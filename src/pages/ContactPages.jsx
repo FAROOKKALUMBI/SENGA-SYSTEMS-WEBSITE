@@ -338,7 +338,6 @@ export default function ContactPages({ forceSubpath }) {
                   <Link to="/contact/quote" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'quote' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Get a Quote</Link>
                   <Link to="/contact/payment" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'payment' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Make Payment</Link>
                   <Link to="/contact/schedule" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'schedule' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Schedule Consultation</Link>
-                  <Link to="/contact/support" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'support' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Support Centre</Link>
                 </div>
               </div>
             </div>
@@ -533,7 +532,7 @@ export default function ContactPages({ forceSubpath }) {
 
           {/* PAYMENT PORTAL SECTION */}
           {subpath === 'payment' && (
-            <section className="max-w-2xl mx-auto px-4 md:px-8">
+            <section className="max-w-4xl mx-auto px-4 md:px-8">
               <div className="bg-[#D9D9D9] p-6 sm:p-10 rounded-3xl border border-slate-300/80 shadow-lg space-y-6 text-slate-900">
                 
                 <div className="flex items-center gap-3.5 border-b border-slate-400/30 pb-4">
@@ -765,25 +764,6 @@ export default function ContactPages({ forceSubpath }) {
                     </button>
                   </form>
                 )}
-              </div>
-            </section>
-          )}
-
-          {/* SUPPORT CENTRE */}
-          {subpath === 'support' && (
-            <section className="max-w-4xl mx-auto px-4 md:px-8 space-y-8">
-              <div className="bg-[#D9D9D9] p-8 rounded-3xl border border-slate-300 shadow-md space-y-6 text-slate-900">
-                <div className="flex items-center gap-3">
-                  <HelpCircle className="w-8 h-8 text-[#2563EB]" />
-                  <div>
-                    <h3 className="text-2xl font-bold text-slate-900">Help Desk & Knowledgebase</h3>
-                    <p className="text-xs text-slate-600">24/7 Emergency Support Hotline & SLAs</p>
-                  </div>
-                </div>
-                <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1">
-                  <p className="text-sm font-bold text-[#2563EB]">Emergency Support Hotline:</p>
-                  <p className="text-xs text-slate-700 font-semibold">+265 (0) 884 288 849 / info@senga.systems</p>
-                </div>
               </div>
             </section>
           )}
