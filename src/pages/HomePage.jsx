@@ -41,32 +41,32 @@ export default function HomePage() {
   const serviceCards = [
     {
       title: 'AI & Automation',
-      path: '/services/ai',
+      path: '/services#ai-automation',
       icon: Bot,
     },
     {
       title: 'Software Engineering',
-      path: '/services/fullstack',
+      path: '/services#software-engineering',
       icon: Cloud,
     },
     {
       title: 'Data & Analytics',
-      path: '/services/analytics',
+      path: '/services#data-analytics',
       icon: PieChart,
     },
     {
       title: 'Security & Compliance',
-      path: '/services/cybersecurity',
+      path: '/services#security-compliance',
       icon: ShieldCheck,
     },
     {
       title: 'ICT & Infrastructure',
-      path: '/services/ict-infrastructure',
+      path: '/services#ict-infrastructure',
       icon: RadioTower,
     },
     {
       title: 'Design & Transformation',
-      path: '/services/sengashield',
+      path: '/services#design-transformation',
       icon: Shapes,
     }
   ];
@@ -185,7 +185,7 @@ export default function HomePage() {
               <div className="space-y-1">
                 <h3 className="font-bold text-white text-base">Innovation & Quality</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Continuous R&D in AI, blockchain, and emerging technologies enterprise-grade solutions with rigorous testing and security audits.
+                  Continuous R&D in AI, blockchain and emerging technologies enterprise-grade solutions with rigorous testing and security audits.
                 </p>
               </div>
             </div>
@@ -251,9 +251,9 @@ export default function HomePage() {
               </h2>
 
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal max-w-lg">
-                With deep expertise in AI, software engineering, and cybersecurity Senga Systems delivers intelligent, scalable solutions that<br className="hidden sm:inline" />
+                With deep expertise in AI, software engineering and cybersecurity Senga Systems delivers intelligent, scalable solutions that<br className="hidden sm:inline" />
                 empower<br className="hidden sm:inline" />
-                businesses, organizations, and communities.
+                businesses, organizations and communities.
               </p>
 
               <div className="pt-2">
@@ -388,7 +388,7 @@ export default function HomePage() {
 
           {/* Paragraph */}
           <p className="text-sm sm:text-base text-slate-200 max-w-xl mx-auto font-normal leading-relaxed">
-            Partner With Senga Systems For Intelligent, Secure, And Scalable Digital Solutions.
+            Partner With Senga Systems For Intelligent, Secure and Scalable Digital Solutions.
           </p>
 
           {/* Action Buttons */}
