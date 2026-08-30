@@ -1,257 +1,303 @@
-import React, { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { 
+  Bot,
   BrainCircuit, 
+  Sparkles, 
+  Cpu, 
+  Server, 
+  Code2, 
   Globe, 
   Smartphone, 
-  Code, 
-  Lock, 
-  Shield, 
-  Server, 
   Layers, 
+  Building2, 
+  ShieldCheck, 
   Cloud, 
+  CloudCog, 
+  PieChart, 
   BarChart3, 
+  Lightbulb, 
+  Shield, 
+  Lock, 
+  RadioTower, 
   Palette, 
-  Lightbulb,
-  ArrowRight,
-  CheckCircle2,
-  Sparkles,
-  ChevronRight,
-  Cpu,
-  CloudCog,
-  PieChart,
-  ShieldCheck,
-  Building2,
-  Shapes
+  Shapes, 
+  ArrowRight, 
+  CheckCircle2, 
+  Database,
+  Headphones,
+  Activity,
+  HardDrive,
+  ChevronDown,
+  ChevronUp,
+  MessageSquare,
+  Phone,
+  Mail
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
 
+export const serviceCategories = [
+  {
+    id: 'ai-automation',
+    title: '1. AI & Automation',
+    shortTitle: 'AI & Automation',
+    description: 'We build practical AI and automation solutions that cut manual work, surface insights faster and let your team focus on higher-value tasks.',
+    icon: Bot,
+    badgeBg: 'bg-[#2563EB]',
+    subServices: [
+      { id: 'custom-ai-solutions', name: 'Custom AI Solutions' },
+      { id: 'workflow-automation', name: 'Workflow Automation' },
+      { id: 'predictive-analytics', name: 'Predictive Analytics' },
+      { id: 'natural-language-processing', name: 'Natural Language Processing (NLP)' },
+      { id: 'ai-integration-deployment', name: 'AI Integration & Deployment' },
+      { id: 'machine-learning-deep-learning', name: 'Machine Learning & Deep Learning' },
+      { id: 'intelligent-document-processing', name: 'Intelligent Document Processing (IDP)' }
+    ]
+  },
+  {
+    id: 'software-engineering',
+    title: '2. Software Engineering',
+    shortTitle: 'Software Engineering',
+    description: 'Building robust, scalable and secure software applications from the ground up to power modern enterprises, modernize legacy applications and drive digital growth.',
+    icon: Cloud,
+    badgeBg: 'bg-[#0284C7]',
+    subServices: [
+      { id: 'custom-software-development', name: 'Custom Software Development' },
+      { id: 'full-stack-web-development', name: 'Full-Stack Web Development' },
+      { id: 'progressive-web-applications', name: 'Progressive Web Applications (PWAs)' },
+      { id: 'e-commerce-solutions', name: 'E-Commerce Solutions' },
+      { id: 'content-management-systems', name: 'Content Management Systems (CMS)' },
+      { id: 'api-development-integration', name: 'API Development & Integration' },
+      { id: 'enterprise-web-applications', name: 'Enterprise Web Applications' },
+      { id: 'mobile-applications', name: 'Mobile Applications (Android, iOS, Flutter, React Native)' },
+      { id: 'backend-systems', name: 'Backend Systems' },
+      { id: 'source-code-quality-assurance', name: 'Source Code & Quality Assurance' },
+      { id: 'system-integration', name: 'System Integration' },
+      { id: 'devsecops-ci-cd', name: 'DevSecOps & CI/CD' },
+      { id: 'legacy-system-modernization', name: 'Legacy System Modernization' },
+      { id: 'cloud-native-solutions', name: 'Cloud-Native Solutions' },
+      { id: 'offline-first-applications', name: 'Offline-First Applications' }
+    ]
+  },
+  {
+    id: 'data-analytics',
+    title: '3. Data & Analytics',
+    shortTitle: 'Data & Analytics',
+    description: 'Transform raw data into actionable insights that drive informed decision-making across your business with interactive dashboards and predictive intelligence.',
+    icon: PieChart,
+    badgeBg: 'bg-[#D97706]',
+    subServices: [
+      { id: 'data-strategy-governance', name: 'Data Strategy & Governance' },
+      { id: 'data-analysis', name: 'Data Analysis' },
+      { id: 'interactive-dashboards', name: 'Interactive Dashboards' },
+      { id: 'business-intelligence-reporting', name: 'Business Intelligence Reporting' },
+      { id: 'predictive-modeling', name: 'Predictive Modeling' },
+      { id: 'machine-learning-solutions', name: 'Machine Learning Solutions' },
+      { id: 'analytics-insights', name: 'Analytics & Insights' },
+      { id: 'data-engineering', name: 'Data Engineering' },
+      { id: 'reporting-automation', name: 'Reporting Automation' }
+    ]
+  },
+  {
+    id: 'security-compliance',
+    title: '4. Security & Compliance',
+    shortTitle: 'Security & Compliance',
+    description: 'Protect your systems, networks and digital assets with industry-standard security practices, continuous threat defense and regulatory compliance.',
+    icon: ShieldCheck,
+    badgeBg: 'bg-[#059669]',
+    subServices: [
+      { id: 'vulnerability-assessments', name: 'Vulnerability Assessments' },
+      { id: 'penetration-testing', name: 'Penetration Testing' },
+      { id: 'security-audits', name: 'Security Audits' },
+      { id: 'network-security', name: 'Network Security' },
+      { id: 'security-compliance', name: 'Security Compliance' },
+      { id: 'cyber-defense', name: 'Cyber Defense' },
+      { id: 'identity-access-management', name: 'Identity & Access Management (IAM)' },
+      { id: 'data-security-encryption', name: 'Data Security (Encryption)' },
+      { id: 'security-consulting', name: 'Security Consulting' },
+      { id: 'data-encryption', name: 'Data Encryption' },
+      { id: 'blockchain-development', name: 'Blockchain Development' },
+      { id: 'smart-contract-development', name: 'Smart Contract Development' },
+      { id: 'decentralized-applications', name: 'Decentralized Applications (dApps)' },
+      { id: 'digital-identity-solutions', name: 'Digital Identity Solutions' }
+    ]
+  },
+  {
+    id: 'ict-infrastructure',
+    title: '5. ICT & Infrastructure',
+    shortTitle: 'ICT & Infrastructure',
+    description: 'Reliable networking and IT solutions designed to support modern organizations with high-availability cloud hosting, server administration and 24/7 helpdesk.',
+    icon: RadioTower,
+    badgeBg: 'bg-[#7C3AED]',
+    subServices: [
+      { id: 'network-design-installation', name: 'Network Design & Installation' },
+      { id: 'server-deployment', name: 'Server Deployment' },
+      { id: 'systems-administration', name: 'Systems Administration' },
+      { id: 'internet-infrastructure', name: 'Internet Infrastructure' },
+      { id: 'cloud-hybrid-infrastructure', name: 'Cloud & Hybrid Infrastructure' },
+      { id: 'cloud-hosting', name: 'Cloud Hosting' },
+      { id: 'domain-registration-management', name: 'Domain Registration & Management' },
+      { id: 'ssl-certificates', name: 'SSL Certificates' },
+      { id: 'cloud-migration', name: 'Cloud Migration' },
+      { id: 'infrastructure-management', name: 'Infrastructure Management' },
+      { id: 'network-services', name: 'Network Services' },
+      { id: 'cloud-datacenter-management', name: 'Cloud & Datacenter Management' },
+      { id: 'support-helpdesk', name: 'Support & Helpdesk' }
+    ]
+  },
+  {
+    id: 'design-transformation',
+    title: '6. Design & Transformation',
+    shortTitle: 'Design & Transformation',
+    description: 'Enabling meaningful change through human-centric design and strategy, intuitive UI/UX experiences, brand identity development and technology advisory.',
+    icon: Shapes,
+    badgeBg: 'bg-[#DB2777]',
+    subServices: [
+      { id: 'digital-transformation-strategy', name: 'Digital Transformation Strategy' },
+      { id: 'service-design', name: 'Service Design' },
+      { id: 'change-management-storytelling', name: 'Change Management & Storytelling' },
+      { id: 'process-re-engineering', name: 'Process Re-engineering' },
+      { id: 'ui-ux-design', name: 'UI/UX Design' },
+      { id: 'brand-identity', name: 'Brand Identity' },
+      { id: 'graphic-design', name: 'Graphic Design' },
+      { id: 'wireframing-prototyping', name: 'Wireframing & Prototyping' },
+      { id: 'product-design', name: 'Product Design' },
+      { id: 'technology-strategy', name: 'Technology Strategy' },
+      { id: 'digital-transformation-advisory', name: 'Digital Transformation Advisory' },
+      { id: 'it-roadmap-planning', name: 'IT Roadmap Planning' },
+      { id: 'architecture-review', name: 'Architecture Review' },
+      { id: 'technology-selection-procurement', name: 'Technology Selection & Procurement' },
+      { id: 'mobile-ui-ux-design', name: 'Mobile UI/UX Design' }
+    ]
+  }
+];
+
+export const technicalServices = [
+  {
+    id: 'ai-systems-support',
+    title: 'AI Systems Support',
+    icon: Bot,
+    description: 'Dedicated technical administration, model maintenance and inference optimization for enterprise AI systems.',
+    bullets: [
+      'AI Model Monitoring & Maintenance',
+      'RAG & Vector Database Tuning',
+      'Inference API Rate & Speed Optimization',
+      'LLM Security & Guardrail Protection'
+    ]
+  },
+  {
+    id: 'cloud-infrastructure',
+    title: 'Cloud Infrastructure',
+    icon: Cloud,
+    description: 'End-to-end design, deployment and 24/7 administration of AWS, Azure and hybrid cloud environments.',
+    bullets: [
+      'Multi-Cloud & Hybrid Deployment',
+      'Auto-Scaling & Load Balancing',
+      'Cloud Storage & Cost Optimization',
+      'Serverless Architecture Management'
+    ]
+  },
+  {
+    id: 'cybersecurity-operations',
+    title: 'Cybersecurity Operations',
+    icon: ShieldCheck,
+    description: 'Proactive 24/7 security monitoring, threat containment, perimeter defense and vulnerability mitigation.',
+    bullets: [
+      'Perimeter Firewalls & IDS/IPS',
+      'Vulnerability Assessment & Pen Testing',
+      'Real-Time Threat Isolation',
+      'Zero-Day Vulnerability Defense'
+    ]
+  },
+  {
+    id: 'database-management',
+    title: 'Database Management',
+    icon: Database,
+    description: 'Comprehensive database administration, query optimization, high-availability clustering and secure data backups.',
+    bullets: [
+      'Database Architecture & Indexing',
+      'Performance Tuning & Query Optimization',
+      'Master-Slave Replication & Clustering',
+      'Automated Backup & Encryption'
+    ]
+  },
+  {
+    id: 'network-connectivity',
+    title: 'Network & Connectivity',
+    icon: RadioTower,
+    description: 'Enterprise networking setup, structured fiber cabling, secure VPN routing and high-speed Wi-Fi architecture.',
+    bullets: [
+      'Structured Fiber & Copper Cabling',
+      'Enterprise Wi-Fi & Mesh Setup',
+      'Core Router & Switch Configuration',
+      'SD-WAN & Site-to-Site VPNs'
+    ]
+  },
+  {
+    id: 'devops-cicd',
+    title: 'DevOps & CI/CD',
+    icon: Cpu,
+    description: 'Automated deployment pipelines, infrastructure as code, container orchestration and continuous integration.',
+    bullets: [
+      'Automated Build & Release Pipelines',
+      'Docker & Kubernetes Orchestration',
+      'Infrastructure as Code (Terraform)',
+      'Automated Static Security Scanning'
+    ]
+  },
+  {
+    id: 'system-administration',
+    title: 'System Administration',
+    icon: Server,
+    description: 'Expert administration of Windows, Linux, active directory, user permissions and server virtualization.',
+    bullets: [
+      'Linux & Windows Server Management',
+      'OS Patching & Kernel Hardening',
+      'Active Directory & User Provisioning',
+      'Server Virtualization (VMware/Hyper-V)'
+    ]
+  },
+  {
+    id: 'it-consulting',
+    title: 'IT Consulting',
+    icon: Lightbulb,
+    description: 'Strategic technical guidance for CTOs, IT procurement advisory, enterprise architecture audits and technology roadmaps.',
+    bullets: [
+      'Technology Roadmap & Architecture Audit',
+      'IT Procurement & Vendor Benchmarking',
+      'Digital Transformation Advisory',
+      'Disaster Preparedness Strategy'
+    ]
+  },
+  {
+    id: 'backup-recovery',
+    title: 'Backup & Recovery',
+    icon: HardDrive,
+    description: 'Robust data backup strategies, offsite replication, quick restore protocols and business continuity planning.',
+    bullets: [
+      'Automated Offsite Cloud Backups',
+      'Encrypted Snapshot Vaults',
+      'Rapid Recovery & Restoration Drills',
+      'Business Continuity Frameworks'
+    ]
+  },
+  {
+    id: 'performance-optimization',
+    title: 'Performance Optimization',
+    icon: Activity,
+    description: 'Continuous system health tracking, bottleneck resolution, bandwidth optimization and capacity planning.',
+    bullets: [
+      'Real-Time Health & Resource Tracking',
+      'Application Bottleneck Profiling',
+      'Traffic & Latency Optimization',
+      'Capacity Forecasting & Scaling'
+    ]
+  }
+];
+
 export default function ServicesPages() {
   const location = useLocation();
-  const serviceKey = location.pathname.split('/services/')[1] || '';
-  const { openQuoteModal } = useCMS();
-
-  const servicesMap = {
-    'ai': {
-      title: 'Artificial Intelligence (AI)',
-      icon: BrainCircuit,
-      color: 'text-blue-400',
-      badge: 'Machine Learning & NLP',
-      summary: 'Empower your enterprise with custom AI agents, machine learning algorithms, and intelligent automation built specifically for Malawian and African business data.',
-      features: [
-        'Custom Large Language Models (LLMs) & RAG Chatbots',
-        'Predictive Analytics for Financial Risk & Fraud Detection',
-        'Computer Vision & Document Intelligence Parsing',
-        'Automated Customer Service & Workflow Automation'
-      ],
-      benefits: 'Reduces operational overhead by up to 60% while accelerating decision-making speed.'
-    },
-    'web-development': {
-      title: 'Web Development',
-      icon: Globe,
-      color: 'text-cyan-400',
-      badge: 'High-Performance Web Platforms',
-      summary: 'Scalable, modern web application development using React, Next.js, and Node.js built to handle heavy user concurrency with lightning speed.',
-      features: [
-        'Custom Enterprise Portals & SaaS Applications',
-        'Responsive Mobile-Optimized User Interfaces',
-        'E-Commerce & Digital Payment Portal Integrations',
-        'High-Security API Architecture'
-      ],
-      benefits: 'Flawless digital presence with 99.9% uptime and instant load times.'
-    },
-    'mobile-apps': {
-      title: 'Mobile Application Development',
-      icon: Smartphone,
-      color: 'text-indigo-400',
-      badge: 'iOS & Android Native Solutions',
-      summary: 'Intuitive, secure native and cross-platform mobile apps for smartphones and tablets across Android and iOS.',
-      features: [
-        'Native React Native & Flutter App Engineering',
-        'Biometric Mobile Banking & Wallet Integrations',
-        'Offline Synchronization for Low-Bandwidth Areas',
-        'Push Notifications & Real-Time Data Streaming'
-      ],
-      benefits: 'Direct engagement with millions of mobile users across Malawi.'
-    },
-    'fullstack': {
-      title: 'Full-Stack Software Development',
-      icon: Code,
-      color: 'text-emerald-400',
-      badge: 'End-to-End Enterprise Systems',
-      summary: 'Custom ERPs, CRMs, and core enterprise backends engineered with clean architecture, microservices, and high-availability database engines.',
-      features: [
-        'Microservices Architecture & REST/GraphQL APIs',
-        'PostgreSQL, MongoDB, and Redis Data Pipelines',
-        'Continuous Integration & Automated Testing (CI/CD)',
-        'Legacy Codebase Refactoring & Migration'
-      ],
-      benefits: 'Robust core software built to support decades of business expansion.'
-    },
-    'cybersecurity': {
-      title: 'Cybersecurity & Auditing',
-      icon: Lock,
-      color: 'text-red-400',
-      badge: 'Zero-Trust Defense',
-      summary: 'Comprehensive cyber risk assessments, penetration testing, compliance auditing, and active vulnerability management for banks and corporates.',
-      features: [
-        'Penetration Testing & Red Teaming Simulations',
-        'ISO 27001 & Data Protection Regulatory Compliance',
-        '24/7 Security Operations Center (SOC) Oversight',
-        'Incident Response & Forensic Malware Analysis'
-      ],
-      benefits: 'Guaranteed protection against data leaks, ransomware, and regulatory fines.'
-    },
-    'sengashield': {
-      title: 'SengaShield Threat Protection',
-      icon: Shield,
-      color: 'text-blue-500',
-      badge: 'Proprietary AI Defense System',
-      summary: 'Senga Systems flagship autonomous cyber defense platform engineered for 24/7 threat monitoring, active containment, and zero-day protection.',
-      features: [
-        'Autonomous AI Threat Detection & Isolation',
-        'Zero-Trust Network Access (ZTNA) Control',
-        'Real-time Cryptographic Data Vaulting',
-        'Malawi National Banking Standard Compliance'
-      ],
-      benefits: 'Continuous, self-healing cyber defense without human delay.'
-    },
-    'ict-infrastructure': {
-      title: 'ICT Infrastructure',
-      icon: Server,
-      color: 'text-amber-400',
-      badge: 'Hardware & Datacenters',
-      summary: 'Enterprise network cabling, server room design, datacenter deployment, fiber routing, and Cisco hardware integration.',
-      features: [
-        'Datacenter Design & Virtualization (VMware/Hyper-V)',
-        'Enterprise Fiber & Wireless Mesh Network Setup',
-        'Uninterruptible Power Supply (UPS) & Solar Backup',
-        'Hardware Procurement & Maintenance Contracts'
-      ],
-      benefits: 'Unbroken hardware reliability and rock-solid network speeds.'
-    },
-    'blockchain': {
-      title: 'Encryption & Blockchain',
-      icon: Layers,
-      color: 'text-purple-400',
-      badge: 'Cryptographic Ledger Systems',
-      summary: 'Immutable smart contracts, tamper-proof record-keeping, and advanced cryptographic key management for supply chains and finance.',
-      features: [
-        'Private & Hybrid Hyperledger Blockchain Networks',
-        'Smart Contract Development & Auditing',
-        'End-to-End Cryptographic Ledger Verification',
-        'Digital Document & Identity Authentication'
-      ],
-      benefits: 'Total transparency, tamper-proofing, and auditable data integrity.'
-    },
-    'cloud-hosting': {
-      title: 'Cloud Hosting & Infrastructure',
-      icon: Cloud,
-      color: 'text-cyan-300',
-      badge: 'Hybrid Cloud Datacenters',
-      summary: 'Seamless cloud migration, container management (Docker/Kubernetes), and high-availability hosting managed in Malawian and global datacenters.',
-      features: [
-        'AWS, Azure & Local Hybrid Cloud Migration',
-        'Kubernetes Container Orchestration',
-        'Automated Daily Backups & Disaster Recovery',
-        'Elastic Load Balancing & Auto-Scaling'
-      ],
-      benefits: 'Pay-as-you-grow cloud scalability with zero downtime.'
-    },
-    'data-analytics': {
-      title: 'Data Analytics & Business Intelligence',
-      icon: BarChart3,
-      color: 'text-yellow-400',
-      badge: 'Actionable Insights',
-      summary: 'Transform raw corporate data into interactive PowerBI dashboards, executive reports, and automated forecasting engines.',
-      features: [
-        'Data Warehousing & ETL Pipeline Engineering',
-        'Interactive Executive Dashboards (PowerBI / Tableau)',
-        'Real-time Financial & Operational KPI Tracking',
-        'Customer Churn & Market Demand Predictive Modeling'
-      ],
-      benefits: 'Clear data-driven decision making at all management levels.'
-    },
-    'creative-design': {
-      title: 'Creative Design & UX',
-      icon: Palette,
-      color: 'text-pink-400',
-      badge: 'User Experience & Branding',
-      summary: 'Modern UI/UX design, brand identity systems, interactive prototypes, and design systems built to captivate users.',
-      features: [
-        'User Research & Wireframe Prototyping in Figma',
-        'Enterprise Design System & UI Components',
-        'Brand Identity, Logos & Graphic Assets',
-        'Accessibility & Usability Optimization'
-      ],
-      benefits: 'Increased user engagement and elevated brand prestige.'
-    },
-    'tech-consulting': {
-      title: 'Technology Consulting',
-      icon: Lightbulb,
-      color: 'text-orange-400',
-      badge: 'Strategic Advisory',
-      summary: 'Expert technical advisory for CTOs, CEOs, and government bodies navigating digital transformation, software procurement, and AI strategy.',
-      features: [
-        'Digital Transformation Roadmaps',
-        'IT Procurement & Vendor Evaluation',
-        'AI Strategy & Ethics Policy Design',
-        'Enterprise Architecture Health Audits'
-      ],
-      benefits: 'Clear strategic roadmap aligned with business ROI.'
-    }
-  };
-
-  const categorySections = [
-    {
-      id: 'ai-automation',
-      title: 'AI & Automation',
-      icon: Cpu,
-      badge: 'Machine Learning & LLMs',
-      description: 'Custom AI models, natural language processing, automated workflow bots, and autonomous threat containment.',
-      serviceKeys: ['ai', 'sengashield']
-    },
-    {
-      id: 'software-engineering',
-      title: 'Software Engineering',
-      icon: CloudCog,
-      badge: 'Custom Enterprise Software',
-      description: 'End-to-end full-stack software architecture, high-speed web platforms, and mobile apps for Android and iOS.',
-      serviceKeys: ['fullstack', 'web-development', 'mobile-apps']
-    },
-    {
-      id: 'data-analytics',
-      title: 'Data & Analytics',
-      icon: PieChart,
-      badge: 'Business Intelligence & Ledger Systems',
-      description: 'Transforming corporate datasets into PowerBI executive dashboards, predictive analytics, and cryptographic blockchain ledgers.',
-      serviceKeys: ['data-analytics', 'blockchain']
-    },
-    {
-      id: 'security-compliance',
-      title: 'Security & Compliance',
-      icon: ShieldCheck,
-      badge: 'Zero-Trust Cyber Defense',
-      description: 'Comprehensive risk assessments, penetration testing, compliance auditing, and SengaShield real-time threat protection.',
-      serviceKeys: ['cybersecurity', 'sengashield']
-    },
-    {
-      id: 'ict-infrastructure',
-      title: 'ICT & Infrastructure',
-      icon: Building2,
-      badge: 'Datacenters & Hybrid Cloud',
-      description: 'Hardware deployment, fiber network installation, server virtualization, and managed cloud infrastructure.',
-      serviceKeys: ['ict-infrastructure', 'cloud-hosting']
-    },
-    {
-      id: 'design-transformation',
-      title: 'Design & Transformation',
-      icon: Shapes,
-      badge: 'UI/UX & Strategic IT Advisory',
-      description: 'User experience research, Figma design systems, corporate brand identity, and executive digital strategy consulting.',
-      serviceKeys: ['creative-design', 'tech-consulting']
-    }
-  ];
+  const [expandedTechId, setExpandedTechId] = useState('ai-systems-support');
 
   useEffect(() => {
     if (location.hash) {
@@ -260,182 +306,229 @@ export default function ServicesPages() {
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 120);
+        }, 150);
       }
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [location.hash, location.pathname]);
 
-  const currentService = servicesMap[serviceKey];
-
   return (
-    <div className="space-y-16 py-12">
-      {/* 1. ALL SERVICES CATALOG OVERVIEW BY 6 CATEGORIES */}
-      {!currentService && (
-        <section className="max-w-7xl mx-auto px-4 md:px-8 space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="px-3.5 py-1.5 rounded-full bg-blue-600/10 text-blue-400 text-xs font-bold uppercase tracking-wider">
-              Comprehensive Technology Solutions
-            </span>
-            <h1 className="text-4xl font-extrabold text-white tracking-tight">
-              Our Technology & Engineering Services
-            </h1>
-            <p className="text-base text-slate-300">
-              Select any category below to explore our full suite of enterprise digital solutions, SengaShield cybersecurity, custom AI engines, and software engineering.
-            </p>
+    <div className="space-y-0 font-['Plus_Jakarta_Sans',sans-serif]">
+      
+      {/* 1. HERO BANNER SECTION (Deep Navy Background #23275c, Left-Aligned with White Text) */}
+      <section className="bg-[#23275c] text-white py-16 md:py-20 px-4 md:px-12 border-b border-indigo-900/40">
+        <div className="max-w-7xl mx-auto space-y-4 text-left">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 text-xs font-semibold tracking-wide border border-white/15 uppercase">
+            Comprehensive Digital Capabilities
+          </span>
+          
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+            Our Services & Capabilities
+          </h1>
 
-            {/* Quick Navigation Category Pills */}
-            <div className="flex flex-wrap justify-center gap-2.5 pt-4">
-              {categorySections.map((cat) => {
-                const CatIcon = cat.icon;
-                return (
-                  <a
-                    key={cat.id}
-                    href={`#${cat.id}`}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-blue-600 text-slate-200 hover:text-white text-xs font-bold transition-all border border-slate-700/60 shadow-sm"
-                  >
-                    <CatIcon className="w-3.5 h-3.5 text-blue-400 hover:text-white" />
-                    <span>{cat.title}</span>
-                  </a>
-                );
-              })}
-            </div>
-          </div>
+          <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal max-w-2xl pt-1">
+            Discover our comprehensive technology solutions and managed IT support services engineered to drive business growth, security and digital transformation.
+          </p>
+        </div>
+      </section>
 
-          {/* 6 Category Sections */}
-          <div className="space-y-16">
-            {categorySections.map((cat) => {
+      {/* 2. MAIN SERVICE CARDS GRID SECTION (Light Gray #D9D9D9 Background, Pure White #FFFFFF Cards) */}
+      <section className="bg-[#D9D9D9] text-slate-900 py-20 px-4 md:px-12 border-t border-slate-300">
+        <div className="max-w-7xl mx-auto space-y-10">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+            {serviceCategories.map((cat) => {
               const CatIcon = cat.icon;
               return (
                 <div 
                   key={cat.id} 
                   id={cat.id} 
-                  className="scroll-mt-28 space-y-6 pt-4 border-t border-slate-800/80 first:border-t-0 first:pt-0"
+                  className="scroll-mt-28 relative overflow-hidden bg-[#FFFFFF] rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 p-6 sm:p-7 space-y-5 text-slate-900 flex flex-col justify-between group"
                 >
-                  {/* Category Section Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl bg-gradient-to-r from-[#111e38] via-[#0f172a] to-[#0f172a] border border-blue-900/40">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
-                        <CatIcon className="w-7 h-7" />
+                  <div className="space-y-5">
+                    {/* Left Edge Accent Bar */}
+                    <div className="absolute top-0 left-0 w-2 h-full bg-[#2563EB] rounded-l-2xl"></div>
+
+                    {/* Icon Badge & Title */}
+                    <div className="flex items-center gap-3.5 pl-2">
+                      <div className={`w-14 h-14 rounded-2xl ${cat.badgeBg} text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0`}>
+                        <CatIcon className="w-7 h-7 stroke-[2.2]" />
                       </div>
-                      <div>
-                        <span className="text-[11px] font-mono font-bold text-blue-400 uppercase tracking-wider">{cat.badge}</span>
-                        <h2 className="text-2xl font-black text-white tracking-tight">{cat.title}</h2>
-                      </div>
+                      <h2 className="text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
+                        {cat.shortTitle}
+                      </h2>
                     </div>
-                    <p className="text-xs text-slate-300 max-w-md leading-relaxed">
+
+                    {/* Description */}
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal pl-2">
                       {cat.description}
                     </p>
-                  </div>
 
-                  {/* Sub-Services Grid inside this Category */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {cat.serviceKeys.map((sKey) => {
-                      const svc = servicesMap[sKey];
-                      if (!svc) return null;
-                      const IconComp = svc.icon;
+                    {/* Divider */}
+                    <div className="border-t border-slate-100 pt-1 ml-2"></div>
 
-                      return (
-                        <Link
-                          key={sKey}
-                          to={`/services/${sKey}`}
-                          className="glass-card glass-card-hover p-6 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between group"
-                        >
-                          <div className="space-y-3">
-                            <div className="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                              <IconComp className={`w-6 h-6 ${svc.color}`} />
-                            </div>
-                            <span className="text-[11px] font-mono text-blue-400 font-semibold uppercase tracking-wider">{svc.badge}</span>
-                            <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{svc.title}</h3>
-                            <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">{svc.summary}</p>
-                          </div>
-
-                          <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs font-semibold text-blue-400">
-                            <span>Explore Detailed Specs</span>
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </div>
-                        </Link>
-                      );
-                    })}
+                    {/* Sub-Services Checklist */}
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 pl-2">
+                      {cat.subServices.map((sub, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs text-slate-700 font-medium leading-tight">
+                          <CheckCircle2 className="w-4 h-4 text-[#2563EB] shrink-0 mt-0.5" />
+                          <span className="truncate" title={sub.name}>{sub.name}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               );
             })}
           </div>
-        </section>
-      )}
 
-      {/* 2. DEDICATED SERVICE SUBPAGE DETAIL VIEW */}
-      {currentService && (
-        <section className="max-w-7xl mx-auto px-4 md:px-8 space-y-12">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-slate-400">
-            <Link to="/services" className="hover:text-blue-400">Services</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white font-semibold">{currentService.title}</span>
+        </div>
+      </section>
+
+      {/* 3. TECHNICAL SERVICES ACCORDION SECTION */}
+      <section id="technical-services" className="scroll-mt-28 bg-[#FFFFFF] py-16 sm:py-20 px-4 md:px-8 border-t border-slate-200/80">
+        <div className="max-w-4xl mx-auto space-y-10">
+          
+          {/* Centered Header */}
+          <div className="text-center space-y-2 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0F172A] tracking-tight">
+              Technical Services
+            </h2>
+            <p className="text-sm sm:text-base text-slate-500 font-semibold">
+              Our Expertise
+            </p>
           </div>
 
-          {/* Subpage Banner */}
-          <div className="glass-card bg-[#0F172A] border border-slate-700 rounded-3xl p-8 md:p-12 space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
-                <currentService.icon className="w-8 h-8" />
-              </div>
-              <div>
-                <span className="text-xs font-mono text-cyan-400 uppercase font-bold tracking-wider">{currentService.badge}</span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">{currentService.title}</h1>
-              </div>
+          {/* Accordion Stack */}
+          <div className="space-y-4 pt-4">
+            {technicalServices.map((techSvc) => {
+              const isOpen = expandedTechId === techSvc.id;
+              const TechIcon = techSvc.icon || Server;
+              return (
+                <div
+                  key={techSvc.id}
+                  className="rounded-2xl transition-all duration-200 border border-slate-200/80 shadow-xs overflow-hidden"
+                >
+                  {/* Accordion Header Bar */}
+                  <button
+                    onClick={() => setExpandedTechId(isOpen ? null : techSvc.id)}
+                    className={`w-full p-4 sm:p-5 flex items-center justify-between text-left transition-all duration-200 cursor-pointer ${
+                      isOpen
+                        ? 'bg-[#111335] text-white rounded-t-2xl'
+                        : 'bg-white text-[#0F172A] hover:bg-slate-50 rounded-2xl'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3.5">
+                      {/* Cream White Smaller Rectangle Container */}
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#FDFBF7] border border-slate-200/80 shadow-xs flex items-center justify-center text-[#2563EB] shrink-0">
+                        <TechIcon className="w-5 h-5 stroke-[2.2]" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold tracking-tight">
+                        {techSvc.title}
+                      </h3>
+                    </div>
+                    {isOpen ? (
+                      <ChevronUp className="w-5 h-5 text-white shrink-0" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-slate-500 shrink-0" />
+                    )}
+                  </button>
+
+                  {/* Accordion Expanded Content Panel */}
+                  {isOpen && (
+                    <div className="bg-white p-6 sm:p-8 rounded-b-2xl border-t border-slate-100 space-y-6 animate-in fade-in duration-200">
+                      
+                      {/* Description */}
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                        {techSvc.description}
+                      </p>
+
+                      {/* 2-Column Grid of Bullet Points with Website Brand Blue Dots */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 pt-1">
+                        {techSvc.bullets.map((bullet, bIdx) => (
+                          <div key={bIdx} className="flex items-center gap-3">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB] shrink-0 shadow-xs"></span>
+                            <span className="text-sm sm:text-base font-semibold text-slate-700 leading-snug">
+                              {bullet}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* 4. CTA BANNER SECTION (Matching uploaded mockup 1:1) */}
+      <section className="bg-white py-12 md:py-16 px-4 md:px-8 border-t border-slate-100">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-[#1b1f48] text-white rounded-[32px] p-8 sm:p-12 md:p-16 text-center space-y-6 shadow-2xl relative overflow-hidden border border-indigo-900/50">
+            
+            {/* Top Pill Badge */}
+            <div>
+              <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 text-xs font-semibold tracking-wide border border-white/15">
+                Lets Build Together
+              </span>
             </div>
 
-            <p className="text-base text-slate-200 leading-relaxed max-w-3xl">
-              {currentService.summary}
+            {/* Heading */}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight max-w-3xl mx-auto">
+              Ready To Empower Your Business With Technology?
+            </h2>
+
+            {/* Subtitle Paragraph */}
+            <p className="text-sm sm:text-base text-slate-200 max-w-xl mx-auto font-normal leading-relaxed">
+              Partner With Senga Systems For Intelligent, Secure and Scalable Digital Solutions.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-800">
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
               <button
-                onClick={() => openQuoteModal(currentService.title)}
-                className="px-7 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 flex items-center gap-2 cursor-pointer transition-all"
+                onClick={() => openQuoteModal()}
+                className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center gap-2.5 cursor-pointer"
               >
-                <span>Request Quote for {currentService.title}</span>
-                <ArrowRight className="w-4 h-4" />
+                <MessageSquare className="w-4 h-4" />
+                <span>Get a Free Consultation</span>
               </button>
+
+              <a
+                href="tel:+265884288849"
+                className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl border border-white/40 text-white font-extrabold text-xs sm:text-sm hover:bg-white/10 transition-all flex items-center gap-2.5 cursor-pointer"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call Us Now</span>
+              </a>
             </div>
+
+            {/* Bottom Contact Details Bar */}
+            <div className="border-t border-white/10 pt-6 mt-8 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-slate-300 text-xs sm:text-sm font-semibold">
+              <a
+                href="tel:+265884288849"
+                className="flex items-center gap-2 hover:text-white transition-colors"
+              >
+                <Phone className="w-4 h-4 text-cyan-400" />
+                <span>(+265) 884 288 849</span>
+              </a>
+
+              <a
+                href="mailto:info@senga.systems"
+                className="flex items-center gap-2 hover:text-white transition-colors"
+              >
+                <Mail className="w-4 h-4 text-cyan-400" />
+                <span>info@senga.systems</span>
+              </a>
+            </div>
+
           </div>
-
-          {/* Detailed Features & Business Impact */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 glass-card p-8 rounded-3xl border border-slate-800 space-y-6">
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-400" />
-                Key Service Capabilities
-              </h2>
-              <div className="space-y-4">
-                {currentService.features.map((feat, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <CheckCircle2 className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
-                    <span className="text-sm text-slate-200 font-medium">{feat}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 glass-card p-8 rounded-3xl border border-slate-800 space-y-6 bg-gradient-to-b from-blue-950/30 to-[#0F172A]">
-              <h2 className="text-2xl font-bold text-white">Business Impact</h2>
-              <p className="text-sm text-slate-300 leading-relaxed">
-                {currentService.benefits}
-              </p>
-
-              <div className="p-4 rounded-xl bg-blue-600/10 border border-blue-500/20 space-y-2">
-                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">Enterprise SLA</span>
-                <p className="text-xs text-slate-300">
-                  Includes 24/7 technical monitoring, dedicated engineering support, and guaranteed uptime response times.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
 
     </div>
   );

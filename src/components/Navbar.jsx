@@ -148,22 +148,22 @@ export default function Navbar() {
                       Services Overview
                     </Link>
                     <div className="my-1 border-t border-slate-100"></div>
-                    <Link to="/services/ai" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    <Link to="/services#ai-automation" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       AI & Automation
                     </Link>
-                    <Link to="/services/fullstack" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    <Link to="/services#software-engineering" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       Software Engineering
                     </Link>
-                    <Link to="/services/analytics" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    <Link to="/services#data-analytics" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       Data & Analytics
                     </Link>
-                    <Link to="/services/cybersecurity" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    <Link to="/services#security-compliance" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       Security & Compliance
                     </Link>
-                    <Link to="/services/ict-infrastructure" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    <Link to="/services#ict-infrastructure" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       ICT & Infrastructure
                     </Link>
-                    <Link to="/services/sengashield" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
+                    <Link to="/services#design-transformation" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       Design & Transformation
                     </Link>
                   </div>
