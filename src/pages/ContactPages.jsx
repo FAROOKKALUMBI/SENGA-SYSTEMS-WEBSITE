@@ -15,18 +15,33 @@ import {
   Building,
   User,
   Search,
-  FileText
+  FileText,
+  Paperclip,
+  UploadCloud
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
 
-export default function ContactPages() {
+export default function ContactPages({ forceSubpath }) {
   const location = useLocation();
-  const subpath = location.pathname.split('/contact/')[1] || '';
+  const subpath = forceSubpath || (location.pathname.split('/contact/')[1] || (location.pathname === '/quote' ? 'quote' : ''));
   const { submitQuote, submitConsultation } = useCMS();
 
   // Contact Form State
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [contactData, setContactData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+
+  // Quote Form State
+  const [quoteSubmitted, setQuoteSubmitted] = useState(false);
+  const [quoteData, setQuoteData] = useState({
+    firstName: '',
+    surname: '',
+    email: '',
+    companyName: '',
+    jobTitle: '',
+    inquiryType: '',
+    projectDescription: '',
+    fileName: ''
+  });
 
   // Payment Simulator State
   const [paymentMethod, setPaymentMethod] = useState('airtel');
@@ -51,402 +66,543 @@ export default function ContactPages() {
     setContactSubmitted(true);
   };
 
+  const handleQuoteSubmit = async (e) => {
+    e.preventDefault();
+    await submitQuote({
+      clientName: `${quoteData.firstName} ${quoteData.surname}`,
+      email: quoteData.email,
+      company: quoteData.companyName,
+      jobTitle: quoteData.jobTitle,
+      serviceRequested: quoteData.inquiryType || 'General Project Inquiry',
+      details: quoteData.projectDescription,
+      attachedFile: quoteData.fileName
+    });
+    setQuoteSubmitted(true);
+  };
+
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
     await submitConsultation(consultData);
     setConsultSubmitted(true);
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setQuoteData(prev => ({ ...prev, fileName: e.target.files[0].name }));
+    }
+  };
+
   return (
-    <div className="space-y-12 py-12">
-      {/* Header Banner & Subpage Navigation Tabs */}
-      <section className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="glass-card bg-[#0F172A] border border-slate-700 rounded-3xl p-8 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <span className="text-xs uppercase tracking-wider font-bold text-blue-400">Connect With Senga Systems</span>
-              <h1 className="text-3xl font-extrabold text-white tracking-tight mt-1">
-                {subpath === 'quote' && 'Request a Custom Project Quote'}
-                {subpath === 'payment' && 'Online Client Payment Portal'}
-                {subpath === 'schedule' && 'Schedule a Technical Consultation'}
-                {subpath === 'support' && 'Support Centre & Help Desk'}
-                {!subpath && 'Contact Us'}
+    <div className="space-y-12 pb-16 font-['Plus_Jakarta_Sans',sans-serif]">
+      
+      {/* 1. GET A QUOTE DEDICATED SUBPAGE (Matching image media_1788130529353.png 1:1) */}
+      {subpath === 'quote' ? (
+        <div className="space-y-12">
+          
+          {/* Hero Banner Header matching attached screenshot */}
+          <section className="bg-[#23275c] text-white py-16 md:py-20 px-4 md:px-12 text-left border-b border-indigo-900/40">
+            <div className="max-w-7xl mx-auto space-y-3">
+              <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 text-xs font-semibold tracking-wide border border-white/15">
+                Quote
+              </span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
+                Get a Quote
               </h1>
+              <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal max-w-2xl pt-1">
+                Tell us about your project and we'll provide you with a customized quote.
+              </p>
             </div>
+          </section>
 
-            {/* Navigation Tabs */}
-            <div className="flex flex-wrap items-center gap-2">
-              <Link to="/contact" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!subpath ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Contact Us</Link>
-              <Link to="/contact/quote" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'quote' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Get a Quote</Link>
-              <Link to="/contact/payment" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'payment' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Make Payment</Link>
-              <Link to="/contact/schedule" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'schedule' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Schedule Consultation</Link>
-              <Link to="/contact/support" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'support' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Support Centre</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 1. CONTACT US MAIN PAGE */}
-      {!subpath && (
-        <section className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            
-            {/* Direct Channels */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-                <h3 className="text-xl font-bold text-white">Direct Communication</h3>
-
-                <div className="space-y-4 pt-2">
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <Phone className="w-5 h-5 text-blue-400 shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-white text-sm">Telephone Support</h4>
-                      <p className="text-xs text-slate-300 mt-0.5">+265 (0) 999 123 456 / +265 (0) 888 789 000</p>
-                      <p className="text-[11px] text-slate-400 mt-1">Mon - Fri: 8:00 AM - 5:00 PM CAT</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <Mail className="w-5 h-5 text-cyan-400 shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-white text-sm">Email Inquiries</h4>
-                      <p className="text-xs text-slate-300 mt-0.5">info@sengasystems.mw</p>
-                      <p className="text-[11px] text-slate-400 mt-1">24/7 SengaShield Desk: security@sengasystems.mw</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <MapPin className="w-5 h-5 text-indigo-400 shrink-0 mt-1" />
-                    <div>
-                      <h4 className="font-semibold text-white text-sm">Malawi Office Locations</h4>
-                      <p className="text-xs text-slate-300 mt-0.5">
-                        <strong className="text-white">Lilongwe Head Office:</strong> Sector 19, City Centre<br />
-                        <strong className="text-white">Blantyre Branch:</strong> Victoria Avenue Commercial Hub
-                      </p>
-                    </div>
-                  </div>
-                </div>
+          {/* White Card Section with Request a Quote Form */}
+          <section className="max-w-4xl mx-auto px-4 md:px-8">
+            <div className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 shadow-xl space-y-8 text-slate-900">
+              
+              <div className="space-y-1 border-b border-slate-100 pb-4">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">
+                  Request a Quote
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                  Fill in your details below and our technical experts will prepare a proposal.
+                </p>
               </div>
-            </div>
 
-            {/* Contact Form */}
-            <div className="lg:col-span-7 glass-card p-8 rounded-3xl border border-slate-800 space-y-6">
-              {contactSubmitted ? (
+              {quoteSubmitted ? (
                 <div className="text-center py-12 space-y-4">
-                  <CheckCircle2 className="w-16 h-16 text-emerald-400 mx-auto" />
-                  <h3 className="text-2xl font-bold text-white">Message Sent Successfully!</h3>
-                  <p className="text-sm text-slate-300 max-w-md mx-auto">
-                    Thank you for reaching out to Senga Systems. One of our technology representatives will contact you shortly.
+                  <CheckCircle2 className="w-16 h-16 text-[#2563EB] mx-auto" />
+                  <h3 className="text-2xl font-black text-slate-900">Quote Request Submitted!</h3>
+                  <p className="text-sm text-slate-600 max-w-md mx-auto">
+                    Thank you, <span className="font-bold text-slate-900">{quoteData.firstName} {quoteData.surname}</span>. Our technical advisory team will review your project requirements and respond within 24 hours.
                   </p>
-                  <button onClick={() => setContactSubmitted(false)} className="px-6 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold">
-                    Send Another Message
+                  <button 
+                    onClick={() => setQuoteSubmitted(false)} 
+                    className="px-7 py-3 rounded-xl bg-[#2563EB] text-white text-xs font-extrabold shadow-md hover:bg-blue-700 transition-all cursor-pointer"
+                  >
+                    Submit Another Quote Request
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleContactSubmit} className="space-y-4">
-                  <h3 className="text-xl font-bold text-white">Send Us a Direct Message</h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form onSubmit={handleQuoteSubmit} className="space-y-6">
+                  
+                  {/* Row 1: First Name & Surname */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Your Name</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        First Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Enter your first name"
+                        value={quoteData.firstName}
+                        onChange={(e) => setQuoteData({ ...quoteData, firstName: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all shadow-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Surname <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Enter your surname"
+                        value={quoteData.surname}
+                        onChange={(e) => setQuoteData({ ...quoteData, surname: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all shadow-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 2: Email Address & Company Name */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Email Address <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="Enter your email address"
+                        value={quoteData.email}
+                        onChange={(e) => setQuoteData({ ...quoteData, email: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all shadow-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Company Name
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter your company name"
+                        value={quoteData.companyName}
+                        onChange={(e) => setQuoteData({ ...quoteData, companyName: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all shadow-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 3: Job Title & Inquiry Type */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Job Title
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter your job title"
+                        value={quoteData.jobTitle}
+                        onChange={(e) => setQuoteData({ ...quoteData, jobTitle: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all shadow-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        Inquiry Type <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        required
+                        value={quoteData.inquiryType}
+                        onChange={(e) => setQuoteData({ ...quoteData, inquiryType: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all shadow-xs"
+                      >
+                        <option value="">Select an inquiry type</option>
+                        <option value="AI & Automation">AI & Automation</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Data & Analytics">Data & Analytics</option>
+                        <option value="Security & Compliance">Security & Compliance</option>
+                        <option value="ICT & Infrastructure">ICT & Infrastructure</option>
+                        <option value="Design & Transformation">Design & Transformation</option>
+                        <option value="Technical Support Services">Technical Support Services</option>
+                        <option value="General Project Inquiry">General Project Inquiry</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Row 4: Project Description */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                      Project Description <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      rows="4"
+                      required
+                      placeholder="Briefly describe your objectives, timelines or technical requirements..."
+                      value={quoteData.projectDescription}
+                      onChange={(e) => setQuoteData({ ...quoteData, projectDescription: e.target.value })}
+                      className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm resize-none transition-all shadow-xs"
+                    ></textarea>
+                  </div>
+
+                  {/* Row 5: Attach Supporting Document */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <Paperclip className="w-4 h-4 text-[#2563EB]" />
+                      <span>Attach Supporting Document</span>
+                    </label>
+                    <label className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-dashed border-slate-300 hover:border-[#2563EB] hover:bg-blue-50/40 cursor-pointer transition-all">
+                      <div className="flex items-center gap-3 text-xs text-slate-600">
+                        <UploadCloud className="w-5 h-5 text-[#2563EB]" />
+                        <span className="font-medium truncate max-w-xs sm:max-w-md">
+                          {quoteData.fileName || 'Upload PDF, DOCX, ZIP or image files (Max 10MB)'}
+                        </span>
+                      </div>
+                      <span className="px-3 py-1.5 rounded-lg bg-[#2563EB] text-white text-xs font-bold shrink-0">Browse</span>
+                      <input
+                        type="file"
+                        onChange={handleFileChange}
+                        accept=".pdf,.doc,.docx,.zip,.png,.jpg,.jpeg"
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  {/* Submit Button */}
+                  <div className="pt-4">
+                    <button
+                      type="submit"
+                      className="w-full py-4 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-2.5 transition-all cursor-pointer"
+                    >
+                      <span>Submit Quote Request</span>
+                      <Send className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                </form>
+              )}
+
+            </div>
+          </section>
+
+        </div>
+      ) : (
+
+        /* 2. STANDARD CONTACT & OTHER SUBPAGES */
+        <div className="space-y-12">
+          
+          {/* Header Banner & Subpage Navigation Tabs */}
+          <section className="bg-[#23275c] text-white py-14 px-4 md:px-8 border-b border-indigo-900/40">
+            <div className="max-w-7xl mx-auto space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <span className="text-xs uppercase tracking-wider font-bold text-cyan-300">Connect With Senga Systems</span>
+                  <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-1">
+                    {subpath === 'payment' && 'Online Client Payment Portal'}
+                    {subpath === 'schedule' && 'Schedule a Technical Consultation'}
+                    {subpath === 'support' && 'Support Centre & Help Desk'}
+                    {!subpath && 'Contact Us'}
+                  </h1>
+                </div>
+
+                {/* Navigation Tabs */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Link to="/contact" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!subpath ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Contact Us</Link>
+                  <Link to="/contact/quote" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'quote' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Get a Quote</Link>
+                  <Link to="/contact/payment" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'payment' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Make Payment</Link>
+                  <Link to="/contact/schedule" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'schedule' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Schedule Consultation</Link>
+                  <Link to="/contact/support" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'support' ? 'bg-[#2563EB] text-white shadow-md' : 'bg-slate-800 text-slate-300 hover:text-white'}`}>Support Centre</Link>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* CONTACT US MAIN PAGE CONTENT */}
+          {!subpath && (
+            <section className="max-w-7xl mx-auto px-4 md:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                {/* Contact Details Column */}
+                <div className="lg:col-span-5 space-y-6">
+                  <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-md space-y-6 text-slate-900">
+                    <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Contact Information</h3>
+
+                    <div className="space-y-5 pt-1">
+                      
+                      {/* Phone Number */}
+                      <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <Phone className="w-5 h-5 text-[#2563EB] shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm">Phone Number</h4>
+                          <a href="tel:+265884288849" className="text-sm font-semibold text-[#2563EB] hover:underline block mt-0.5">
+                            (+265) 884 288 849
+                          </a>
+                          <p className="text-xs text-slate-500 mt-0.5">+265 (0) 999 123 456</p>
+                        </div>
+                      </div>
+
+                      {/* Email Address */}
+                      <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <Mail className="w-5 h-5 text-[#2563EB] shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm">Email Address</h4>
+                          <a href="mailto:info@senga.systems" className="text-sm font-semibold text-[#2563EB] hover:underline block mt-0.5">
+                            info@senga.systems
+                          </a>
+                          <p className="text-xs text-slate-500 mt-0.5">24/7 Desk: security@sengasystems.mw</p>
+                        </div>
+                      </div>
+
+                      {/* Physical Location */}
+                      <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <MapPin className="w-5 h-5 text-[#2563EB] shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm">Physical Location</h4>
+                          <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                            <strong className="text-slate-900">Headquarters:</strong> City Centre, Sector 19, Lilongwe, Malawi<br />
+                            <strong className="text-slate-900">Blantyre Branch:</strong> Victoria Avenue Commercial Hub, Blantyre
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Operating Hours */}
+                      <div className="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                        <Clock className="w-5 h-5 text-[#2563EB] shrink-0 mt-1" />
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-sm">Operating Hours</h4>
+                          <p className="text-xs font-semibold text-slate-700 mt-0.5">
+                            Monday to Friday: 8:00 AM – 4:00 PM
+                          </p>
+                          <p className="text-xs text-slate-400 mt-0.5">Closed Saturday & Sunday</p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                {/* Direct Message Form */}
+                <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-md space-y-6 text-slate-900">
+                  {contactSubmitted ? (
+                    <div className="text-center py-12 space-y-4">
+                      <CheckCircle2 className="w-16 h-16 text-[#2563EB] mx-auto" />
+                      <h3 className="text-2xl font-bold text-slate-900">Message Sent Successfully!</h3>
+                      <p className="text-sm text-slate-600 max-w-md mx-auto">
+                        Thank you for reaching out to Senga Systems. One of our technology representatives will contact you shortly.
+                      </p>
+                      <button onClick={() => setContactSubmitted(false)} className="px-6 py-2.5 rounded-xl bg-[#2563EB] text-white text-xs font-bold">
+                        Send Another Message
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                      <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Send Us a Direct Message</h3>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Your Name *</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="John Banda"
+                            value={contactData.name}
+                            onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
+                            className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-[#2563EB]"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address *</label>
+                          <input
+                            type="email"
+                            required
+                            placeholder="john@company.mw"
+                            value={contactData.email}
+                            onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
+                            className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-[#2563EB]"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Subject *</label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="e.g. AI System Integration Inquiry"
+                          value={contactData.subject}
+                          onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm focus:outline-none focus:border-[#2563EB]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Your Message *</label>
+                        <textarea
+                          rows="4"
+                          required
+                          placeholder="How can Senga Systems assist your organization?"
+                          value={contactData.message}
+                          onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
+                          className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm resize-none focus:outline-none focus:border-[#2563EB]"
+                        ></textarea>
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full py-3.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+                      >
+                        <span>Send Message</span>
+                        <Send className="w-4 h-4" />
+                      </button>
+                    </form>
+                  )}
+                </div>
+
+              </div>
+            </section>
+          )}
+
+          {/* PAYMENT SIMULATOR */}
+          {subpath === 'payment' && (
+            <section className="max-w-3xl mx-auto px-4 md:px-8">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-6 text-slate-900">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
+                    <CreditCard className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">Client Payment Gateway</h3>
+                    <p className="text-xs text-slate-500">Pay invoices via Airtel Money, TNM Mpamba, or Bank Transfer</p>
+                  </div>
+                </div>
+
+                {paymentDone ? (
+                  <div className="text-center py-10 space-y-4">
+                    <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto" />
+                    <h3 className="text-2xl font-bold text-slate-900">Payment Processed!</h3>
+                    <p className="text-sm text-slate-600">Receipt generated for Invoice #{invoiceNo}.</p>
+                    <button onClick={() => setPaymentDone(false)} className="px-6 py-2 rounded-xl bg-[#2563EB] text-white text-xs font-bold">
+                      Process Another Payment
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); setPaymentDone(true); }} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Invoice Number</label>
+                      <input
+                        type="text"
+                        value={invoiceNo}
+                        onChange={(e) => setInvoiceNo(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Amount (MWK)</label>
+                      <input
+                        type="text"
+                        value={payAmount}
+                        onChange={(e) => setPayAmount(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm"
+                      />
+                    </div>
+                    <button type="submit" className="w-full py-3.5 rounded-xl bg-[#2563EB] text-white font-bold text-sm shadow-md">
+                      Confirm Payment
+                    </button>
+                  </form>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* SCHEDULE CONSULTATION */}
+          {subpath === 'schedule' && (
+            <section className="max-w-3xl mx-auto px-4 md:px-8">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-6 text-slate-900">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#2563EB]">
+                    <Calendar className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900">Schedule Technical Advisory</h3>
+                    <p className="text-xs text-slate-500">Book 45-min session with senior AI & infrastructure architects</p>
+                  </div>
+                </div>
+
+                {consultSubmitted ? (
+                  <div className="text-center py-10 space-y-4">
+                    <CheckCircle2 className="w-16 h-16 text-[#2563EB] mx-auto" />
+                    <h3 className="text-2xl font-bold text-slate-900">Consultation Booked!</h3>
+                    <p className="text-sm text-slate-600">Confirmation invite sent to {consultData.email}.</p>
+                    <button onClick={() => setConsultSubmitted(false)} className="px-6 py-2 rounded-xl bg-[#2563EB] text-white text-xs font-bold">
+                      Book Another Session
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleConsultSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Your Name *</label>
                       <input
                         type="text"
                         required
                         placeholder="John Banda"
-                        value={contactData.name}
-                        onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
+                        value={consultData.clientName}
+                        onChange={(e) => setConsultData({ ...consultData, clientName: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Email Address</label>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address *</label>
                       <input
                         type="email"
                         required
                         placeholder="john@company.mw"
-                        value={contactData.email}
-                        onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
+                        value={consultData.email}
+                        onChange={(e) => setConsultData({ ...consultData, email: e.target.value })}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-sm"
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Subject</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. AI System Integration Inquiry"
-                      value={contactData.subject}
-                      onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Your Message</label>
-                    <textarea
-                      rows="4"
-                      required
-                      placeholder="How can Senga Systems assist your organization?"
-                      value={contactData.message}
-                      onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm resize-none"
-                    ></textarea>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
-                  >
-                    <span>Send Message</span>
-                    <Send className="w-4 h-4" />
-                  </button>
-                </form>
-              )}
-            </div>
-
-          </div>
-        </section>
-      )}
-
-      {/* 2. MAKE A PAYMENT SIMULATOR */}
-      {subpath === 'payment' && (
-        <section className="max-w-3xl mx-auto px-4 md:px-8">
-          <div className="glass-card p-8 rounded-3xl border border-slate-800 space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                <CreditCard className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white">Client Payment Portal</h2>
-                <p className="text-xs text-slate-400">Secure digital payment gateway for Senga Systems invoices</p>
-              </div>
-            </div>
-
-            {paymentDone ? (
-              <div className="p-8 text-center space-y-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl">
-                <CheckCircle2 className="w-14 h-14 text-emerald-400 mx-auto" />
-                <h3 className="text-xl font-bold text-white">Payment Successfully Processed!</h3>
-                <p className="text-xs text-slate-300 font-mono">Receipt Reference: TXN-SNG-99812739</p>
-                <p className="text-sm text-slate-300">Invoice {invoiceNo} paid in full (MWK {payAmount}). Receipt sent to email.</p>
-                <button onClick={() => setPaymentDone(false)} className="px-6 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Make Another Payment</button>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Invoice Reference No.</label>
-                    <input
-                      type="text"
-                      value={invoiceNo}
-                      onChange={(e) => setInvoiceNo(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Amount (MWK)</label>
-                    <input
-                      type="text"
-                      value={payAmount}
-                      onChange={(e) => setPayAmount(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-2">Select Payment Method</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('airtel')}
-                      className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${paymentMethod === 'airtel' ? 'bg-red-600/20 border-red-500 text-white font-bold' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
-                    >
-                      <Smartphone className="w-5 h-5 mx-auto mb-1 text-red-500" />
-                      <span className="text-xs">Airtel Money</span>
+                    <button type="submit" className="w-full py-3.5 rounded-xl bg-[#2563EB] text-white font-bold text-sm shadow-md">
+                      Confirm Consultation Booking
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('tnm')}
-                      className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${paymentMethod === 'tnm' ? 'bg-emerald-600/20 border-emerald-500 text-white font-bold' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
-                    >
-                      <Smartphone className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
-                      <span className="text-xs">TNM Mpamba</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('card')}
-                      className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${paymentMethod === 'card' ? 'bg-blue-600/20 border-blue-500 text-white font-bold' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
-                    >
-                      <CreditCard className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-                      <span className="text-xs">Visa / Mastercard</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod('bank')}
-                      className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${paymentMethod === 'bank' ? 'bg-indigo-600/20 border-indigo-500 text-white font-bold' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
-                    >
-                      <Building className="w-5 h-5 mx-auto mb-1 text-indigo-400" />
-                      <span className="text-xs">Bank Transfer</span>
-                    </button>
+                  </form>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* SUPPORT CENTRE */}
+          {subpath === 'support' && (
+            <section className="max-w-4xl mx-auto px-4 md:px-8 space-y-8">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-md space-y-6 text-slate-900">
+                <div className="flex items-center gap-3">
+                  <HelpCircle className="w-8 h-8 text-[#2563EB]" />
+                  <div>
+                    <h3 className="text-2xl font-bold text-slate-900">Help Desk & Knowledgebase</h3>
+                    <p className="text-xs text-slate-500">24/7 Emergency Support Hotline & SLAs</p>
                   </div>
                 </div>
-
-                <button
-                  onClick={() => setPaymentDone(true)}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Complete MWK {payAmount} Payment</span>
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* 3. SCHEDULE CONSULTATION */}
-      {subpath === 'schedule' && (
-        <section className="max-w-3xl mx-auto px-4 md:px-8">
-          <div className="glass-card p-8 rounded-3xl border border-slate-800 space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                <Calendar className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-white">Schedule Technical Consultation</h2>
-                <p className="text-xs text-slate-400">Book a 45-minute strategic session with our lead system architects</p>
-              </div>
-            </div>
-
-            {consultSubmitted ? (
-              <div className="p-8 text-center space-y-4 bg-blue-600/10 border border-blue-500/30 rounded-2xl">
-                <CheckCircle2 className="w-14 h-14 text-blue-400 mx-auto" />
-                <h3 className="text-xl font-bold text-white">Consultation Booked!</h3>
-                <p className="text-sm text-slate-300">
-                  Session scheduled for <strong className="text-white">{consultData.preferredDate} at {consultData.timeSlot}</strong> with our technical advisory team. Calendar invitation sent to {consultData.email}.
-                </p>
-                <button onClick={() => setConsultSubmitted(false)} className="px-6 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Book Another Session</button>
-              </div>
-            ) : (
-              <form onSubmit={handleConsultSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Your Full Name</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Jane Banda"
-                      value={consultData.clientName}
-                      onChange={(e) => setConsultData({ ...consultData, clientName: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Email Address</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="jane@organization.mw"
-                      value={consultData.email}
-                      onChange={(e) => setConsultData({ ...consultData, email: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
-                    />
-                  </div>
+                <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 space-y-1">
+                  <p className="text-sm font-bold text-[#2563EB]">24/7 Security Incident Hotline:</p>
+                  <p className="text-xs text-slate-700 font-semibold">+265 (0) 884 288 849 / security@sengasystems.mw</p>
                 </div>
+              </div>
+            </section>
+          )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Preferred Date</label>
-                    <input
-                      type="date"
-                      required
-                      value={consultData.preferredDate}
-                      onChange={(e) => setConsultData({ ...consultData, preferredDate: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Preferred Time Slot</label>
-                    <select
-                      value={consultData.timeSlot}
-                      onChange={(e) => setConsultData({ ...consultData, timeSlot: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
-                    >
-                      <option value="09:00 AM">09:00 AM CAT</option>
-                      <option value="10:30 AM">10:30 AM CAT</option>
-                      <option value="02:00 PM">02:00 PM CAT</option>
-                      <option value="03:30 PM">03:30 PM CAT</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 uppercase mb-1">Consultation Topic</label>
-                  <select
-                    value={consultData.consultantNeeded}
-                    onChange={(e) => setConsultData({ ...consultData, consultantNeeded: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm"
-                  >
-                    <option value="Cybersecurity & SengaShield Audit">Cybersecurity & SengaShield Audit</option>
-                    <option value="Custom AI Model Strategy">Custom AI Model Strategy</option>
-                    <option value="Enterprise Cloud Infrastructure">Enterprise Cloud Infrastructure</option>
-                    <option value="Full-Stack Software Architecture">Full-Stack Software Architecture</option>
-                  </select>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all"
-                >
-                  <Calendar className="w-4 h-4" />
-                  <span>Confirm Consultation Booking</span>
-                </button>
-              </form>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* 4. SUPPORT CENTRE */}
-      {subpath === 'support' && (
-        <section className="max-w-5xl mx-auto px-4 md:px-8 space-y-10">
-          <div className="glass-card p-8 rounded-3xl border border-slate-800 text-center space-y-4">
-            <HelpCircle className="w-12 h-12 text-blue-400 mx-auto" />
-            <h2 className="text-3xl font-bold text-white">Senga Systems Support Centre</h2>
-            <p className="text-sm text-slate-300 max-w-xl mx-auto">
-              Welcome to client help desk. Search knowledgebase topics or submit a priority support ticket.
-            </p>
-
-            <div className="relative max-w-lg mx-auto">
-              <input
-                type="text"
-                placeholder="Search support articles, SSL setups, SengaShield docs..."
-                className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500"
-              />
-              <Search className="w-5 h-5 text-slate-400 absolute left-4 top-3.5" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
-              <FileText className="w-8 h-8 text-blue-400" />
-              <h3 className="font-bold text-white text-base">Knowledgebase Docs</h3>
-              <p className="text-xs text-slate-400">Step-by-step guides for domain routing, API keys and dashboard setups.</p>
-            </div>
-            <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
-              <ShieldCheck className="w-8 h-8 text-cyan-400" />
-              <h3 className="font-bold text-white text-base">SengaShield SLA Support</h3>
-              <p className="text-xs text-slate-400">24/7 emergency hotline for active cyber incident response.</p>
-            </div>
-            <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
-              <Mail className="w-8 h-8 text-indigo-400" />
-              <h3 className="font-bold text-white text-base">Email Support Desk</h3>
-              <p className="text-xs text-slate-400">Direct response within 2 hours: support@sengasystems.mw</p>
-            </div>
-          </div>
-        </section>
+        </div>
       )}
 
     </div>

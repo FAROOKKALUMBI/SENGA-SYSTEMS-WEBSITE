@@ -29,7 +29,6 @@ function PublicLayout({ children }) {
         {children}
       </main>
       <Footer />
-      <QuoteModal />
     </div>
   );
 }
@@ -45,6 +44,7 @@ export default function App() {
           <Route path="/services/*" element={<PublicLayout><ServicesPages /></PublicLayout>} />
           <Route path="/updates/*" element={<PublicLayout><UpdatesPages /></PublicLayout>} />
           <Route path="/contact/*" element={<PublicLayout><ContactPages /></PublicLayout>} />
+          <Route path="/quote" element={<PublicLayout><ContactPages forceSubpath="quote" /></PublicLayout>} />
 
           {/* Admin Staff CMS Portal Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
