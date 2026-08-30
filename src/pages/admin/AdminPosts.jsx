@@ -39,7 +39,7 @@ export default function AdminPosts() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-extrabold text-white tracking-tight">Posts & Updates Content Manager</h1>
-          <p className="text-xs text-slate-400">Publish and manage News, Events, AI Insights, and Announcements</p>
+          <p className="text-xs text-slate-400">Publish and manage News, Events, AI Insights and Announcements</p>
         </div>
         <button
           onClick={() => setShowCreate(!showCreate)}

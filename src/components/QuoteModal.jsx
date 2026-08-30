@@ -154,7 +154,7 @@ export default function QuoteModal() {
                 <textarea
                   rows="3"
                   required
-                  placeholder="Briefly describe your objectives, timelines, or technical requirements..."
+                  placeholder="Briefly describe your objectives, timelines or technical requirements..."
                   value={formData.details}
                   onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                   className="w-full px-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm resize-none"

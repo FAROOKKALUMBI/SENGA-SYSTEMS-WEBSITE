@@ -433,7 +433,7 @@ export default function ContactPages() {
             <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
               <FileText className="w-8 h-8 text-blue-400" />
               <h3 className="font-bold text-white text-base">Knowledgebase Docs</h3>
-              <p className="text-xs text-slate-400">Step-by-step guides for domain routing, API keys, and dashboard setups.</p>
+              <p className="text-xs text-slate-400">Step-by-step guides for domain routing, API keys and dashboard setups.</p>
             </div>
             <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-3">
               <ShieldCheck className="w-8 h-8 text-cyan-400" />

@@ -29,7 +29,7 @@ export default function AboutPages() {
   const faqsList = [
     {
       q: 'What technology services does Senga Systems specialize in?',
-      a: 'Senga Systems provides full-stack software development, custom artificial intelligence (AI) solutions, SengaShield cybersecurity threat defense, ICT infrastructure design, cloud hosting, and technology consulting.'
+      a: 'Senga Systems provides full-stack software development, custom artificial intelligence (AI) solutions, SengaShield cybersecurity threat defense, ICT infrastructure design, cloud hosting and technology consulting.'
     },
     {
       q: 'Where are Senga Systems headquarters located?',
@@ -37,11 +37,11 @@ export default function AboutPages() {
     },
     {
       q: 'How does SengaShield protect enterprise banking and telecommunications?',
-      a: 'SengaShield is our proprietary autonomous security platform that operates 24/7 zero-trust network analysis, automated threat isolation, and cryptographic data protection.'
+      a: 'SengaShield is our proprietary autonomous security platform that operates 24/7 zero-trust network analysis, automated threat isolation and cryptographic data protection.'
     },
     {
       q: 'Can Senga Systems build custom software tailored for our specific industry?',
-      a: 'Yes! We specialize in custom web applications, native mobile apps (iOS & Android), financial technology integration, and enterprise resource planning systems tailored for Malawian and international compliance.'
+      a: 'Yes! We specialize in custom web applications, native mobile apps (iOS & Android), financial technology integration and enterprise resource planning systems tailored for Malawian and international compliance.'
     },
     {
       q: 'How do I request a consultation or quote?',
@@ -59,7 +59,7 @@ export default function AboutPages() {
     {
       name: 'Chimwemwe Banda',
       title: 'Head of Software Engineering & AI',
-      bio: 'Specialist in distributed cloud platforms, machine learning pipelines, and high-concurrency database engineering.',
+      bio: 'Specialist in distributed cloud platforms, machine learning pipelines and high-concurrency database engineering.',
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'
     },
     {
@@ -71,7 +71,7 @@ export default function AboutPages() {
     {
       name: 'Kondwani Mwale',
       title: 'Head of ICT Infrastructure & Operations',
-      bio: 'Expert in enterprise datacenters, fiber optic network routing, and hybrid cloud migrations.',
+      bio: 'Expert in enterprise datacenters, fiber optic network routing and hybrid cloud migrations.',
       image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80'
     }
   ];
@@ -129,7 +129,7 @@ export default function AboutPages() {
               </div>
               <h2 className="text-2xl font-bold text-white">Our Mission</h2>
               <p className="text-sm text-slate-300 leading-relaxed">
-                To empower businesses, government agencies, and organizations across Malawi and Africa through secure, state-of-the-art software engineering, AI automation, and unyielding cybersecurity defenses.
+                To empower businesses, government agencies and organizations across Malawi and Africa through secure, state-of-the-art software engineering, AI automation and unyielding cybersecurity defenses.
               </p>
             </div>
 
@@ -205,7 +205,7 @@ export default function AboutPages() {
               <span className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-emerald-500 border-4 border-[#0B132B]"></span>
               <span className="text-xs font-mono font-bold text-emerald-400">2026</span>
               <h3 className="text-lg font-bold text-white">Nationwide Leadership & AI Transformation</h3>
-              <p className="text-xs text-slate-300 mt-1">Operating full-scale AI labs, cybersecurity hubs, and enterprise cloud data centers.</p>
+              <p className="text-xs text-slate-300 mt-1">Operating full-scale AI labs, cybersecurity hubs and enterprise cloud data centers.</p>
             </div>
           </div>
         </section>
