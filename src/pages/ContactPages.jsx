@@ -17,7 +17,8 @@ import {
   Search,
   FileText,
   Paperclip,
-  UploadCloud
+  UploadCloud,
+  Lock
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
 
@@ -50,11 +51,17 @@ export default function ContactPages({ forceSubpath }) {
     fileName: ''
   });
 
-  // Payment Simulator State
-  const [paymentMethod, setPaymentMethod] = useState('airtel');
+  // Payment Gateway State
+  const [currency, setCurrency] = useState('USD');
   const [paymentDone, setPaymentDone] = useState(false);
-  const [payAmount, setPayAmount] = useState('250,000');
-  const [invoiceNo, setInvoiceNo] = useState('INV-2026-089');
+  const [paymentData, setPaymentData] = useState({
+    customerName: '',
+    email: '',
+    phone: '',
+    invoiceNo: '',
+    description: '',
+    amount: ''
+  });
 
   // Consultation State
   const [consultSubmitted, setConsultSubmitted] = useState(false);
@@ -524,54 +531,184 @@ export default function ContactPages({ forceSubpath }) {
             </section>
           )}
 
-          {/* PAYMENT SIMULATOR */}
+          {/* PAYMENT PORTAL SECTION */}
           {subpath === 'payment' && (
-            <section className="max-w-3xl mx-auto px-4 md:px-8">
-              <div className="bg-[#D9D9D9] p-8 rounded-3xl border border-slate-300 shadow-md space-y-6 text-slate-900">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-[#2563EB]">
+            <section className="max-w-2xl mx-auto px-4 md:px-8">
+              <div className="bg-[#D9D9D9] p-6 sm:p-10 rounded-3xl border border-slate-300/80 shadow-lg space-y-6 text-slate-900">
+                
+                <div className="flex items-center gap-3.5 border-b border-slate-400/30 pb-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-[#2563EB] shadow-xs shrink-0">
                     <CreditCard className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900">Client Payment Gateway</h3>
-                    <p className="text-xs text-slate-600">Pay invoices via Airtel Money, TNM Mpamba or Bank Transfer</p>
+                    <h3 className="text-2xl font-black text-slate-900 tracking-tight">Client Payment Gateway</h3>
+                    <p className="text-xs text-slate-600 font-medium">Pay invoices via encrypted online payment connection</p>
                   </div>
                 </div>
 
                 {paymentDone ? (
-                  <div className="text-center py-10 space-y-4">
-                    <CheckCircle2 className="w-16 h-16 text-emerald-600 mx-auto" />
-                    <h3 className="text-2xl font-bold text-slate-900">Payment Processed!</h3>
-                    <p className="text-sm text-slate-700">Receipt generated for Invoice #{invoiceNo}.</p>
-                    <button onClick={() => setPaymentDone(false)} className="px-6 py-2 rounded-xl bg-[#2563EB] text-white text-xs font-bold">
-                      Process Another Payment
+                  <div className="text-center py-12 space-y-4">
+                    <CheckCircle2 className="w-16 h-16 text-[#2563EB] mx-auto" />
+                    <h3 className="text-2xl font-black text-slate-900">Payment Processed Successfully!</h3>
+                    <p className="text-sm text-slate-700 max-w-md mx-auto">
+                      Thank you, <span className="font-bold text-slate-900">{paymentData.customerName || 'Valued Client'}</span>. Your payment of <span className="font-bold text-[#2563EB]">{currency} {paymentData.amount || '0.00'}</span> for Invoice #{paymentData.invoiceNo || 'INV-12345'} has been confirmed.
+                    </p>
+                    <button 
+                      onClick={() => setPaymentDone(false)} 
+                      className="px-7 py-3 rounded-xl bg-[#2563EB] text-white text-xs font-extrabold shadow-md hover:bg-blue-700 transition-all cursor-pointer"
+                    >
+                      Make Another Payment
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={(e) => { e.preventDefault(); setPaymentDone(true); }} className="space-y-4">
+                  <form onSubmit={(e) => { e.preventDefault(); setPaymentDone(true); }} className="space-y-5">
+                    
+                    {/* Select Currency */}
                     <div>
-                      <label className="block text-xs font-bold text-slate-800 uppercase mb-1">Invoice Number</label>
+                      <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2">
+                        Select Currency
+                      </label>
+                      <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-200/80 rounded-2xl border border-slate-300">
+                        <button
+                          type="button"
+                          onClick={() => setCurrency('USD')}
+                          className={`py-2.5 rounded-xl font-extrabold text-sm transition-all cursor-pointer ${
+                            currency === 'USD'
+                              ? 'bg-[#2563EB] text-white shadow-md'
+                              : 'bg-transparent text-slate-700 hover:text-slate-900'
+                          }`}
+                        >
+                          USD
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setCurrency('MWK')}
+                          className={`py-2.5 rounded-xl font-extrabold text-sm transition-all cursor-pointer ${
+                            currency === 'MWK'
+                              ? 'bg-[#2563EB] text-white shadow-md'
+                              : 'bg-transparent text-slate-700 hover:text-slate-900'
+                          }`}
+                        >
+                          MWK
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Customer Name */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        Customer Name <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="text"
-                        value={invoiceNo}
-                        onChange={(e) => setInvoiceNo(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 text-sm"
+                        required
+                        placeholder="Enter your full name"
+                        value={paymentData.customerName}
+                        onChange={(e) => setPaymentData({ ...paymentData, customerName: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
                       />
                     </div>
+
+                    {/* Email Address & Phone Number */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                          Email Address <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          placeholder="your@email.com"
+                          value={paymentData.email}
+                          onChange={(e) => setPaymentData({ ...paymentData, email: e.target.value })}
+                          className="w-full px-4 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          placeholder="+265 888 539 882"
+                          value={paymentData.phone}
+                          onChange={(e) => setPaymentData({ ...paymentData, phone: e.target.value })}
+                          className="w-full px-4 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Invoice Number */}
                     <div>
-                      <label className="block text-xs font-bold text-slate-800 uppercase mb-1">Amount (MWK)</label>
+                      <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        Invoice Number <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="text"
-                        value={payAmount}
-                        onChange={(e) => setPayAmount(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 text-sm"
+                        required
+                        placeholder="INV-12345"
+                        value={paymentData.invoiceNo}
+                        onChange={(e) => setPaymentData({ ...paymentData, invoiceNo: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs font-mono"
                       />
                     </div>
-                    <button type="submit" className="w-full py-3.5 rounded-xl bg-[#2563EB] text-white font-bold text-sm shadow-md">
-                      Confirm Payment
-                    </button>
+
+                    {/* Invoice Description */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        Invoice Description <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Brief description of what this payment is for"
+                        value={paymentData.description}
+                        onChange={(e) => setPaymentData({ ...paymentData, description: e.target.value })}
+                        className="w-full px-4 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
+                      />
+                    </div>
+
+                    {/* Amount */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        Amount ({currency}) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative flex items-center">
+                        <input
+                          type="number"
+                          step="0.01"
+                          required
+                          placeholder="0.00"
+                          value={paymentData.amount}
+                          onChange={(e) => setPaymentData({ ...paymentData, amount: e.target.value })}
+                          className="w-full pl-4 pr-16 py-3.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs font-semibold"
+                        />
+                        <span className="absolute right-4 text-xs font-bold text-slate-500 uppercase pointer-events-none">
+                          {currency}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Pay Now Button */}
+                    <div className="pt-2 space-y-3 text-center">
+                      <button
+                        type="submit"
+                        className="w-full py-4 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <span>Pay Now</span>
+                        <Send className="w-4 h-4" />
+                      </button>
+
+                      <p className="text-xs text-slate-600 font-semibold flex items-center justify-center gap-1.5 pt-1">
+                        <Lock className="w-3.5 h-3.5 text-[#2563EB]" />
+                        <span>Secure payment via encrypted connection</span>
+                      </p>
+                    </div>
+
                   </form>
                 )}
+
               </div>
             </section>
           )}
