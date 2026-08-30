@@ -490,13 +490,13 @@ export default function ServicesPages() {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-              <button
-                onClick={() => openQuoteModal()}
+              <Link
+                to="/quote"
                 className="px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md transition-all flex items-center gap-2.5 cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Get a Free Consultation</span>
-              </button>
+              </Link>
 
               <a
                 href="tel:+265884288849"

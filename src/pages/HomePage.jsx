@@ -112,13 +112,13 @@ export default function HomePage() {
                 Explore Services
               </Link>
 
-              <button
-                onClick={() => openQuoteModal()}
+              <Link
+                to="/quote"
                 className="px-8 py-3.5 rounded-xl border-2 border-white/90 text-white font-extrabold text-sm hover:bg-white/10 flex items-center gap-2.5 cursor-pointer transition-all"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
 
           </div>
@@ -393,13 +393,13 @@ export default function HomePage() {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <button
-              onClick={() => openQuoteModal()}
+            <Link
+              to="/quote"
               className="px-7 py-3.5 rounded-xl bg-[#2b66bf] hover:bg-[#21519a] text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center gap-2.5 cursor-pointer"
             >
               <MessageSquare className="w-4 h-4" />
               <span>Get a Free Consultation</span>
-            </button>
+            </Link>
 
             <a
               href="tel:+2650884288849"

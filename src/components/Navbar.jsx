@@ -233,13 +233,13 @@ export default function Navbar() {
               {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            <button
-              onClick={() => openQuoteModal()}
+            <Link
+              to="/quote"
               className="px-6 py-3 rounded-xl bg-[#2b66bf] hover:bg-[#21519a] text-white font-extrabold text-sm shadow-md transition-all cursor-pointer flex items-center gap-2"
             >
               <Mail className="w-4 h-4" />
               <span>Get a Quote</span>
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -263,13 +263,14 @@ export default function Navbar() {
             <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold hover:text-blue-600">Contact</Link>
             <Link to="/admin/login" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold text-blue-600">Staff Portal Login</Link>
           </div>
-          <button
-            onClick={() => { setMobileMenuOpen(false); openQuoteModal(); }}
+          <Link
+            to="/quote"
+            onClick={() => setMobileMenuOpen(false)}
             className="w-full py-3 rounded-xl bg-[#2b66bf] text-white font-bold text-center flex items-center justify-center gap-2"
           >
             <Mail className="w-4 h-4" />
             <span>Get a Quote</span>
-          </button>
+          </Link>
         </div>
       )}
 
