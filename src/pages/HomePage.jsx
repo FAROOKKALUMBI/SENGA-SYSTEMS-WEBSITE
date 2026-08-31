@@ -327,17 +327,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* LATEST NEWS & VACANCIES DISPLAY SECTION (ADMIN & EMPLOYEE POSTINGS) */}
+      {/* NEWS AND EVENTS DISPLAY SECTION */}
       <section className="bg-white dark:bg-slate-900 py-16 px-4 md:px-12 border-t border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto space-y-10">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
             <div>
-              <span className="inline-block px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/40 text-[#2563EB] dark:text-blue-300 text-xs font-extrabold uppercase tracking-wider">
-                Company Portal Feed
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2">
-                Latest News & Career Vacancies
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                News and Events
               </h2>
             </div>
             <Link
