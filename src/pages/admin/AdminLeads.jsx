@@ -1,115 +1,87 @@
-import React, { useState } from 'react';
-import { Inbox, Calendar, Phone, Mail, CheckCircle2, Clock } from 'lucide-react';
+import React from 'react';
+import { MessageSquare, Calendar, Mail, FileText, CheckCircle2 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 
 export default function AdminLeads() {
-  const { quotes, consultations, updateQuoteStatus } = useCMS();
-  const [tab, setTab] = useState('quotes');
+  const { quotes, consultations } = useCMS();
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">Leads & Submissions Inbox</h1>
-          <p className="text-xs text-slate-400">Review incoming quote requests and booked consultation sessions</p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setTab('quotes')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${tab === 'quotes' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-400'}`}
-          >
-            Quote Requests ({quotes.length})
-          </button>
-          <button
-            onClick={() => setTab('consultations')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${tab === 'consultations' ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-800 text-slate-400'}`}
-          >
-            Booked Consultations ({consultations.length})
-          </button>
-        </div>
+    <div className="space-y-8 font-['Plus_Jakarta_Sans',sans-serif]">
+      
+      {/* Top Banner Header */}
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-2">
+        <span className="text-xs font-black uppercase tracking-wider text-[#2563EB]">Lead Management & Sales</span>
+        <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
+          <MessageSquare className="w-7 h-7 text-[#2563EB]" />
+          <span>Client Quote Inquiries & Consultations</span>
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-600 font-medium">
+          View client quote submissions, project specifications, and scheduled technical consultation sessions.
+        </p>
       </div>
 
-      {tab === 'quotes' ? (
-        <div className="space-y-4">
-          {quotes.length === 0 ? (
-            <div className="glass-card p-12 text-center text-slate-400 rounded-3xl">No quote submissions yet.</div>
-          ) : (
-            quotes.map((q) => (
-              <div key={q.id} className="glass-card bg-[#0F172A] border border-slate-800 rounded-2xl p-6 space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
-                  <div>
-                    <h3 className="font-bold text-white text-lg">{q.clientName}</h3>
-                    <div className="flex items-center gap-4 text-xs text-slate-400 mt-0.5">
-                      <span className="flex items-center gap-1"><Mail className="w-3.5 h-3.5 text-blue-400" /> {q.email}</span>
-                      <span className="flex items-center gap-1"><Phone className="w-3.5 h-3.5 text-blue-400" /> {q.phone}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-slate-400 font-mono">{new Date(q.submittedAt).toLocaleDateString()}</span>
-                    <select
-                      value={q.status}
-                      onChange={(e) => updateQuoteStatus(q.id, e.target.value)}
-                      className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-blue-400"
-                    >
-                      <option value="New">New</option>
-                      <option value="Contacted">Contacted</option>
-                      <option value="Proposal Sent">Proposal Sent</option>
-                      <option value="Archived">Archived</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div>
-                    <span className="text-slate-400 uppercase font-semibold">Service Requested:</span>
-                    <p className="text-white font-bold mt-0.5">{q.serviceRequested}</p>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 uppercase font-semibold">Budget Range:</span>
-                    <p className="text-emerald-400 font-mono font-bold mt-0.5">{q.budget}</p>
-                  </div>
-                </div>
-
-                {q.details && (
-                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase">Project Details:</span>
-                    <p className="mt-1 leading-relaxed">{q.details}</p>
-                  </div>
-                )}
-              </div>
-            ))
-          )}
+      {/* QUOTES TABLE */}
+      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 className="text-xl font-black text-slate-900">Project Quote Submissions ({quotes.length})</h2>
+          <span className="text-xs font-bold text-[#2563EB]">Active Sales Pipeline</span>
         </div>
-      ) : (
-        <div className="space-y-4">
-          {consultations.length === 0 ? (
-            <div className="glass-card p-12 text-center text-slate-400 rounded-3xl">No consultation bookings yet.</div>
-          ) : (
-            consultations.map((c) => (
-              <div key={c.id} className="glass-card bg-[#0F172A] border border-slate-800 rounded-2xl p-6 space-y-3">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
-                    <h3 className="font-bold text-white text-lg">{c.clientName}</h3>
-                    <p className="text-xs text-slate-400">{c.email} • {c.phone}</p>
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold">
-                    {c.status || 'Confirmed'}
-                  </span>
-                </div>
 
-                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
-                  <span className="text-blue-400 font-bold">{c.consultantNeeded}</span>
-                  <span className="text-white font-mono flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5 text-blue-400" /> {c.preferredDate} at {c.timeSlot}
-                  </span>
+        <div className="space-y-4">
+          {quotes.map((q) => (
+            <div key={q.id} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                <div>
+                  <h3 className="text-base font-black text-slate-900">{q.clientName}</h3>
+                  <span className="text-xs font-bold text-slate-600">{q.email} • {q.company || 'Private Entity'}</span>
                 </div>
+                <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 font-black text-[11px]">
+                  {q.status || 'PENDING'}
+                </span>
               </div>
-            ))
-          )}
+
+              <div className="space-y-1 text-xs">
+                <span className="font-black text-[#2563EB] block">Service Requested: {q.serviceRequested}</span>
+                <p className="text-slate-800 font-medium leading-relaxed">{q.details}</p>
+              </div>
+
+              {q.attachedFile && (
+                <div className="pt-2 flex items-center gap-2 text-xs text-[#2563EB] font-bold">
+                  <FileText className="w-4 h-4" />
+                  <span>Attached File: {q.attachedFile}</span>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
-      )}
+      </section>
+
+      {/* BOOKED CONSULTATIONS */}
+      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 className="text-xl font-black text-slate-900">Scheduled Consultation Sessions ({consultations.length})</h2>
+          <span className="text-xs font-bold text-[#2563EB]">Calendar Sessions</span>
+        </div>
+
+        <div className="space-y-4">
+          {consultations.map((c) => (
+            <div key={c.id} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h3 className="text-base font-black text-slate-900">{c.clientName}</h3>
+                <p className="text-xs font-bold text-slate-600">{c.email} • {c.phone}</p>
+                <span className="text-xs font-black text-[#2563EB] block">{c.consultantNeeded}</span>
+              </div>
+              <div className="text-left sm:text-right space-y-1">
+                <span className="text-xs font-black text-slate-800 block">📅 {c.preferredDate} at {c.timeSlot}</span>
+                <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-black inline-block">
+                  {c.status || 'CONFIRMED'}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
     </div>
   );
 }

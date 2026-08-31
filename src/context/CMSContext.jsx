@@ -230,12 +230,28 @@ export function CMSProvider({ children }) {
   const [quoteServicePrefill, setQuoteServicePrefill] = useState('');
 
   const login = async (email, password) => {
-    // Authenticate as Farook Kalumbi (COO) or requested email
-    const loggedInUser = {
-      ...DEFAULT_COO_USER,
-      email: email || DEFAULT_COO_USER.email,
-      lastLogin: 'Just now'
-    };
+    let matchedUser = users.find(u => u.email.toLowerCase() === (email || '').toLowerCase());
+    if (!matchedUser) {
+      const lowerEmail = (email || '').toLowerCase();
+      if (lowerEmail.includes('editor')) {
+        matchedUser = { id: 'usr_ed', name: 'Grace Phiri', email: lowerEmail, title: 'Content Editor', role: 'Content Administrator', roleCode: 'CONTENT_ADMIN', avatar: null };
+      } else if (lowerEmail.includes('hr')) {
+        matchedUser = { id: 'usr_hr', name: 'Chisomo Banda', email: lowerEmail, title: 'HR & Talent Lead', role: 'HR Manager', roleCode: 'HR_MANAGER', avatar: null };
+      } else if (lowerEmail.includes('support')) {
+        matchedUser = { id: 'usr_sup', name: 'John Kaunda', email: lowerEmail, title: 'Support Lead', role: 'Client Support', roleCode: 'CLIENT_SUPPORT', avatar: null };
+      } else if (lowerEmail.includes('biz') || lowerEmail.includes('sales')) {
+        matchedUser = { id: 'usr_biz', name: 'Memory Musonda', email: lowerEmail, title: 'Sales Manager', role: 'Sales Manager', roleCode: 'SALES_MANAGER', avatar: null };
+      } else if (lowerEmail.includes('auditor') || lowerEmail.includes('security')) {
+        matchedUser = { id: 'usr_sec', name: 'Tamandani Mwale', email: lowerEmail, title: 'Security Specialist', role: 'Security Auditor', roleCode: 'SECURITY_AUDITOR', avatar: null };
+      } else if (lowerEmail.includes('partner')) {
+        matchedUser = { id: 'usr_part', name: 'Patricia Gondwe', email: lowerEmail, title: 'Partner Liaison', role: 'Partner Manager', roleCode: 'PARTNER_MANAGER', avatar: null };
+      } else if (lowerEmail.includes('analytics')) {
+        matchedUser = { id: 'usr_an', name: 'Kelvin Chirwa', email: lowerEmail, title: 'Data Analyst', role: 'Analytics Viewer', roleCode: 'ANALYTICS_VIEWER', avatar: null };
+      } else {
+        matchedUser = { ...DEFAULT_COO_USER, email: email || DEFAULT_COO_USER.email };
+      }
+    }
+    const loggedInUser = { ...matchedUser, lastLogin: 'Just now' };
     setUser(loggedInUser);
     localStorage.setItem('senga_admin_user', JSON.stringify(loggedInUser));
     return { success: true, user: loggedInUser };

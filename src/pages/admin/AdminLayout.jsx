@@ -34,6 +34,23 @@ export default function AdminLayout() {
     avatar: '/farook_avatar.jpg'
   };
 
+  const roleCode = currentUser.roleCode || 'SYSTEM_ADMIN';
+
+  const roleAllowedPaths = {
+    SYSTEM_ADMIN: ['/admin/dashboard', '/admin/posts', '/admin/vacancies', '/admin/leads', '/admin/roles', '/admin/partners', '/admin/analytics', '/admin/settings'],
+    CONTENT_ADMIN: ['/admin/dashboard', '/admin/posts', '/admin/analytics'],
+    CONTENT_AUTHOR: ['/admin/dashboard', '/admin/posts'],
+    SERVICE_MANAGER: ['/admin/dashboard', '/admin/posts'],
+    HR_MANAGER: ['/admin/dashboard', '/admin/vacancies'],
+    CLIENT_SUPPORT: ['/admin/dashboard', '/admin/leads'],
+    SALES_MANAGER: ['/admin/dashboard', '/admin/leads'],
+    SECURITY_AUDITOR: ['/admin/dashboard', '/admin/roles', '/admin/settings'],
+    PARTNER_MANAGER: ['/admin/dashboard', '/admin/partners'],
+    ANALYTICS_VIEWER: ['/admin/dashboard', '/admin/analytics']
+  };
+
+  const allowedPaths = roleAllowedPaths[roleCode] || roleAllowedPaths.SYSTEM_ADMIN;
+
   const navItems = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     { label: 'Content Management', path: '/admin/posts', icon: FileText },
@@ -43,7 +60,7 @@ export default function AdminLayout() {
     { label: 'Partners', path: '/admin/partners', icon: Handshake },
     { label: 'Analytics', path: '/admin/analytics', icon: BarChart3 },
     { label: 'Settings', path: '/admin/settings', icon: Settings },
-  ];
+  ].filter(item => allowedPaths.includes(item.path));
 
   const handleSignOut = () => {
     logout();
