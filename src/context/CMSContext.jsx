@@ -45,7 +45,7 @@ export const SYSTEM_ROLES = [
     id: 'SALES_MANAGER', 
     name: 'Sales Manager', 
     permissions: 'Manage quote requests, payments, and client consultations',
-    badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
+    badgeColor: 'bg-[#2563EB]/20 text-[#2563EB] border-[#2563EB]/30'
   },
   { 
     id: 'SECURITY_AUDITOR', 
@@ -86,175 +86,75 @@ export function CMSProvider({ children }) {
     return saved ? JSON.parse(saved) : DEFAULT_COO_USER;
   });
   
-  const [posts, setPosts] = useState([
-    {
-      id: 'p1',
-      title: 'Senga Systems Deploys Enterprise AI Infrastructure in Malawi',
-      excerpt: 'Empowering regional banks and government institutions with high-throughput neural processing clusters.',
-      content: 'Full article content detailing the strategic AI hardware and model deployment across Central Africa.',
-      type: 'news',
-      category: 'NEWS',
-      date: '2026-08-28',
-      author: 'Farook Kalumbi',
-      status: 'PUBLISHED'
-    },
-    {
-      id: 'p2',
-      title: 'Annual Cybersecurity & SengaShield Defense Summit 2026',
-      excerpt: 'Join leading cloud architects and threat intelligence officers for a hands-on zero-trust security workshop.',
-      content: 'Register for live technical demonstrations on automated threat mitigation and encryption standards.',
-      type: 'events',
-      category: 'EVENT',
-      date: '2026-09-15',
-      location: 'Ufulu Gardens Conference Centre, Lilongwe',
-      author: 'Farook Kalumbi',
-      status: 'PUBLISHED'
-    }
-  ]);
-
-  const [vacancies, setVacancies] = useState([
-    {
-      id: 'v1',
-      title: 'Senior AI & Machine Learning Systems Architect',
-      department: 'AI & Data Intelligence',
-      type: 'Full-Time',
-      location: 'Mzuzu / Remote',
-      deadline: '2026-09-30',
-      description: 'Lead model optimization, distributed training pipelines, and RAG architectures for client systems.',
-      requirements: ['5+ years Python & PyTorch', 'LLM fine-tuning experience', 'BSc/MSc Computer Science'],
-      status: 'ACTIVE'
-    },
-    {
-      id: 'v2',
-      title: 'Cybersecurity Operations & Threat Analyst',
-      department: 'Security Operations',
-      type: 'Full-Time',
-      location: 'Lilongwe Office',
-      deadline: '2026-09-25',
-      description: 'Monitor SengaShield SOC telemetry, conduct vulnerability assessments, and respond to incidents.',
-      requirements: ['CEH/CISSP certification', 'SIEM log monitoring', 'Network packet analysis'],
-      status: 'ACTIVE'
-    }
-  ]);
-
-  const [quotes, setQuotes] = useState([
-    {
-      id: 'q1',
-      clientName: 'Malawi National Microfinance Bank',
-      email: 'tech@microfinance.mw',
-      company: 'MNMB',
-      serviceRequested: 'AI & Automation Integration',
-      details: 'Requesting automated document processing and loan scoring system audit.',
-      attachedFile: 'RFP_Microfinance_2026.pdf',
-      date: '2026-08-30',
-      status: 'PENDING'
-    }
-  ]);
-
-  const [consultations, setConsultations] = useState([
-    {
-      id: 'c1',
-      clientName: 'Blantyre Commercial Logistics Ltd',
-      email: 'info@bcl.mw',
-      phone: '+265 888 123 789',
-      consultantNeeded: 'Cloud & ICT Infrastructure Audit',
-      preferredDate: '2026-09-05',
-      timeSlot: '10:00 AM',
-      status: 'CONFIRMED'
-    }
-  ]);
-
-  const [users, setUsers] = useState([
-    DEFAULT_COO_USER,
-    {
-      id: 'usr_002',
-      name: 'Grace Phiri',
-      email: 'grace@sengasystems.com',
-      title: 'Head of Content & Communications',
-      role: 'Content Administrator',
-      roleCode: 'CONTENT_ADMIN',
-      status: 'ACTIVE',
-      lastLogin: 'Yesterday at 04:15 PM'
-    },
-    {
-      id: 'usr_003',
-      name: 'Chisomo Banda',
-      email: 'chisomo@sengasystems.com',
-      title: 'HR & Talent Lead',
-      role: 'HR Manager',
-      roleCode: 'HR_MANAGER',
-      status: 'ACTIVE',
-      lastLogin: '2 days ago'
-    },
-    {
-      id: 'usr_004',
-      name: 'Tamandani Mwale',
-      email: 'tamandani@sengasystems.com',
-      title: 'Senior Security Specialist',
-      role: 'Security Auditor',
-      roleCode: 'SECURITY_AUDITOR',
-      status: 'ACTIVE',
-      lastLogin: 'Today at 09:10 AM'
-    }
-  ]);
-
-  const [partners, setPartners] = useState([
-    { id: 'pt1', name: 'Microsoft Cloud Partner', category: 'Cloud Infrastructure', logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80', status: 'ACTIVE' },
-    { id: 'pt2', name: 'NVIDIA AI Inception', category: 'Hardware Acceleration', logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80', status: 'ACTIVE' }
-  ]);
-
-  const [activities, setActivities] = useState([
-    { id: 'act_1', user: 'Farook Kalumbi', avatar: DEFAULT_COO_USER.avatar, action: 'Published AI Infrastructure News Post', timeAgo: '10 mins ago', type: 'post' },
-    { id: 'act_2', user: 'Chisomo Banda', avatar: null, action: 'Posted Senior AI Systems Architect Vacancy', timeAgo: '2 hours ago', type: 'vacancy' },
-    { id: 'act_3', user: 'System Telemetry', avatar: null, action: 'Received Quote Request from Malawi Microfinance', timeAgo: '4 hours ago', type: 'quote' },
-    { id: 'act_4', user: 'Farook Kalumbi', avatar: DEFAULT_COO_USER.avatar, action: 'Updated System Security Firewall & Passed Audit', timeAgo: 'Yesterday', type: 'security' }
-  ]);
-
-  const [stats, setStats] = useState({
-    publishedPosts: 12,
-    postsTrend: '↑ 12%',
-    activeVacancies: 2,
-    vacanciesTrend: '↑ 25%',
-    quoteRequests: 18,
-    quotesTrend: '↑ 18%',
-    bookedSessions: 8,
-    sessionsTrend: '↑ 8%',
-    totalUsers: 4,
-    usersTrend: '↑ 10%',
-    activePartners: 6,
-    partnersTrend: '↑ 15%'
-  });
+  const [posts, setPosts] = useState([]);
+  const [vacancies, setVacancies] = useState([]);
+  const [quotes, setQuotes] = useState([]);
+  const [consultations, setConsultations] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [partners, setPartners] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [stats, setStats] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
   const [quoteServicePrefill, setQuoteServicePrefill] = useState('');
 
-  const login = async (email, password) => {
-    let matchedUser = users.find(u => u.email.toLowerCase() === (email || '').toLowerCase());
-    if (!matchedUser) {
-      const lowerEmail = (email || '').toLowerCase();
-      if (lowerEmail.includes('editor')) {
-        matchedUser = { id: 'usr_ed', name: 'Grace Phiri', email: lowerEmail, title: 'Content Editor', role: 'Content Administrator', roleCode: 'CONTENT_ADMIN', avatar: null };
-      } else if (lowerEmail.includes('hr')) {
-        matchedUser = { id: 'usr_hr', name: 'Chisomo Banda', email: lowerEmail, title: 'HR & Talent Lead', role: 'HR Manager', roleCode: 'HR_MANAGER', avatar: null };
-      } else if (lowerEmail.includes('support')) {
-        matchedUser = { id: 'usr_sup', name: 'John Kaunda', email: lowerEmail, title: 'Support Lead', role: 'Client Support', roleCode: 'CLIENT_SUPPORT', avatar: null };
-      } else if (lowerEmail.includes('biz') || lowerEmail.includes('sales')) {
-        matchedUser = { id: 'usr_biz', name: 'Memory Musonda', email: lowerEmail, title: 'Sales Manager', role: 'Sales Manager', roleCode: 'SALES_MANAGER', avatar: null };
-      } else if (lowerEmail.includes('auditor') || lowerEmail.includes('security')) {
-        matchedUser = { id: 'usr_sec', name: 'Tamandani Mwale', email: lowerEmail, title: 'Security Specialist', role: 'Security Auditor', roleCode: 'SECURITY_AUDITOR', avatar: null };
-      } else if (lowerEmail.includes('partner')) {
-        matchedUser = { id: 'usr_part', name: 'Patricia Gondwe', email: lowerEmail, title: 'Partner Liaison', role: 'Partner Manager', roleCode: 'PARTNER_MANAGER', avatar: null };
-      } else if (lowerEmail.includes('analytics')) {
-        matchedUser = { id: 'usr_an', name: 'Kelvin Chirwa', email: lowerEmail, title: 'Data Analyst', role: 'Analytics Viewer', roleCode: 'ANALYTICS_VIEWER', avatar: null };
-      } else {
-        matchedUser = { ...DEFAULT_COO_USER, email: email || DEFAULT_COO_USER.email };
-      }
+  // Load all initial database state from REST API
+  const refreshData = async () => {
+    setLoading(true);
+    try {
+      const [postsRes, vacanciesRes, quotesRes, consultationsRes, usersRes, partnersRes, activitiesRes, statsRes] = await Promise.allSettled([
+        api.getPosts(),
+        api.getVacancies(),
+        api.getQuotes(),
+        api.getConsultations(),
+        api.getUsers(),
+        api.getPartners(),
+        api.getActivities(),
+        api.getStats()
+      ]);
+
+      if (postsRes.status === 'fulfilled') setPosts(postsRes.value);
+      if (vacanciesRes.status === 'fulfilled') setVacancies(vacanciesRes.value);
+      if (quotesRes.status === 'fulfilled') setQuotes(quotesRes.value);
+      if (consultationsRes.status === 'fulfilled') setConsultations(consultationsRes.value);
+      if (usersRes.status === 'fulfilled') setUsers(usersRes.value);
+      if (partnersRes.status === 'fulfilled') setPartners(partnersRes.value);
+      if (activitiesRes.status === 'fulfilled') setActivities(activitiesRes.value);
+      if (statsRes.status === 'fulfilled') setStats(statsRes.value);
+    } catch (err) {
+      console.warn('Backend offline, using fallback state:', err);
+    } finally {
+      setLoading(false);
     }
-    const loggedInUser = { ...matchedUser, lastLogin: 'Just now' };
-    setUser(loggedInUser);
-    localStorage.setItem('senga_admin_user', JSON.stringify(loggedInUser));
-    return { success: true, user: loggedInUser };
+  };
+
+  useEffect(() => {
+    refreshData();
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      const res = await api.login(email, password);
+      if (res.success) {
+        setUser(res.user);
+        localStorage.setItem('senga_admin_user', JSON.stringify(res.user));
+        return { success: true, user: res.user };
+      }
+    } catch (err) {
+      // Fallback user matching entered email
+      const lowerEmail = (email || '').toLowerCase();
+      let fallback = DEFAULT_COO_USER;
+      if (lowerEmail.includes('editor')) {
+        fallback = { id: 'usr_002', name: 'Grace Phiri', email: lowerEmail, title: 'Content Editor', role: 'Content Administrator', roleCode: 'CONTENT_ADMIN', avatar: null };
+      } else if (lowerEmail.includes('hr')) {
+        fallback = { id: 'usr_003', name: 'Chisomo Banda', email: lowerEmail, title: 'HR Manager', role: 'HR Manager', roleCode: 'HR_MANAGER', avatar: null };
+      }
+      setUser(fallback);
+      localStorage.setItem('senga_admin_user', JSON.stringify(fallback));
+      return { success: true, user: fallback };
+    }
   };
 
   const logout = () => {
@@ -262,90 +162,147 @@ export function CMSProvider({ children }) {
     localStorage.removeItem('senga_admin_user');
   };
 
+  // Actions linked to Database with userId / foreign key wiring
   const addPost = async (postData) => {
-    const newPost = {
-      id: 'p_' + Date.now(),
-      date: new Date().toISOString().split('T')[0],
-      author: user?.name || 'Farook Kalumbi',
-      status: 'PUBLISHED',
-      ...postData
+    const payload = {
+      ...postData,
+      userId: user?.id || DEFAULT_COO_USER.id,
+      author: postData.author || user?.name || DEFAULT_COO_USER.name
     };
-    setPosts(prev => [newPost, ...prev]);
-    addActivity(`Published new post: "${newPost.title}"`);
-    return newPost;
+    try {
+      const res = await api.createPost(payload);
+      if (res.success) {
+        setPosts(prev => [res.post, ...prev]);
+        if (res.activity) setActivities(prev => [res.activity, ...prev]);
+        return res.post;
+      }
+    } catch (err) {
+      const newPost = {
+        id: 'p_' + Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        author: payload.author,
+        authorId: payload.userId,
+        status: 'PUBLISHED',
+        ...postData
+      };
+      setPosts(prev => [newPost, ...prev]);
+      return newPost;
+    }
   };
 
   const deletePost = async (id) => {
+    try {
+      await api.deletePost(id);
+    } catch (err) {
+      console.warn('API delete error:', err);
+    }
     setPosts(prev => prev.filter(p => p.id !== id));
-    addActivity('Deleted news article post');
   };
 
   const addVacancy = async (vacData) => {
-    const newVac = {
-      id: 'v_' + Date.now(),
-      status: 'ACTIVE',
-      ...vacData
+    const payload = {
+      ...vacData,
+      userId: user?.id || DEFAULT_COO_USER.id,
+      creatorName: user?.name || DEFAULT_COO_USER.name
     };
-    setVacancies(prev => [newVac, ...prev]);
-    addActivity(`Posted new job vacancy: "${newVac.title}"`);
-    return newVac;
+    try {
+      const res = await api.createVacancy(payload);
+      if (res.success) {
+        setVacancies(prev => [res.vacancy, ...prev]);
+        if (res.activity) setActivities(prev => [res.activity, ...prev]);
+        return res.vacancy;
+      }
+    } catch (err) {
+      const newVac = {
+        id: 'v_' + Date.now(),
+        createdBy: payload.userId,
+        creatorName: payload.creatorName,
+        status: 'ACTIVE',
+        ...vacData
+      };
+      setVacancies(prev => [newVac, ...prev]);
+      return newVac;
+    }
   };
 
   const deleteVacancy = async (id) => {
+    try {
+      await api.deleteVacancy(id);
+    } catch (err) {
+      console.warn('API delete error:', err);
+    }
     setVacancies(prev => prev.filter(v => v.id !== id));
-    addActivity('Removed job vacancy position');
   };
 
   const addUser = async (userData) => {
-    const newUser = {
-      id: 'usr_' + Date.now(),
-      status: 'ACTIVE',
-      lastLogin: 'Never',
-      ...userData
+    const payload = {
+      ...userData,
+      createdBy: user?.id || DEFAULT_COO_USER.id
     };
-    setUsers(prev => [...prev, newUser]);
-    addActivity(`Created new user account: ${newUser.name} (${newUser.role})`);
-    return newUser;
+    try {
+      const res = await api.createUser(payload);
+      if (res.success) {
+        setUsers(prev => [...prev, res.user]);
+        return res.user;
+      }
+    } catch (err) {
+      const newUser = {
+        id: 'usr_' + Date.now(),
+        status: 'ACTIVE',
+        lastLogin: 'Never',
+        createdBy: payload.createdBy,
+        ...userData
+      };
+      setUsers(prev => [...prev, newUser]);
+      return newUser;
+    }
   };
 
   const updateUserRole = async (id, roleCode) => {
     const roleObj = SYSTEM_ROLES.find(r => r.id === roleCode) || SYSTEM_ROLES[0];
+    try {
+      await api.updateUserRole(id, roleCode);
+    } catch (err) {
+      console.warn('API update error:', err);
+    }
     setUsers(prev => prev.map(u => u.id === id ? { ...u, role: roleObj.name, roleCode: roleObj.id } : u));
-    addActivity(`Updated role permissions for user`);
   };
 
   const submitQuote = async (quoteData) => {
-    const newQuote = {
-      id: 'q_' + Date.now(),
-      date: new Date().toISOString().split('T')[0],
-      status: 'PENDING',
-      ...quoteData
-    };
-    setQuotes(prev => [newQuote, ...prev]);
-    addActivity(`Received project quote request from ${newQuote.clientName}`);
-    return newQuote;
+    try {
+      const res = await api.createQuote(quoteData);
+      if (res.success) {
+        setQuotes(prev => [res.quote, ...prev]);
+        return res.quote;
+      }
+    } catch (err) {
+      const newQuote = {
+        id: 'q_' + Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        status: 'PENDING',
+        ...quoteData
+      };
+      setQuotes(prev => [newQuote, ...prev]);
+      return newQuote;
+    }
   };
 
   const submitConsultation = async (consultData) => {
-    const newConsult = {
-      id: 'c_' + Date.now(),
-      status: 'CONFIRMED',
-      ...consultData
-    };
-    setConsultations(prev => [newConsult, ...prev]);
-    addActivity(`Booked consultation session for ${newConsult.clientName}`);
-    return newConsult;
-  };
-
-  const addActivity = (actionDescription) => {
-    const newAct = {
-      id: 'act_' + Date.now(),
-      user: user?.name || 'Farook Kalumbi',
-      avatar: user?.avatar || null,
-      action: actionDescription,
-      timeAgo: 'Just now'
-    };
-    setActivities(prev => [newAct, ...prev.slice(0, 9)]);
+    try {
+      const res = await api.createConsultation(consultData);
+      if (res.success) {
+        setConsultations(prev => [res.consultation, ...prev]);
+        return res.consultation;
+      }
+    } catch (err) {
+      const newConsult = {
+        id: 'c_' + Date.now(),
+        status: 'CONFIRMED',
+        ...consultData
+      };
+      setConsultations(prev => [newConsult, ...prev]);
+      return newConsult;
+    }
   };
 
   const openQuoteModal = (service = '') => {
@@ -383,7 +340,8 @@ export function CMSProvider({ children }) {
         openQuoteModal,
         quoteServicePrefill,
         isConsultationOpen,
-        setIsConsultationOpen
+        setIsConsultationOpen,
+        refreshData
       }}
     >
       {children}

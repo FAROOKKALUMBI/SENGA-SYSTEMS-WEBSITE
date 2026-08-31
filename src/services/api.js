@@ -46,5 +46,9 @@ export const api = {
   // Users & Roles
   getUsers: () => fetchApi('/users'),
   createUser: (user) => fetchApi('/users', { method: 'POST', body: JSON.stringify(user) }),
-  updateUserRole: (id, role) => fetchApi(`/users/${id}`, { method: 'PUT', body: JSON.stringify({ role }) })
+  updateUserRole: (id, roleCode) => fetchApi(`/users/${id}`, { method: 'PUT', body: JSON.stringify({ roleCode }) }),
+
+  // Partners & Activities
+  getPartners: () => fetchApi('/partners'),
+  getActivities: () => fetchApi('/activities')
 };
