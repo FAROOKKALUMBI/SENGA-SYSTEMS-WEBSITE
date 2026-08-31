@@ -346,75 +346,35 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            {/* Left 7 cols: Latest Posted News & Press */}
-            <div className="lg:col-span-7 space-y-6">
-              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Newspaper className="w-5 h-5 text-[#2563EB]" />
-                <span>Recent News & Press</span>
-              </h3>
-
-              <div className="space-y-4">
-                {posts && posts.length > 0 ? (
-                  posts.slice(0, 3).map((post) => (
-                    <div key={post.id} className="p-5 rounded-2xl bg-[#D9D9D9]/50 dark:bg-slate-800/80 border border-slate-300/60 dark:border-slate-700 flex flex-col sm:flex-row items-start gap-4">
-                      {post.image && (
-                        <img src={post.image} alt={post.title} className="w-full sm:w-28 h-24 rounded-xl object-cover shrink-0" />
-                      )}
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex items-center gap-2 text-xs font-bold text-[#2563EB]">
-                          <span className="uppercase">{post.type}</span>
-                          <span>•</span>
-                          <span className="text-slate-500 dark:text-slate-400">{post.date}</span>
-                        </div>
-                        <h4 className="text-base font-extrabold text-slate-900 dark:text-white line-clamp-1">{post.title}</h4>
-                        <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">{post.excerpt || post.content}</p>
-                      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {posts && posts.length > 0 ? (
+              posts.slice(0, 4).map((post) => (
+                <div key={post.id} className="p-6 rounded-2xl bg-[#D9D9D9]/50 dark:bg-slate-800/80 border border-slate-300/60 dark:border-slate-700 flex flex-col justify-between space-y-4">
+                  <div className="space-y-3">
+                    {post.image && (
+                      <img src={post.image} alt={post.title} className="w-full h-44 rounded-xl object-cover" />
+                    )}
+                    <div className="flex items-center justify-between text-xs font-bold text-[#2563EB]">
+                      <span className="uppercase font-extrabold">{post.type}</span>
+                      <span className="text-slate-500 dark:text-slate-400">{post.date}</span>
                     </div>
-                  ))
-                ) : (
-                  <div className="p-6 rounded-2xl bg-[#D9D9D9]/40 dark:bg-slate-800 text-center text-xs text-slate-500">
-                    No news articles published yet.
+                    <h4 className="text-lg font-extrabold text-slate-900 dark:text-white leading-snug">{post.title}</h4>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">{post.excerpt || post.content}</p>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right 5 cols: Open Vacancies Added by Staff/Admin */}
-            <div className="lg:col-span-5 space-y-6">
-              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-[#2563EB]" />
-                <span>Open Vacancies ({vacancies ? vacancies.length : 0})</span>
-              </h3>
-
-              <div className="space-y-4">
-                {vacancies && vacancies.length > 0 ? (
-                  vacancies.slice(0, 3).map((job) => (
-                    <div key={job.id} className="p-5 rounded-2xl bg-[#D9D9D9]/50 dark:bg-slate-800/80 border border-slate-300/60 dark:border-slate-700 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-[#2563EB] dark:text-blue-300 text-[10px] font-extrabold">{job.department}</span>
-                        <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400">{job.type}</span>
-                      </div>
-                      <h4 className="text-base font-extrabold text-slate-900 dark:text-white">{job.title}</h4>
-                      <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">{job.description}</p>
-                      <div className="pt-2 flex items-center justify-between text-xs font-bold text-[#2563EB]">
-                        <span>Deadline: {job.deadline}</span>
-                        <Link to="/updates/vacancies" className="hover:underline flex items-center gap-1">
-                          <span>Apply</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-6 rounded-2xl bg-[#D9D9D9]/40 dark:bg-slate-800 text-center text-xs text-slate-500 font-medium">
-                    No active job vacancies at the moment.
+                  <div className="pt-3 border-t border-slate-300/60 dark:border-slate-700 flex items-center justify-between text-xs font-bold text-[#2563EB]">
+                    <span>By {post.author || 'Senga Team'}</span>
+                    <Link to="/updates" className="hover:underline flex items-center gap-1">
+                      <span>Read More</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
-                )}
+                </div>
+              ))
+            ) : (
+              <div className="p-8 rounded-2xl bg-[#D9D9D9]/40 dark:bg-slate-800 text-center text-xs text-slate-500 col-span-2">
+                No news articles or events published yet.
               </div>
-            </div>
-
+            )}
           </div>
         </div>
       </section>
