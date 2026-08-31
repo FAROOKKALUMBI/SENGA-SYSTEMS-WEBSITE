@@ -49,16 +49,16 @@ export default function AdminRoles() {
   return (
     <div className="space-y-8 font-['Plus_Jakarta_Sans',sans-serif]">
       
-      {/* Top Banner Header */}
+      {/* Top Banner Header with Improved High-Contrast Wording */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md">
         <div>
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[#2563EB]">Access Control & Governance</span>
+          <span className="text-xs font-extrabold uppercase tracking-wider text-[#2563EB]">System Security & Governance</span>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight mt-1 flex items-center gap-2.5">
             <Users className="w-7 h-7 text-[#2563EB]" />
-            <span>Role-Based Access Control (RBAC)</span>
+            <span>User Management & Role Permissions</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            Manage employee accounts, assign granular role permissions and oversee security policies.
+            Oversee corporate team accounts, manage role-based security clearance, and configure staff access levels.
           </p>
         </div>
 
@@ -71,38 +71,12 @@ export default function AdminRoles() {
         </button>
       </div>
 
-      {/* 10 RBAC SYSTEM ROLES REFERENCE MATRIX */}
-      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <h2 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-            <Key className="w-5 h-5 text-purple-600" />
-            <span>10 System Roles & Permission Matrix</span>
-          </h2>
-          <span className="text-xs text-slate-500 font-mono">Enforced Access Levels</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {systemRoles.map((role, idx) => (
-            <div key={role.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500 font-mono">#{idx + 1}</span>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
-                  {role.id}
-                </span>
-              </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{role.name}</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">{role.permissions}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* REGISTERED USERS MANAGEMENT TABLE */}
       <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <h2 className="text-xl font-extrabold text-slate-900">Registered System Accounts ({filteredUsers.length})</h2>
-            <p className="text-xs text-slate-500">System Administrators can update permissions in real time.</p>
+            <p className="text-xs text-slate-600">System Administrators can update permissions in real time.</p>
           </div>
 
           {/* Search Filter */}
@@ -122,7 +96,7 @@ export default function AdminRoles() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-200 text-slate-500 uppercase font-extrabold text-[11px] tracking-wider bg-slate-50">
+              <tr className="border-b border-slate-200 text-slate-700 uppercase font-black text-[11px] tracking-wider bg-slate-100/70">
                 <th className="py-3.5 px-4">User Details</th>
                 <th className="py-3.5 px-4">Title / Position</th>
                 <th className="py-3.5 px-4">Assigned Role</th>
@@ -131,9 +105,9 @@ export default function AdminRoles() {
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-200">
               {filteredUsers.map((u) => (
-                <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
+                <tr key={u.id} className="hover:bg-slate-50 transition-colors">
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-3">
                       <img
@@ -143,16 +117,16 @@ export default function AdminRoles() {
                       />
                       <div>
                         <span className="font-extrabold text-slate-900 block">{u.name}</span>
-                        <span className="text-[11px] text-slate-500">{u.email}</span>
+                        <span className="text-[11px] font-medium text-slate-600">{u.email}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-4 text-slate-700 font-semibold">{u.title || 'Staff Member'}</td>
+                  <td className="py-4 px-4 text-slate-800 font-extrabold">{u.title || 'Staff Member'}</td>
                   <td className="py-4 px-4">
                     <select
                       value={u.roleCode || 'SYSTEM_ADMIN'}
                       onChange={(e) => updateUserRole(u.id, e.target.value)}
-                      className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-300 text-[#2563EB] font-extrabold text-xs focus:outline-none cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-[#2563EB] font-black text-xs focus:outline-none cursor-pointer shadow-xs"
                     >
                       {systemRoles.map(r => (
                         <option key={r.id} value={r.id}>{r.name}</option>
@@ -160,13 +134,13 @@ export default function AdminRoles() {
                     </select>
                   </td>
                   <td className="py-4 px-4">
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold border border-emerald-300">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black border border-emerald-300">
                       {u.status || 'ACTIVE'}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-slate-500 font-mono">{u.lastLogin || 'Recent'}</td>
+                  <td className="py-4 px-4 text-slate-700 font-bold font-mono">{u.lastLogin || 'Recent'}</td>
                   <td className="py-4 px-4 text-right">
-                    <span className="text-[11px] text-[#2563EB] font-extrabold">Active</span>
+                    <span className="text-[11px] text-[#2563EB] font-black">Active</span>
                   </td>
                 </tr>
               ))}
@@ -187,52 +161,52 @@ export default function AdminRoles() {
             </button>
 
             <div className="space-y-1">
-              <h3 className="text-xl font-extrabold text-slate-900">Create Staff Account</h3>
-              <p className="text-xs text-slate-500">Assign a role and permissions to the new employee.</p>
+              <h3 className="text-xl font-black text-slate-900">Create Staff Account</h3>
+              <p className="text-xs text-slate-600">Assign a role and permissions to the new employee.</p>
             </div>
 
             <form onSubmit={handleCreateUser} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Full Name *</label>
+                <label className="block text-xs font-black text-slate-800 uppercase mb-1">Full Name *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. John Banda"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-bold text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address *</label>
+                <label className="block text-xs font-black text-slate-800 uppercase mb-1">Email Address *</label>
                 <input
                   type="email"
                   required
                   placeholder="john@sengasystems.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-bold text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Job Title</label>
+                <label className="block text-xs font-black text-slate-800 uppercase mb-1">Job Title</label>
                 <input
                   type="text"
                   placeholder="e.g. Senior Software Engineer"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-bold text-sm"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Assign Role *</label>
+                <label className="block text-xs font-black text-slate-800 uppercase mb-1">Assign Role *</label>
                 <select
                   value={formData.roleCode}
                   onChange={(e) => setFormData({ ...formData, roleCode: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-sm"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-bold text-sm"
                 >
                   {systemRoles.map(r => (
                     <option key={r.id} value={r.id}>{r.name}</option>
@@ -243,7 +217,7 @@ export default function AdminRoles() {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-sm shadow-md"
+                  className="w-full py-3 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-black text-sm shadow-md"
                 >
                   Create Staff Account
                 </button>
