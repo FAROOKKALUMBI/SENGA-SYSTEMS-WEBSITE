@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   FileText, 
@@ -14,7 +14,6 @@ import {
   Activity, 
   BarChart3, 
   ArrowRight,
-  Search,
   Server,
   Zap,
   CheckCircle2,
@@ -31,12 +30,11 @@ import {
   Settings
 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
+import AnimatedCounter from '../../components/AnimatedCounter';
 
 export default function AdminDashboard() {
   const { user, posts, vacancies, quotes, consultations, users, partners, activities, stats } = useCMS();
   const navigate = useNavigate();
-
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Dynamic Time-Based Greeting with Emojis
   const getGreeting = () => {
@@ -80,9 +78,9 @@ export default function AdminDashboard() {
   const statsCards = [
     {
       title: 'PUBLISHED POSTS',
-      count: posts.length || 12,
+      count: posts.length,
       subtitle: 'News, Insights & Announcements',
-      trend: '↑ 12% vs last month',
+      trend: null,
       icon: FileText,
       color: 'text-[#2563EB]',
       bgColor: 'bg-blue-50 border-2 border-blue-200',
@@ -93,9 +91,9 @@ export default function AdminDashboard() {
     },
     {
       title: 'ACTIVE VACANCIES',
-      count: vacancies.length || 2,
+      count: vacancies.length,
       subtitle: 'Open career opportunities',
-      trend: '↑ 25% vs last week',
+      trend: null,
       icon: Briefcase,
       color: 'text-pink-600',
       bgColor: 'bg-pink-50 border-2 border-pink-200',
@@ -106,9 +104,9 @@ export default function AdminDashboard() {
     },
     {
       title: 'QUOTE REQUESTS',
-      count: quotes.length || 18,
+      count: quotes.length,
       subtitle: 'Client project submissions',
-      trend: '↑ 18% vs last month',
+      trend: null,
       icon: MessageSquare,
       color: 'text-amber-600',
       bgColor: 'bg-amber-50 border-2 border-amber-200',
@@ -119,9 +117,9 @@ export default function AdminDashboard() {
     },
     {
       title: 'BOOKED SESSIONS',
-      count: consultations.length || 8,
+      count: consultations.length,
       subtitle: 'Technical consultations',
-      trend: '↑ 8% vs last week',
+      trend: null,
       icon: Calendar,
       color: 'text-emerald-600',
       bgColor: 'bg-emerald-50 border-2 border-emerald-200',
@@ -132,9 +130,9 @@ export default function AdminDashboard() {
     },
     {
       title: 'TOTAL USERS',
-      count: users.length || 4,
+      count: users.length,
       subtitle: 'Registered system users',
-      trend: '↑ 10% vs last month',
+      trend: null,
       icon: Users,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50 border-2 border-purple-200',
@@ -145,9 +143,9 @@ export default function AdminDashboard() {
     },
     {
       title: 'ACTIVE PARTNERS',
-      count: partners.length || 6,
+      count: partners.length,
       subtitle: 'Partner organizations',
-      trend: '↑ 15% vs last month',
+      trend: null,
       icon: Handshake,
       color: 'text-cyan-600',
       bgColor: 'bg-cyan-50 border-2 border-cyan-200',
@@ -167,12 +165,6 @@ export default function AdminDashboard() {
     { label: 'Analytics', shortcut: '⌘A', path: '/admin/analytics', icon: BarChart3, color: 'text-cyan-600', iconBg: 'bg-cyan-100 text-cyan-600 border-2 border-cyan-300', hoverBg: 'hover:bg-cyan-50 hover:border-cyan-400', desc: 'View performance report' }
   ];
 
-  // Upcoming Scheduled Events
-  const upcomingEvents = [
-    { id: 1, title: 'Malawi Executive Cybersecurity Summit 2026', date: 'Sep 25, 2026', location: 'BICC Lilongwe', seats: '45 Seats' },
-    { id: 2, title: 'SengaShield Threat Intelligence Workshop', date: 'Oct 12, 2026', location: 'Virtual Webinar', seats: '120 Registered' }
-  ];
-
   return (
     <div className="space-y-8 font-['Plus_Jakarta_Sans',sans-serif]">
       
@@ -183,10 +175,6 @@ export default function AdminDashboard() {
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <span className="text-xs uppercase tracking-wider font-black text-[#2563EB]">Control Center</span>
-              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border-2 border-emerald-300 text-[11px] font-black flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                <span>System Status: Operational</span>
-              </span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight flex items-center gap-3">
@@ -219,27 +207,6 @@ export default function AdminDashboard() {
 
         </div>
 
-        {/* Global Control Center Search Bar */}
-        <div className="pt-4 border-t-2 border-slate-200 flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-            <input
-              type="text"
-              placeholder="Search posts, vacancies, quote inquiries, or staff members..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-[#2563EB]"
-            />
-          </div>
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className="px-3 py-2.5 rounded-xl bg-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-300 border-2 border-slate-300"
-            >
-              Clear Search
-            </button>
-          )}
-        </div>
       </section>
 
       {/* 2. QUICK ACTION BAR WITH 2PX BORDER LINES */}
@@ -289,7 +256,7 @@ export default function AdminDashboard() {
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
                   <span className="text-xs font-black uppercase tracking-wider text-slate-500 block">{card.title}</span>
-                  <span className="text-3xl font-black text-slate-900 block">{card.count}</span>
+                  <span className="text-3xl font-black text-slate-900 block"><AnimatedCounter value={card.count} /></span>
                   <span className="text-xs font-bold text-slate-600 block">{card.subtitle}</span>
                 </div>
                 <div className={`w-12 h-12 rounded-2xl ${card.iconContainer} p-2.5 flex items-center justify-center shrink-0 shadow-xs`}>
@@ -299,9 +266,11 @@ export default function AdminDashboard() {
 
               {/* Sparkline Chart & Growth Trend */}
               <div className="flex items-center justify-between pt-2">
-                <span className="text-xs font-black text-emerald-600 bg-emerald-50 border-2 border-emerald-200 px-2.5 py-1 rounded-full">
-                  {card.trend}
-                </span>
+                {card.trend && (
+                  <span className="text-xs font-black text-emerald-600 bg-emerald-50 border-2 border-emerald-200 px-2.5 py-1 rounded-full">
+                    {card.trend}
+                  </span>
+                )}
 
                 {/* SVG Sparkline Path */}
                 <div className="w-24 h-8">
@@ -333,10 +302,8 @@ export default function AdminDashboard() {
         })}
       </section>
 
-      {/* 4. PERFORMANCE ANALYTICS SUMMARY CHARTS WITH 2PX BORDERS */}
+      {/* 4. PERFORMANCE ANALYTICS SUMMARY */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        {/* Content Performance Chart */}
         <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
           <div className="flex items-center justify-between border-b-2 border-slate-200 pb-3">
             <div className="flex items-center gap-2.5">
@@ -348,51 +315,9 @@ export default function AdminDashboard() {
                 <span className="text-xs text-slate-500 font-medium">Monthly views per category</span>
               </div>
             </div>
-            <span className="text-xs text-[#2563EB] font-black bg-blue-50 px-2.5 py-1 rounded-full border-2 border-blue-200">
-              Total: 11,180 Views
-            </span>
+            <span className="text-xs text-slate-500 font-black bg-slate-50 px-2.5 py-1 rounded-full border-2 border-slate-200">Backend data only</span>
           </div>
-
-          <div className="space-y-4 pt-2">
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-slate-800">
-                <span className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]"></span>
-                  <span>AI & Enterprise Innovation Press</span>
-                </span>
-                <span className="text-[#2563EB] font-black">4,820 Views (43%)</span>
-              </div>
-              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200">
-                <div className="bg-[#2563EB] h-full rounded-full transition-all duration-500 w-[86%]"></div>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-slate-800">
-                <span className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                  <span>Cybersecurity Summit Announcements</span>
-                </span>
-                <span className="text-emerald-700 font-black">3,450 Views (31%)</span>
-              </div>
-              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200">
-                <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 w-[62%]"></div>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-bold text-slate-700">
-                <span className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
-                  <span>Cloud Architecture & Hybrid Insights</span>
-                </span>
-                <span className="text-purple-700 font-black">2,910 Views (26%)</span>
-              </div>
-              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200">
-                <div className="bg-purple-500 h-full rounded-full transition-all duration-500 w-[52%]"></div>
-              </div>
-            </div>
-          </div>
+          <div className="py-12 text-center text-slate-500 text-sm font-bold">No content analytics recorded yet.</div>
 
           <div className="pt-3 border-t-2 border-slate-200 flex items-center justify-between text-xs text-slate-500 font-bold">
             <span>Data range: May – August 2026</span>
@@ -402,7 +327,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quote Trends & Conversion Chart */}
         <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
           <div className="flex items-center justify-between border-b-2 border-slate-200 pb-3">
             <div className="flex items-center gap-2.5">
@@ -414,49 +338,12 @@ export default function AdminDashboard() {
                 <span className="text-xs text-slate-500 font-medium">Monthly lead pipeline velocity</span>
               </div>
             </div>
-            <span className="text-xs text-emerald-800 font-black bg-emerald-50 px-2.5 py-1 rounded-full border-2 border-emerald-200">
-              72% Conversion Rate
-            </span>
+            <span className="text-xs text-slate-500 font-black bg-slate-50 px-2.5 py-1 rounded-full border-2 border-slate-200">Backend data only</span>
           </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 border-b-2 border-slate-100 pb-1">
-              <span>20 Quotes (Max Peak)</span>
-              <span className="text-emerald-700">Peak: 18 Requests in August</span>
-            </div>
-
-            <div className="h-32 w-full relative pt-2">
-              <svg className="w-full h-full overflow-visible" viewBox="0 0 300 80">
-                <defs>
-                  <linearGradient id="quoteGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
-                  </linearGradient>
-                </defs>
-
-                <line x1="0" y1="20" x2="300" y2="20" stroke="#cbd5e1" strokeDasharray="4 4" strokeWidth="1.5" />
-                <line x1="0" y1="50" x2="300" y2="50" stroke="#cbd5e1" strokeDasharray="4 4" strokeWidth="1.5" />
-
-                <polygon points="0,80 0,60 75,45 150,30 225,25 300,10 300,80" fill="url(#quoteGradient)" />
-                <path d="M0,60 Q37,52 75,45 T150,30 T225,25 T300,10" fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" />
-
-                <circle cx="75" cy="45" r="4" fill="#10b981" />
-                <circle cx="150" cy="30" r="4" fill="#10b981" />
-                <circle cx="225" cy="25" r="4" fill="#10b981" />
-                <circle cx="300" cy="10" r="5" fill="#059669" stroke="#ffffff" strokeWidth="2" />
-              </svg>
-            </div>
-
-            <div className="flex justify-between text-[11px] font-bold text-slate-500 pt-1 border-t-2 border-slate-200">
-              <span>May (6)</span>
-              <span>Jun (10)</span>
-              <span>Jul (14)</span>
-              <span className="text-[#2563EB] font-black">Aug (18 Quotes)</span>
-            </div>
-          </div>
+          <div className="py-12 text-center text-slate-500 text-sm font-bold">No conversion analytics recorded yet.</div>
 
           <div className="pt-2 flex items-center justify-between text-xs text-slate-600 font-bold border-t-2 border-slate-200">
-            <span>Scheduled Consultations: 8 Sessions</span>
+            <span>Scheduled Consultations: {consultations.length} Sessions</span>
             <Link to="/admin/leads" className="text-[#2563EB] hover:underline flex items-center gap-1">
               <span>Manage Leads →</span>
             </Link>
@@ -513,38 +400,21 @@ export default function AdminDashboard() {
         {/* Right 4 Cols: Upcoming Events & Security Telemetry */}
         <div className="lg:col-span-4 space-y-6">
           
-          {/* Upcoming Events */}
           <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 shadow-md space-y-4">
             <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b-2 border-slate-200 pb-3">
               <Calendar className="w-4 h-4 text-purple-600" />
-              <span>Upcoming Events & Summit</span>
+              <span>Upcoming Events</span>
             </h3>
-
-            <div className="space-y-3">
-              {upcomingEvents.map((evt) => (
-                <div key={evt.id} className="p-3.5 rounded-2xl bg-purple-50/60 border-2 border-purple-200 space-y-1">
-                  <span className="text-[10px] font-black text-purple-700 uppercase block">{evt.date} • {evt.location}</span>
-                  <h4 className="text-xs font-black text-slate-900">{evt.title}</h4>
-                  <span className="text-[11px] font-bold text-slate-500 block">{evt.seats}</span>
-                </div>
-              ))}
-            </div>
+            <div className="py-8 text-center text-slate-500 text-xs font-bold">No upcoming events recorded yet.</div>
           </div>
 
-          {/* Quick System Telemetry Alert */}
           <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 shadow-md space-y-3">
             <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b-2 border-slate-200 pb-3">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>System Security Telemetry</span>
             </h3>
 
-            <div className="p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-200 text-xs font-bold text-emerald-900 space-y-1">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Zero Vulnerabilities Detected</span>
-              </div>
-              <p className="text-[11px] text-emerald-700 font-medium">SengaShield SOC telemetry active & encrypted.</p>
-            </div>
+            <div className="py-8 text-center text-slate-500 text-xs font-bold">No security telemetry recorded yet.</div>
           </div>
 
         </div>

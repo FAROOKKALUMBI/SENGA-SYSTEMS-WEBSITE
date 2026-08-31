@@ -15,7 +15,7 @@ import {
 import { useCMS } from '../../context/CMSContext';
 
 export default function AdminRoles() {
-  const { users, systemRoles, addUser, updateUserRole } = useCMS();
+  const { users, systemRoles, addUser, updateUserRole, deleteUser } = useCMS();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -140,7 +140,18 @@ export default function AdminRoles() {
                   </td>
                   <td className="py-4 px-4 text-slate-700 font-bold font-mono">{u.lastLogin || 'Recent'}</td>
                   <td className="py-4 px-4 text-right">
-                    <span className="text-[11px] text-[#2563EB] font-black">Active</span>
+                    <div className="flex items-center justify-end gap-2">
+                      <span className="text-[11px] text-[#2563EB] font-black">Active</span>
+                      {u.id !== 'usr_farook_001' && (
+                        <button
+                          onClick={() => deleteUser(u.id)}
+                          className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                          title="Delete User"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

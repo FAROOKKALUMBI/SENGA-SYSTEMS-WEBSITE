@@ -30,7 +30,7 @@ import {
 import { useCMS } from '../../context/CMSContext';
 
 export default function AdminLayout() {
-  const { user, logout } = useCMS();
+  const { user, logout, activities } = useCMS();
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -141,6 +141,10 @@ export default function AdminLayout() {
 
         {/* Right User Profile Controls & Notifications */}
         <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 text-emerald-100 border border-emerald-300/40 text-xs font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-300"></span>
+            <span>System Operational</span>
+          </div>
           
           {/* View Public Site Shortcut */}
           <Link
@@ -168,17 +172,17 @@ export default function AdminLayout() {
               <div className="absolute right-0 top-full mt-2 w-80 bg-white border-2 border-slate-300 text-slate-900 rounded-2xl p-4 shadow-2xl space-y-3 z-50 text-xs">
                 <div className="flex items-center justify-between border-b-2 border-slate-200 pb-2">
                   <span className="font-bold text-slate-900">System Notifications</span>
-                  <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">2 Unread</span>
+                  <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">{activities?.length || 0} Total</span>
                 </div>
                 <div className="space-y-2">
-                  <div className="p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 space-y-1">
-                    <p className="font-semibold text-slate-800">New Quote Request received</p>
-                    <span className="text-[10px] text-slate-500">Malawi Microfinance • 10 mins ago</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 space-y-1">
-                    <p className="font-semibold text-slate-800">System Security Backup Completed</p>
-                    <span className="text-[10px] text-slate-500">System Telemetry • 2 hours ago</span>
-                  </div>
+                  {activities?.length ? activities.slice(0, 5).map((activity) => (
+                    <div key={activity.id} className="p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 space-y-1">
+                      <p className="font-semibold text-slate-800">{activity.action}</p>
+                      <span className="text-[10px] text-slate-500">{activity.userName || activity.user || 'System'} • {activity.timeAgo || 'Recently'}</span>
+                    </div>
+                  )) : (
+                    <p className="py-4 text-center text-slate-500">No notifications yet.</p>
+                  )}
                 </div>
               </div>
             )}
@@ -523,7 +527,9 @@ export default function AdminLayout() {
               ))}
             </nav>
 
-            <Outlet />
+            <div key={`${location.pathname}${location.search}`} className="page-transition">
+              <Outlet />
+            </div>
           </div>
         </main>
 
