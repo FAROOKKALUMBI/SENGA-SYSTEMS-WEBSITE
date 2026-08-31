@@ -105,12 +105,13 @@ export default function AdminLayout() {
   };
 
   const breadcrumbs = getBreadcrumbs();
+  const isContentActive = location.pathname.startsWith('/admin/posts');
 
   return (
     <div className="min-h-screen bg-slate-100/80 text-slate-900 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
       
       {/* 1. TOP HEADER (Deep Navy #23275c with Senga Systems Brand & White Text) */}
-      <header className="sticky top-0 z-40 bg-[#23275c] text-white border-b-2 border-[#2b66bf] px-4 md:px-8 py-3.5 flex items-center justify-between shadow-lg">
+      <header className="sticky top-0 z-40 bg-[#23275c] text-white border-b-2 border-[#2b66bf] px-4 md:px-8 py-3.5 flex items-center justify-between shadow-lg h-[73px]">
         
         {/* Brand & Logo Lockup + Mobile Toggle */}
         <div className="flex items-center gap-3">
@@ -233,12 +234,12 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      {/* MAIN BODY: COLLAPSIBLE SIDEBAR WITH SUB-MENUS + CONTENT AREA */}
+      {/* MAIN LAYOUT: STICKY/FIXED SIDEBAR (STAYS VISIBLE) + SCROLLABLE RIGHT CONTENT */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* COLLAPSIBLE SIDEBAR NAVIGATION (Desktop) */}
+        {/* STICKY / FIXED SIDEBAR NAVIGATION (Does NOT scroll away when content scrolls) */}
         <aside 
-          className={`bg-white border-r border-slate-200 p-4 hidden md:flex flex-col justify-between shrink-0 shadow-xs transition-all duration-300 ${
+          className={`bg-white border-r border-slate-200 p-4 hidden md:flex flex-col justify-between shrink-0 shadow-xs sticky top-[73px] h-[calc(100vh-73px)] self-start overflow-y-auto transition-all duration-300 ${
             isSidebarCollapsed ? 'w-20' : 'w-64'
           }`}
         >
@@ -247,7 +248,7 @@ export default function AdminLayout() {
             {/* Sidebar Header: Section Title + Minimize/Expand Toggle */}
             <div className={`flex items-center justify-between pb-2 border-b border-slate-200 ${isSidebarCollapsed ? 'justify-center' : ''}`}>
               {!isSidebarCollapsed && (
-                <span className="text-xs font-black text-slate-700 uppercase tracking-wider">Navigation Menu</span>
+                <span className="text-xs font-black text-slate-700 uppercase tracking-wider">NAVIGATION MENU</span>
               )}
 
               {/* Minimise / Expand Toggle Button */}
@@ -260,7 +261,7 @@ export default function AdminLayout() {
               </button>
             </div>
 
-            {/* Navigation Links with Sub-Menu Tree Structure */}
+            {/* Navigation Links with Clean Vector Stroke Icons matching Image 4 */}
             <nav className="space-y-1">
               
               {/* 1. Dashboard */}
@@ -276,79 +277,80 @@ export default function AdminLayout() {
                       : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <LayoutDashboard className={`w-4 h-4 shrink-0 ${location.pathname === '/admin/dashboard' ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>📊 Dashboard</span>}
+                  <LayoutDashboard className={`w-4 h-4 shrink-0 ${location.pathname === '/admin/dashboard' ? 'text-white' : 'text-blue-600'}`} />
+                  {!isSidebarCollapsed && <span>Dashboard</span>}
                 </Link>
               )}
 
-              {/* 2. Content Management with Collapsible Sub-Items */}
+              {/* 2. Content Management with Active Blue Bar Highlight */}
               {allowedPaths.includes('/admin/posts') && (
                 <div>
-                  <div
+                  <Link
+                    to="/admin/posts"
                     onClick={() => setContentSubmenuOpen(!contentSubmenuOpen)}
                     title={isSidebarCollapsed ? "Content" : undefined}
                     className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-extrabold cursor-pointer transition-all ${
                       isSidebarCollapsed ? 'justify-center px-2' : ''
                     } ${
-                      location.pathname.startsWith('/admin/posts')
-                        ? 'bg-blue-50 text-[#2563EB] border border-blue-200'
+                      isContentActive
+                        ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20 font-black'
                         : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className="w-4 h-4 text-slate-500 shrink-0" />
-                      {!isSidebarCollapsed && <span>📝 Content</span>}
+                      <FileText className={`w-4 h-4 shrink-0 ${isContentActive ? 'text-white' : 'text-[#2563EB]'}`} />
+                      {!isSidebarCollapsed && <span>Content</span>}
                     </div>
                     {!isSidebarCollapsed && (
-                      <ChevronDown className={`w-4 h-4 transition-transform ${contentSubmenuOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 transition-transform ${contentSubmenuOpen ? 'rotate-180' : ''} ${isContentActive ? 'text-white' : 'text-slate-400'}`} />
                     )}
-                  </div>
+                  </Link>
 
-                  {/* Sub-menu Tree Items */}
+                  {/* Sub-menu Tree Items with Crisp Vector Icons */}
                   {contentSubmenuOpen && !isSidebarCollapsed && (
-                    <div className="pl-4 mt-1 space-y-1 border-l-2 border-slate-200 ml-5">
+                    <div className="pl-4 mt-1.5 space-y-1 border-l-2 border-slate-200 ml-5">
                       <Link
                         to="/admin/posts"
                         className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
                           location.pathname === '/admin/posts' && !location.search
-                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            ? 'text-[#2563EB] font-black bg-blue-50/80 border border-blue-200'
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <FileText className="w-3.5 h-3.5 text-blue-500" />
+                        <FileText className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                         <span>All Posts</span>
                       </Link>
                       <Link
                         to="/admin/posts?type=news"
                         className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
                           location.search.includes('type=news')
-                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            ? 'text-[#2563EB] font-black bg-blue-50/80 border border-blue-200'
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <Newspaper className="w-3.5 h-3.5 text-emerald-500" />
+                        <Newspaper className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                         <span>News & Press</span>
                       </Link>
                       <Link
                         to="/admin/posts?type=insights"
                         className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
                           location.search.includes('type=insights')
-                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            ? 'text-[#2563EB] font-black bg-blue-50/80 border border-blue-200'
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+                        <Lightbulb className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                         <span>Insights</span>
                       </Link>
                       <Link
                         to="/admin/posts?type=announcements"
                         className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
                           location.search.includes('type=announcements')
-                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            ? 'text-[#2563EB] font-black bg-blue-50/80 border border-blue-200'
                             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <Megaphone className="w-3.5 h-3.5 text-purple-500" />
+                        <Megaphone className="w-3.5 h-3.5 text-purple-500 shrink-0" />
                         <span>Announcements</span>
                       </Link>
                     </div>
@@ -369,8 +371,8 @@ export default function AdminLayout() {
                       : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Briefcase className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/vacancies') ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>💼 Vacancies</span>}
+                  <Briefcase className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/vacancies') ? 'text-white' : 'text-pink-600'}`} />
+                  {!isSidebarCollapsed && <span>Vacancies</span>}
                 </Link>
               )}
 
@@ -387,8 +389,8 @@ export default function AdminLayout() {
                       : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <MessageSquare className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/leads') ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>📋 Leads & Quotes</span>}
+                  <MessageSquare className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/leads') ? 'text-white' : 'text-amber-600'}`} />
+                  {!isSidebarCollapsed && <span>Leads & Quotes</span>}
                 </Link>
               )}
 
@@ -405,8 +407,8 @@ export default function AdminLayout() {
                       : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Users className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/roles') ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>👥 Users & Roles</span>}
+                  <Users className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/roles') ? 'text-white' : 'text-purple-600'}`} />
+                  {!isSidebarCollapsed && <span>Users & Roles</span>}
                 </Link>
               )}
 
@@ -423,8 +425,8 @@ export default function AdminLayout() {
                       : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Handshake className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/partners') ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>🤝 Partners</span>}
+                  <Handshake className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/partners') ? 'text-white' : 'text-cyan-600'}`} />
+                  {!isSidebarCollapsed && <span>Partners</span>}
                 </Link>
               )}
 
@@ -441,8 +443,8 @@ export default function AdminLayout() {
                       : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <BarChart3 className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/analytics') ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>📊 Analytics</span>}
+                  <BarChart3 className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/analytics') ? 'text-white' : 'text-blue-500'}`} />
+                  {!isSidebarCollapsed && <span>Analytics</span>}
                 </Link>
               )}
 
@@ -460,7 +462,7 @@ export default function AdminLayout() {
                   }`}
                 >
                   <Settings className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/settings') ? 'text-white' : 'text-slate-500'}`} />
-                  {!isSidebarCollapsed && <span>⚙️ Settings</span>}
+                  {!isSidebarCollapsed && <span>Settings</span>}
                 </Link>
               )}
 
@@ -478,7 +480,7 @@ export default function AdminLayout() {
               }`}
             >
               <Globe className="w-4 h-4 text-[#2563EB]" />
-              {!isSidebarCollapsed && <span>🌐 View Site</span>}
+              {!isSidebarCollapsed && <span>View Site</span>}
             </Link>
 
             <button
@@ -489,13 +491,13 @@ export default function AdminLayout() {
               }`}
             >
               <LogOut className="w-4 h-4 text-red-500" />
-              {!isSidebarCollapsed && <span>🚪 Sign Out</span>}
+              {!isSidebarCollapsed && <span>Sign Out</span>}
             </button>
           </div>
         </aside>
 
-        {/* MAIN PAGE CONTENT WRAPPER WITH BREADCRUMBS */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4">
+        {/* MAIN SCROLLABLE CONTENT WRAPPER WITH BREADCRUMBS */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4 min-h-[calc(100vh-73px)]">
           <div className="max-w-7xl mx-auto space-y-6">
             
             {/* BREADCRUMB NAVIGATION */}
@@ -523,7 +525,7 @@ export default function AdminLayout() {
       </div>
 
       {/* FOOTER */}
-      <footer className="bg-white border-t border-slate-200 px-4 md:px-8 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <footer className="bg-white border-t border-slate-200 px-4 md:px-8 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 z-10">
         <div>© 2026 Senga Systems Limited. All rights reserved.</div>
         <div className="flex items-center gap-4">
           <span className="font-semibold text-slate-700">Admin Portal v2.5.0</span>
