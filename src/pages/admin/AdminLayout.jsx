@@ -28,10 +28,10 @@ export default function AdminLayout() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const currentUser = user || {
-    name: 'Farook Kalumbi',
+    name: 'Mr. Farook Kalumbi',
     title: 'Chief Operating Officer',
     role: 'System Administrator',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+    avatar: '/farook_avatar.jpg'
   };
 
   const navItems = [
@@ -56,7 +56,7 @@ export default function AdminLayout() {
       {/* 1. TOP HEADER */}
       <header className="sticky top-0 z-40 bg-[#0B1120] border-b border-slate-800/80 px-4 md:px-8 py-3.5 flex items-center justify-between shadow-md">
         
-        {/* Brand & Admin Panel Badge */}
+        {/* Brand & Tagline */}
         <div className="flex items-center gap-3">
           <Link to="/admin/dashboard" className="flex items-center gap-2.5">
             <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shadow-md">
@@ -64,7 +64,7 @@ export default function AdminLayout() {
             </div>
             <div>
               <span className="font-extrabold text-lg text-white tracking-tight block">SENGA SYSTEMS</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 block -mt-1">Admin Panel</span>
+              <span className="text-[10px] font-bold tracking-wider text-blue-400 block -mt-1">Building Intelligent Digital Solutions</span>
             </div>
           </Link>
         </div>
