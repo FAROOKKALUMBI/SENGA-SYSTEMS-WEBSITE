@@ -14,12 +14,17 @@ import {
   ExternalLink, 
   ShieldCheck, 
   ChevronDown,
+  ChevronRight,
+  ChevronLeft,
   User,
   HelpCircle,
-  ChevronLeft,
-  ChevronRight,
   Menu,
-  X
+  X,
+  Globe,
+  Newspaper,
+  Lightbulb,
+  Megaphone,
+  Home
 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 
@@ -32,6 +37,7 @@ export default function AdminLayout() {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [contentSubmenuOpen, setContentSubmenuOpen] = useState(true);
 
   const currentUser = user || {
     name: 'Mr. Farook Kalumbi',
@@ -57,21 +63,48 @@ export default function AdminLayout() {
 
   const allowedPaths = roleAllowedPaths[roleCode] || roleAllowedPaths.SYSTEM_ADMIN;
 
-  const navItems = [
-    { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-    { label: 'Content Management', path: '/admin/posts', icon: FileText },
-    { label: 'Vacancies', path: '/admin/vacancies', icon: Briefcase },
-    { label: 'Leads & Quotes', path: '/admin/leads', icon: MessageSquare },
-    { label: 'Users & Roles', path: '/admin/roles', icon: Users },
-    { label: 'Partners', path: '/admin/partners', icon: Handshake },
-    { label: 'Analytics', path: '/admin/analytics', icon: BarChart3 },
-    { label: 'Settings', path: '/admin/settings', icon: Settings },
-  ].filter(item => allowedPaths.includes(item.path));
-
   const handleSignOut = () => {
     logout();
     navigate('/admin/login');
   };
+
+  // Generate Breadcrumbs array based on current pathname
+  const getBreadcrumbs = () => {
+    const path = location.pathname;
+    const crumbs = [{ label: 'Admin', path: '/admin/dashboard' }];
+
+    if (path.includes('/admin/dashboard')) {
+      crumbs.push({ label: 'Dashboard', path: '/admin/dashboard' });
+    } else if (path.includes('/admin/posts')) {
+      crumbs.push({ label: 'Content Management', path: '/admin/posts' });
+      const search = location.search;
+      if (search.includes('type=news')) {
+        crumbs.push({ label: 'News & Press', path: '/admin/posts?type=news' });
+      } else if (search.includes('type=insights')) {
+        crumbs.push({ label: 'Insights & AI Trends', path: '/admin/posts?type=insights' });
+      } else if (search.includes('type=announcements')) {
+        crumbs.push({ label: 'Announcements', path: '/admin/posts?type=announcements' });
+      } else {
+        crumbs.push({ label: 'All Posts', path: '/admin/posts' });
+      }
+    } else if (path.includes('/admin/vacancies')) {
+      crumbs.push({ label: 'Careers & Vacancies', path: '/admin/vacancies' });
+    } else if (path.includes('/admin/leads')) {
+      crumbs.push({ label: 'Leads & Quotes', path: '/admin/leads' });
+    } else if (path.includes('/admin/roles')) {
+      crumbs.push({ label: 'Users & Roles', path: '/admin/roles' });
+    } else if (path.includes('/admin/partners')) {
+      crumbs.push({ label: 'Partners', path: '/admin/partners' });
+    } else if (path.includes('/admin/analytics')) {
+      crumbs.push({ label: 'Analytics', path: '/admin/analytics' });
+    } else if (path.includes('/admin/settings')) {
+      crumbs.push({ label: 'System Settings', path: '/admin/settings' });
+    }
+
+    return crumbs;
+  };
+
+  const breadcrumbs = getBreadcrumbs();
 
   return (
     <div className="min-h-screen bg-slate-100/80 text-slate-900 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
@@ -113,8 +146,9 @@ export default function AdminLayout() {
             target="_blank"
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 text-xs font-semibold border border-white/20 transition-colors"
           >
+            <Globe className="w-3.5 h-3.5 text-blue-300" />
             <span>View Site</span>
-            <ExternalLink className="w-3.5 h-3.5 text-blue-300" />
+            <ExternalLink className="w-3 h-3 text-blue-300 ml-0.5" />
           </Link>
 
           {/* Notification Bell */}
@@ -131,8 +165,8 @@ export default function AdminLayout() {
             {notificationsOpen && (
               <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-slate-200 text-slate-900 rounded-2xl p-4 shadow-2xl space-y-3 z-50 text-xs">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                  <span className="font-bold text-slate-900">Notifications</span>
-                  <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">2 New</span>
+                  <span className="font-bold text-slate-900">System Notifications</span>
+                  <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">2 Unread</span>
                 </div>
                 <div className="space-y-2">
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
@@ -199,7 +233,7 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      {/* MAIN BODY: COLLAPSIBLE SIDEBAR + CONTENT AREA */}
+      {/* MAIN BODY: COLLAPSIBLE SIDEBAR WITH SUB-MENUS + CONTENT AREA */}
       <div className="flex-1 flex overflow-hidden">
         
         {/* COLLAPSIBLE SIDEBAR NAVIGATION (Desktop) */}
@@ -226,34 +260,227 @@ export default function AdminLayout() {
               </button>
             </div>
 
-            {/* Navigation Links */}
+            {/* Navigation Links with Sub-Menu Tree Structure */}
             <nav className="space-y-1">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path || (item.path !== '/admin/dashboard' && location.pathname.startsWith(item.path));
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    title={isSidebarCollapsed ? item.label : undefined}
-                    className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+              
+              {/* 1. Dashboard */}
+              {allowedPaths.includes('/admin/dashboard') && (
+                <Link
+                  to="/admin/dashboard"
+                  title={isSidebarCollapsed ? "Dashboard" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname === '/admin/dashboard'
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <LayoutDashboard className={`w-4 h-4 shrink-0 ${location.pathname === '/admin/dashboard' ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>📊 Dashboard</span>}
+                </Link>
+              )}
+
+              {/* 2. Content Management with Collapsible Sub-Items */}
+              {allowedPaths.includes('/admin/posts') && (
+                <div>
+                  <div
+                    onClick={() => setContentSubmenuOpen(!contentSubmenuOpen)}
+                    title={isSidebarCollapsed ? "Content" : undefined}
+                    className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-extrabold cursor-pointer transition-all ${
                       isSidebarCollapsed ? 'justify-center px-2' : ''
                     } ${
-                      isActive
-                        ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      location.pathname.startsWith('/admin/posts')
+                        ? 'bg-blue-50 text-[#2563EB] border border-blue-200'
                         : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                    {!isSidebarCollapsed && <span>{item.label}</span>}
-                  </Link>
-                );
-              })}
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-4 h-4 text-slate-500 shrink-0" />
+                      {!isSidebarCollapsed && <span>📝 Content</span>}
+                    </div>
+                    {!isSidebarCollapsed && (
+                      <ChevronDown className={`w-4 h-4 transition-transform ${contentSubmenuOpen ? 'rotate-180' : ''}`} />
+                    )}
+                  </div>
+
+                  {/* Sub-menu Tree Items */}
+                  {contentSubmenuOpen && !isSidebarCollapsed && (
+                    <div className="pl-4 mt-1 space-y-1 border-l-2 border-slate-200 ml-5">
+                      <Link
+                        to="/admin/posts"
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
+                          location.pathname === '/admin/posts' && !location.search
+                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        }`}
+                      >
+                        <FileText className="w-3.5 h-3.5 text-blue-500" />
+                        <span>All Posts</span>
+                      </Link>
+                      <Link
+                        to="/admin/posts?type=news"
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
+                          location.search.includes('type=news')
+                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Newspaper className="w-3.5 h-3.5 text-emerald-500" />
+                        <span>News & Press</span>
+                      </Link>
+                      <Link
+                        to="/admin/posts?type=insights"
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
+                          location.search.includes('type=insights')
+                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+                        <span>Insights</span>
+                      </Link>
+                      <Link
+                        to="/admin/posts?type=announcements"
+                        className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold transition-colors ${
+                          location.search.includes('type=announcements')
+                            ? 'text-[#2563EB] font-black bg-blue-50'
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Megaphone className="w-3.5 h-3.5 text-purple-500" />
+                        <span>Announcements</span>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* 3. Vacancies */}
+              {allowedPaths.includes('/admin/vacancies') && (
+                <Link
+                  to="/admin/vacancies"
+                  title={isSidebarCollapsed ? "Vacancies" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname.startsWith('/admin/vacancies')
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <Briefcase className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/vacancies') ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>💼 Vacancies</span>}
+                </Link>
+              )}
+
+              {/* 4. Leads & Quotes */}
+              {allowedPaths.includes('/admin/leads') && (
+                <Link
+                  to="/admin/leads"
+                  title={isSidebarCollapsed ? "Leads & Quotes" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname.startsWith('/admin/leads')
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <MessageSquare className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/leads') ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>📋 Leads & Quotes</span>}
+                </Link>
+              )}
+
+              {/* 5. Users & Roles */}
+              {allowedPaths.includes('/admin/roles') && (
+                <Link
+                  to="/admin/roles"
+                  title={isSidebarCollapsed ? "Users & Roles" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname.startsWith('/admin/roles')
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <Users className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/roles') ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>👥 Users & Roles</span>}
+                </Link>
+              )}
+
+              {/* 6. Partners */}
+              {allowedPaths.includes('/admin/partners') && (
+                <Link
+                  to="/admin/partners"
+                  title={isSidebarCollapsed ? "Partners" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname.startsWith('/admin/partners')
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <Handshake className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/partners') ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>🤝 Partners</span>}
+                </Link>
+              )}
+
+              {/* 7. Analytics */}
+              {allowedPaths.includes('/admin/analytics') && (
+                <Link
+                  to="/admin/analytics"
+                  title={isSidebarCollapsed ? "Analytics" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname.startsWith('/admin/analytics')
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <BarChart3 className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/analytics') ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>📊 Analytics</span>}
+                </Link>
+              )}
+
+              {/* 8. Settings */}
+              {allowedPaths.includes('/admin/settings') && (
+                <Link
+                  to="/admin/settings"
+                  title={isSidebarCollapsed ? "Settings" : undefined}
+                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                    isSidebarCollapsed ? 'justify-center px-2' : ''
+                  } ${
+                    location.pathname.startsWith('/admin/settings')
+                      ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
+                      : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
+                  }`}
+                >
+                  <Settings className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/settings') ? 'text-white' : 'text-slate-500'}`} />
+                  {!isSidebarCollapsed && <span>⚙️ Settings</span>}
+                </Link>
+              )}
+
             </nav>
           </div>
 
-          {/* Bottom Sidebar Sign Out */}
-          <div className="pt-4 border-t border-slate-200">
+          {/* Bottom Sidebar Action Buttons */}
+          <div className="pt-4 border-t border-slate-200 space-y-2">
+            <Link
+              to="/"
+              target="_blank"
+              title={isSidebarCollapsed ? "View Site" : undefined}
+              className={`w-full py-2.5 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-800 hover:text-[#2563EB] text-xs font-bold flex items-center justify-center gap-2 transition-all border border-slate-200 ${
+                isSidebarCollapsed ? 'px-0' : ''
+              }`}
+            >
+              <Globe className="w-4 h-4 text-[#2563EB]" />
+              {!isSidebarCollapsed && <span>🌐 View Site</span>}
+            </Link>
+
             <button
               onClick={handleSignOut}
               title={isSidebarCollapsed ? "Sign Out" : undefined}
@@ -262,58 +489,33 @@ export default function AdminLayout() {
               }`}
             >
               <LogOut className="w-4 h-4 text-red-500" />
-              {!isSidebarCollapsed && <span>Sign Out</span>}
+              {!isSidebarCollapsed && <span>🚪 Sign Out</span>}
             </button>
           </div>
         </aside>
 
-        {/* MOBILE SIDEBAR DRAWER */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs md:hidden flex">
-            <div className="w-64 bg-white h-full p-4 flex flex-col justify-between space-y-6 shadow-2xl">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <span className="font-extrabold text-sm text-slate-900">Navigation Menu</span>
-                  <button onClick={() => setMobileMenuOpen(false)} className="p-1 rounded-lg text-slate-500 hover:bg-slate-100">
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
+        {/* MAIN PAGE CONTENT WRAPPER WITH BREADCRUMBS */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4">
+          <div className="max-w-7xl mx-auto space-y-6">
+            
+            {/* BREADCRUMB NAVIGATION */}
+            <nav className="flex items-center gap-2 text-xs font-extrabold text-slate-500 bg-white border border-slate-200 rounded-2xl px-4 py-2.5 shadow-xs">
+              <Home className="w-3.5 h-3.5 text-[#2563EB]" />
+              {breadcrumbs.map((crumb, idx) => (
+                <React.Fragment key={crumb.path + idx}>
+                  <span>/</span>
+                  <Link
+                    to={crumb.path}
+                    className={`hover:text-[#2563EB] transition-colors ${
+                      idx === breadcrumbs.length - 1 ? 'text-slate-900 font-black' : 'text-slate-600'
+                    }`}
+                  >
+                    {crumb.label}
+                  </Link>
+                </React.Fragment>
+              ))}
+            </nav>
 
-                <nav className="space-y-1">
-                  {navItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = location.pathname === item.path;
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold ${
-                          isActive ? 'bg-[#2563EB] text-white' : 'text-slate-700 hover:bg-slate-100'
-                        }`}
-                      >
-                        <Icon className="w-4 h-4" />
-                        <span>{item.label}</span>
-                      </Link>
-                    );
-                  })}
-                </nav>
-              </div>
-
-              <button
-                onClick={handleSignOut}
-                className="w-full py-2.5 rounded-xl bg-red-50 text-red-600 text-xs font-bold flex items-center justify-center gap-2"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* MAIN PAGE CONTENT WRAPPER */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
-          <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>
@@ -324,7 +526,7 @@ export default function AdminLayout() {
       <footer className="bg-white border-t border-slate-200 px-4 md:px-8 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
         <div>© 2026 Senga Systems Limited. All rights reserved.</div>
         <div className="flex items-center gap-4">
-          <span className="font-semibold text-slate-700">Admin Portal v2.4.0</span>
+          <span className="font-semibold text-slate-700">Admin Portal v2.5.0</span>
           <span>•</span>
           <a href="mailto:help@sengasystems.com" className="text-[#2563EB] font-semibold hover:underline">
             Support Email: help@sengasystems.com
