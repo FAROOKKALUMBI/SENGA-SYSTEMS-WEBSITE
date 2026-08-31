@@ -14,7 +14,12 @@ import {
   Building2, 
   HelpCircle,
   Linkedin,
-  Mail
+  Mail,
+  Download,
+  FileText,
+  Play,
+  ExternalLink,
+  Sparkles
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
 
@@ -94,21 +99,19 @@ export default function AboutPages() {
           <div className="bg-[#23275c] rounded-3xl p-6 sm:p-8 space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <span className="text-xs uppercase tracking-wider font-extrabold text-blue-300">ABOUT SENGA SYSTEMS</span>
+                <span className="text-xs uppercase tracking-wider font-extrabold text-blue-300">Home / About Us</span>
                 <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-1">
-                  {subpath === 'profile' && 'Company Profile'}
                   {subpath === 'history' && 'Company History & Milestones'}
                   {subpath === 'leadership' && 'Executive Leadership Team'}
                   {subpath === 'partners' && 'Our Strategic Partners'}
                   {subpath === 'faqs' && 'Frequently Asked Questions'}
-                  {!subpath && 'About Senga Systems'}
+                  {(!subpath || subpath === 'profile') && 'Building Intelligent Digital Solutions That Matter'}
                 </h1>
               </div>
 
-              {/* Subpages Tabs */}
+              {/* Subpages Tabs (Combined Overview & Profile) */}
               <div className="flex flex-wrap items-center gap-2">
-                <Link to="/about" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!subpath ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Overview</Link>
-                <Link to="/about/profile" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'profile' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Profile</Link>
+                <Link to="/about" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!subpath || subpath === 'profile' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Overview</Link>
                 <Link to="/about/history" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'history' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>History</Link>
                 <Link to="/about/leadership" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'leadership' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Leadership</Link>
                 <Link to="/about/partners" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${subpath === 'partners' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Partners</Link>
@@ -122,74 +125,161 @@ export default function AboutPages() {
       {/* 2. DYNAMIC SUBPAGE CONTENT ON WHITE BACKGROUND (#ffffff) */}
       <div className="bg-[#ffffff] py-16 px-4 md:px-12">
         
-        {/* 1. OVERVIEW & MAIN ABOUT */}
+        {/* 1. COMBINED OVERVIEW & PROFILE SECTION */}
         {(!subpath || subpath === 'profile') && (
           <section className="max-w-7xl mx-auto space-y-16">
-            {/* Mission & Vision Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-[#2563EB] border border-blue-200 flex items-center justify-center">
+            
+            {/* Top Company Overview Grid with YouTube Video Player & Download Button on the Right */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+              
+              {/* Left Column: ABOUT OUR COMPANY / Company Overview Text */}
+              <div className="lg:col-span-7 space-y-5">
+                <div>
+                  <span className="text-xs uppercase tracking-wider font-extrabold text-[#2563EB] block">
+                    ABOUT OUR COMPANY
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-black text-[#23275c] tracking-tight mt-1">
+                    Company Overview
+                  </h2>
+                </div>
+
+                <div className="space-y-4 text-slate-700 text-sm sm:text-base leading-relaxed font-normal">
+                  <p>
+                    At Senga Systems, we transform ideas into innovative digital solutions by combining artificial intelligence, modern software engineering, and human-centered design. We build secure, scalable, and high-performance technologies that help businesses, organizations, and communities improve efficiency, embrace digital transformation, and create lasting impact.
+                  </p>
+                  <p>
+                    Our customer base spans multiple sectors, including financial institutions, telecommunications companies, government agencies, educational institutions, and private enterprises. We deliver enterprise-grade technology solutions tailored to meet the evolving needs of modern organizations, ranging from AI-driven automation and cloud infrastructure to cybersecurity, data analytics, and systems integration.
+                  </p>
+                  <p>
+                    Through a strong combination of technical expertise, strategic partnerships, and deep industry knowledge, Senga Systems has built a reputation for reliability, innovation, and high-quality service delivery across Malawi and Africa.
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: YouTube Video Player & Download Company Profile Button */}
+              <div className="lg:col-span-5 space-y-4">
+                <div className="bg-[#d9d9d9] p-4 rounded-3xl border border-slate-300 shadow-md space-y-4">
+                  
+                  {/* YouTube Video Player Embed */}
+                  <div className="relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-900 border border-slate-400/40">
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0"
+                      title="Senga Systems YouTube Video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+
+                  {/* Video Label & Download Button Below */}
+                  <div className="space-y-3 pt-1">
+                    <div className="flex items-center justify-between text-xs font-extrabold text-slate-800">
+                      <span className="flex items-center gap-1.5 text-[#23275c]">
+                        <Play className="w-3.5 h-3.5 text-red-600 fill-red-600" />
+                        <span>Watch Senga Systems on YouTube</span>
+                      </span>
+                      <a
+                        href="https://www.youtube.com/@SengaSystems"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#2563EB] hover:underline flex items-center gap-1 text-[11px]"
+                      >
+                        <span>Channel</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+
+                    <a
+                      href="/assets/documents/Senga_Systems_Company_Profile.pdf"
+                      download="Senga_Systems_Company_Profile.pdf"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-3.5 px-4 rounded-2xl bg-[#23275c] hover:bg-[#1d2252] text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all cursor-pointer border border-blue-900"
+                    >
+                      <Download className="w-4 h-4 text-blue-300" />
+                      <span>Download Company Profile (PDF)</span>
+                    </a>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            {/* Mission & Vision Cards with #d9d9d9 Background */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+              <div className="bg-[#d9d9d9] p-8 rounded-3xl border border-slate-300 shadow-sm space-y-4 relative overflow-hidden">
+                <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
                   <Target className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-black text-[#0F172A]">Our Mission</h2>
-                <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                <h3 className="text-2xl font-black text-[#0F172A]">Our Mission</h3>
+                <p className="text-sm text-slate-700 leading-relaxed font-medium">
                   To develop innovative, secure and intelligent digital solutions that empower businesses, organizations, government agencies and communities across Malawi and Africa through state-of-the-art software engineering, AI automation and unyielding cybersecurity defenses.
                 </p>
               </div>
 
-              <div className="bg-slate-50 p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 relative overflow-hidden">
-                <div className="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-700 border border-cyan-200 flex items-center justify-center">
+              <div className="bg-[#d9d9d9] p-8 rounded-3xl border border-slate-300 shadow-sm space-y-4 relative overflow-hidden">
+                <div className="w-12 h-12 rounded-2xl bg-cyan-600 text-white flex items-center justify-center shadow-xs">
                   <Eye className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-black text-[#0F172A]">Our Vision</h2>
-                <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                <h3 className="text-2xl font-black text-[#0F172A]">Our Vision</h3>
+                <p className="text-sm text-slate-700 leading-relaxed font-medium">
                   To become Africa's undisputed leader in intelligent innovation and secure digital infrastructure, recognized for delivering secure, AI-driven and impactful digital solutions that drive economic growth and technology self-reliance across the continent.
                 </p>
               </div>
             </div>
 
-            {/* Company Values */}
-            <div className="space-y-8">
-              <h2 className="text-3xl font-black text-[#0F172A] text-center">Our Core Values</h2>
+            {/* Company Values with #23275c Heading, No Numbering/Emojis & #d9d9d9 Cards */}
+            <div className="space-y-8 pt-2">
+              <h2 className="text-3xl font-black text-[#23275c] text-center">
+                Our Core Values
+              </h2>
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center">
+                
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
                     <Shield className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">1. 🔒 Uncompromised Security & Trust</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  <h3 className="font-bold text-[#0F172A] text-base">Uncompromised Security & Trust</h3>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
                     "Zero-trust engineering principles in every line of code. Security is integrated into every stage of our development lifecycle, ensuring resilient, reliable, and data-protected solutions."
                   </p>
                 </div>
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center">
+
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center shadow-xs">
                     <Award className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">2. ⚡ Excellence, Precision & Innovation</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  <h3 className="font-bold text-[#0F172A] text-base">Excellence, Precision & Innovation</h3>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
                     "Delivering world-class code quality and system performance through agile methodologies, AI, and automation to keep our clients ahead in a rapidly evolving digital landscape."
                   </p>
                 </div>
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
                     <Users className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">3. 👥 Human-Centered Client Partnership</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  <h3 className="font-bold text-[#0F172A] text-base">Human-Centered Client Partnership</h3>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
                     "Creating intuitive, accessible, and user-focused digital experiences with long-term dedicated technical support and advisory tailored to your business objectives."
                   </p>
                 </div>
-                <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
                     <Globe className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">4. 🌍 Local Innovation & African Impact</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  <h3 className="font-bold text-[#0F172A] text-base">Local Innovation & African Impact</h3>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
                     "Building software solutions tailored for African business environments, driving economic growth and technology self-reliance across the continent."
                   </p>
                 </div>
+
               </div>
             </div>
+
           </section>
         )}
 
@@ -243,16 +333,16 @@ export default function AboutPages() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {leadersList.map((leader, idx) => (
-                <div key={idx} className="bg-slate-50 rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 text-center group hover:shadow-md transition-all">
+                <div key={idx} className="bg-[#d9d9d9] rounded-3xl p-6 border border-slate-300 shadow-sm space-y-4 text-center group hover:shadow-md transition-all">
                   <img
                     src={leader.image}
                     alt={leader.name}
-                    className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-blue-400 group-hover:scale-105 transition-transform"
+                    className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-blue-600 group-hover:scale-105 transition-transform"
                   />
                   <div>
                     <h3 className="font-black text-[#0F172A] text-base">{leader.name}</h3>
                     <p className="text-xs text-[#2563EB] font-bold mt-0.5">{leader.title}</p>
-                    <p className="text-xs text-slate-600 mt-2 leading-relaxed font-medium">{leader.bio}</p>
+                    <p className="text-xs text-slate-700 mt-2 leading-relaxed font-medium">{leader.bio}</p>
                   </div>
                 </div>
               ))}
@@ -270,10 +360,10 @@ export default function AboutPages() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {partnersList.map((partner, idx) => (
-                <div key={idx} className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                <div key={idx} className="bg-[#d9d9d9] p-6 rounded-2xl border border-slate-300 shadow-sm space-y-3">
                   <span className="text-xs font-mono text-[#2563EB] uppercase tracking-wider font-bold">{partner.cat}</span>
                   <h3 className="font-black text-[#0F172A] text-xl">{partner.name}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-medium">{partner.desc}</p>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">{partner.desc}</p>
                 </div>
               ))}
             </div>
@@ -295,7 +385,7 @@ export default function AboutPages() {
               {faqsList.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden cursor-pointer shadow-xs"
+                  className="bg-[#d9d9d9] border border-slate-300 rounded-2xl overflow-hidden cursor-pointer shadow-xs"
                   onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
                 >
                   <div className="p-5 flex items-center justify-between gap-4">
@@ -303,7 +393,7 @@ export default function AboutPages() {
                     <ChevronDown className={`w-5 h-5 text-[#2563EB] shrink-0 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
                   </div>
                   {openFaq === idx && (
-                    <div className="px-5 pb-5 pt-1 text-sm text-slate-600 border-t border-slate-200 leading-relaxed font-medium">
+                    <div className="px-5 pb-5 pt-1 text-sm text-slate-700 border-t border-slate-300 leading-relaxed font-medium">
                       {faq.a}
                     </div>
                   )}
