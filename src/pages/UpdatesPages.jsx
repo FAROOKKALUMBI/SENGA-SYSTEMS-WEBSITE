@@ -27,7 +27,7 @@ export default function UpdatesPages() {
     <div className="space-y-12 py-12">
       {/* Header Banner & Subpage Tabs */}
       <section className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="glass-card bg-[#0F172A] border border-slate-700 rounded-3xl p-8 space-y-6">
+        <div className="glass-card bg-[#23275c] border border-slate-700 rounded-3xl p-8 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <span className="text-xs uppercase tracking-wider font-bold text-blue-400">Company News & Updates</span>
