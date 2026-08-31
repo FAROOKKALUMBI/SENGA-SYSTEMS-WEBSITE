@@ -24,8 +24,25 @@ import { useCMS } from '../context/CMSContext';
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('senga_dark_mode') === 'true';
+    }
+    return false;
+  });
   const { openQuoteModal } = useCMS();
+
+  React.useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+      localStorage.setItem('senga_dark_mode', 'true');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+      localStorage.setItem('senga_dark_mode', 'false');
+    }
+  }, [darkMode]);
 
   const handleMouseEnter = (name) => setActiveDropdown(name);
   const handleMouseLeave = () => setActiveDropdown(null);
@@ -216,7 +233,6 @@ export default function Navbar() {
                     <Link to="/contact/quote" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Get a Quote</Link>
                     <Link to="/contact/payment" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Make a Payment</Link>
                     <Link to="/contact/schedule" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Schedule Consultation</Link>
-                    <Link to="/contact/support" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Support Centre</Link>
                   </div>
                 </div>
               )}
