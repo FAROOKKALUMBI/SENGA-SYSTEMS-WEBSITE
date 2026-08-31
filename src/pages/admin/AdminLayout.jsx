@@ -235,7 +235,7 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      {/* MAIN BODY: 100% FIXED SIDEBAR (NON-SCROLLABLE INTACT) + ONLY SCROLLABLE RIGHT CONTENT */}
+      {/* MAIN BODY: 100% FIXED SIDEBAR WITH #828080 GRAY ICONS + SCROLLABLE RIGHT CONTENT */}
       <div className="flex-1 flex overflow-hidden">
         
         {/* FIXED INTACT SIDEBAR (NEVER SCROLLS, 2PX RIGHT BORDER LINE) */}
@@ -246,11 +246,11 @@ export default function AdminLayout() {
         >
           <div className="space-y-6">
             
-            {/* Sidebar Header: Navigation Symbol Icon (No Text) + Collapse Toggle */}
+            {/* Sidebar Header: Navigation Symbol Icon with #828080 stroke + Collapse Toggle */}
             <div className={`flex items-center justify-between pb-3 border-b-2 border-slate-300 ${isSidebarCollapsed ? 'justify-center' : ''}`}>
               {!isSidebarCollapsed && (
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 border-2 border-blue-200 flex items-center justify-center text-[#2563EB]">
+                  <div className="w-7 h-7 rounded-lg bg-slate-50 border-2 border-slate-300 flex items-center justify-center text-[#828080]">
                     <LayoutGrid className="w-4 h-4" />
                   </div>
                 </div>
@@ -259,14 +259,14 @@ export default function AdminLayout() {
               {/* Minimise / Expand Toggle Button */}
               <button
                 onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer border-2 border-slate-300 shrink-0 shadow-xs"
+                className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#828080] transition-colors cursor-pointer border-2 border-slate-300 shrink-0 shadow-xs"
                 title={isSidebarCollapsed ? "Expand Sidebar" : "Minimize Sidebar"}
               >
                 {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
               </button>
             </div>
 
-            {/* Navigation Links with Clean Vector Stroke Icons */}
+            {/* Navigation Links with #828080 Inactive Icon Colors */}
             <nav className="space-y-1">
               
               {/* 1. Dashboard */}
@@ -282,12 +282,12 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <LayoutDashboard className={`w-4 h-4 shrink-0 ${location.pathname === '/admin/dashboard' ? 'text-white' : 'text-blue-600'}`} />
+                  <LayoutDashboard className={`w-4 h-4 shrink-0 ${location.pathname === '/admin/dashboard' ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Dashboard</span>}
                 </Link>
               )}
 
-              {/* 2. Content Management with Active Blue Bar Highlight */}
+              {/* 2. Content Management */}
               {allowedPaths.includes('/admin/posts') && (
                 <div>
                   <Link
@@ -303,11 +303,11 @@ export default function AdminLayout() {
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <FileText className={`w-4 h-4 shrink-0 ${isContentActive ? 'text-white' : 'text-[#2563EB]'}`} />
+                      <FileText className={`w-4 h-4 shrink-0 ${isContentActive ? 'text-white' : 'text-[#828080]'}`} />
                       {!isSidebarCollapsed && <span>Content</span>}
                     </div>
                     {!isSidebarCollapsed && (
-                      <ChevronDown className={`w-4 h-4 transition-transform ${contentSubmenuOpen ? 'rotate-180' : ''} ${isContentActive ? 'text-white' : 'text-slate-400'}`} />
+                      <ChevronDown className={`w-4 h-4 transition-transform ${contentSubmenuOpen ? 'rotate-180' : ''} ${isContentActive ? 'text-white' : 'text-[#828080]'}`} />
                     )}
                   </Link>
 
@@ -322,7 +322,7 @@ export default function AdminLayout() {
                             : 'text-slate-600 border-transparent hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <FileText className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                        <FileText className={`w-3.5 h-3.5 shrink-0 ${location.pathname === '/admin/posts' && !location.search ? 'text-[#2563EB]' : 'text-[#828080]'}`} />
                         <span>All Posts</span>
                       </Link>
                       <Link
@@ -333,7 +333,7 @@ export default function AdminLayout() {
                             : 'text-slate-600 border-transparent hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <Newspaper className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <Newspaper className={`w-3.5 h-3.5 shrink-0 ${location.search.includes('type=news') ? 'text-[#2563EB]' : 'text-[#828080]'}`} />
                         <span>News & Press</span>
                       </Link>
                       <Link
@@ -344,7 +344,7 @@ export default function AdminLayout() {
                             : 'text-slate-600 border-transparent hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <Lightbulb className={`w-3.5 h-3.5 shrink-0 ${location.search.includes('type=insights') ? 'text-[#2563EB]' : 'text-[#828080]'}`} />
                         <span>Insights</span>
                       </Link>
                       <Link
@@ -355,7 +355,7 @@ export default function AdminLayout() {
                             : 'text-slate-600 border-transparent hover:text-slate-900 hover:bg-slate-100'
                         }`}
                       >
-                        <Megaphone className="w-3.5 h-3.5 text-purple-500 shrink-0" />
+                        <Megaphone className={`w-3.5 h-3.5 shrink-0 ${location.search.includes('type=announcements') ? 'text-[#2563EB]' : 'text-[#828080]'}`} />
                         <span>Announcements</span>
                       </Link>
                     </div>
@@ -376,7 +376,7 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Briefcase className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/vacancies') ? 'text-white' : 'text-pink-600'}`} />
+                  <Briefcase className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/vacancies') ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Vacancies</span>}
                 </Link>
               )}
@@ -394,7 +394,7 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <MessageSquare className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/leads') ? 'text-white' : 'text-amber-600'}`} />
+                  <MessageSquare className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/leads') ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Leads & Quotes</span>}
                 </Link>
               )}
@@ -412,7 +412,7 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Users className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/roles') ? 'text-white' : 'text-purple-600'}`} />
+                  <Users className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/roles') ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Users & Roles</span>}
                 </Link>
               )}
@@ -430,7 +430,7 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Handshake className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/partners') ? 'text-white' : 'text-cyan-600'}`} />
+                  <Handshake className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/partners') ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Partners</span>}
                 </Link>
               )}
@@ -448,7 +448,7 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <BarChart3 className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/analytics') ? 'text-white' : 'text-blue-500'}`} />
+                  <BarChart3 className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/analytics') ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Analytics</span>}
                 </Link>
               )}
@@ -466,7 +466,7 @@ export default function AdminLayout() {
                       : 'text-slate-700 border-transparent hover:text-[#2563EB] hover:bg-slate-100'
                   }`}
                 >
-                  <Settings className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/settings') ? 'text-white' : 'text-slate-500'}`} />
+                  <Settings className={`w-4 h-4 shrink-0 ${location.pathname.startsWith('/admin/settings') ? 'text-white' : 'text-[#828080]'}`} />
                   {!isSidebarCollapsed && <span>Settings</span>}
                 </Link>
               )}
@@ -474,7 +474,7 @@ export default function AdminLayout() {
             </nav>
           </div>
 
-          {/* Bottom Sidebar Action Buttons with 2px Border Lines */}
+          {/* Bottom Sidebar Action Buttons */}
           <div className="pt-4 border-t-2 border-slate-300 space-y-2">
             <Link
               to="/"
@@ -484,7 +484,7 @@ export default function AdminLayout() {
                 isSidebarCollapsed ? 'px-0' : ''
               }`}
             >
-              <Globe className="w-4 h-4 text-[#2563EB]" />
+              <Globe className="w-4 h-4 text-[#828080]" />
               {!isSidebarCollapsed && <span>View Site</span>}
             </Link>
 
@@ -501,11 +501,11 @@ export default function AdminLayout() {
           </div>
         </aside>
 
-        {/* MAIN SCROLLABLE CONTENT WRAPPER (ONLY THIS RIGHT CONTAINER SCROLLS) */}
+        {/* MAIN SCROLLABLE CONTENT WRAPPER */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4 h-full">
           <div className="max-w-7xl mx-auto space-y-6">
             
-            {/* BREADCRUMB NAVIGATION WITH 2PX BORDER */}
+            {/* BREADCRUMB NAVIGATION */}
             <nav className="flex items-center gap-2 text-xs font-extrabold text-slate-500 bg-white border-2 border-slate-300 rounded-2xl px-4 py-2.5 shadow-xs">
               <Home className="w-3.5 h-3.5 text-[#2563EB]" />
               {breadcrumbs.map((crumb, idx) => (
@@ -529,7 +529,7 @@ export default function AdminLayout() {
 
       </div>
 
-      {/* FOOTER WITH 2PX BORDER LINE */}
+      {/* FOOTER */}
       <footer className="shrink-0 bg-white border-t-2 border-slate-300 px-4 md:px-8 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 z-10">
         <div>© 2026 Senga Systems Limited. All rights reserved.</div>
         <div className="flex items-center gap-4">
