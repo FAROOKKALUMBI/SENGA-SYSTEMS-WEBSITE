@@ -210,34 +210,16 @@ export default function AdminLayout() {
         >
           <div className="space-y-6">
             
-            {/* Sidebar Header: Profile Summary + Minimize/Expand Toggle */}
-            <div className="flex items-center justify-between">
-              {!isSidebarCollapsed ? (
-                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3 flex-1 mr-2 overflow-hidden">
-                  <img
-                    src={currentUser.avatar || '/farook_avatar.jpg'}
-                    alt={currentUser.name}
-                    className="w-10 h-10 rounded-xl object-cover border border-blue-400 shrink-0"
-                  />
-                  <div className="overflow-hidden">
-                    <span className="font-extrabold text-xs text-slate-900 truncate block">{currentUser.name}</span>
-                    <span className="text-[10px] font-extrabold text-[#2563EB] bg-blue-100 px-2 py-0.5 rounded-full inline-block mt-0.5">
-                      {currentUser.title || 'Chief Operating Officer'}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <img
-                  src={currentUser.avatar || '/farook_avatar.jpg'}
-                  alt={currentUser.name}
-                  className="w-10 h-10 rounded-xl object-cover border-2 border-[#2563EB] mx-auto"
-                />
+            {/* Sidebar Header: Section Title + Minimize/Expand Toggle */}
+            <div className={`flex items-center justify-between pb-2 border-b border-slate-200 ${isSidebarCollapsed ? 'justify-center' : ''}`}>
+              {!isSidebarCollapsed && (
+                <span className="text-xs font-black text-slate-700 uppercase tracking-wider">Navigation Menu</span>
               )}
 
               {/* Minimise / Expand Toggle Button */}
               <button
                 onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer border border-slate-300 shrink-0"
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer border border-slate-300 shrink-0 shadow-xs"
                 title={isSidebarCollapsed ? "Expand Sidebar" : "Minimize Sidebar"}
               >
                 {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
