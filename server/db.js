@@ -6,129 +6,202 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// Default initial data for Senga Systems
+// Default initial database data for Senga Systems with User IDs & foreign key references
 const initialData = {
   users: [
-    { id: '1', name: 'Dr. Senga CEO', email: 'admin@sengasystems.mw', role: 'Super Admin', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80' },
-    { id: '2', name: 'Chimwemwe Banda', email: 'editor@sengasystems.mw', role: 'Content Editor', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80' },
-    { id: '3', name: 'Tiwonge Phiri', email: 'biz@sengasystems.mw', role: 'Business Manager', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80' },
-    { id: '4', name: 'Kondwani Mwale', email: 'support@sengasystems.mw', role: 'Support Lead', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80' }
+    { 
+      id: 'usr_farook_001', 
+      name: 'Mr. Farook Kalumbi', 
+      email: 'farook@sengasystems.com', 
+      title: 'Chief Operating Officer',
+      role: 'System Administrator', 
+      roleCode: 'SYSTEM_ADMIN',
+      status: 'ACTIVE',
+      avatar: '/farook_avatar.jpg',
+      lastLogin: 'Today at 08:30 AM',
+      createdAt: '2025-01-01T00:00:00Z'
+    },
+    { 
+      id: 'usr_002', 
+      name: 'Grace Phiri', 
+      email: 'editor@sengasystems.mw', 
+      title: 'Head of Content',
+      role: 'Content Administrator', 
+      roleCode: 'CONTENT_ADMIN',
+      status: 'ACTIVE',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
+      lastLogin: 'Yesterday at 04:15 PM',
+      createdAt: '2025-01-05T00:00:00Z'
+    },
+    { 
+      id: 'usr_003', 
+      name: 'Chisomo Banda', 
+      email: 'hr@sengasystems.mw', 
+      title: 'HR Manager',
+      role: 'HR Manager', 
+      roleCode: 'HR_MANAGER',
+      status: 'ACTIVE',
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
+      lastLogin: '2 days ago',
+      createdAt: '2025-01-10T00:00:00Z'
+    },
+    { 
+      id: 'usr_004', 
+      name: 'Tamandani Mwale', 
+      email: 'auditor@sengasystems.mw', 
+      title: 'Senior Security Lead',
+      role: 'Security Auditor', 
+      roleCode: 'SECURITY_AUDITOR',
+      status: 'ACTIVE',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+      lastLogin: 'Today at 09:10 AM',
+      createdAt: '2025-01-12T00:00:00Z'
+    }
   ],
   posts: [
     {
       id: 'p1',
-      title: 'Senga Systems Unveils Next-Gen AI Security Engine in Malawi',
+      title: 'Senga Systems Deploys Enterprise AI Infrastructure in Malawi',
       type: 'news',
-      category: 'Artificial Intelligence',
-      author: 'Dr. Senga CEO',
-      date: '2026-08-15',
-      excerpt: 'Senga Systems introduces SengaShield AI, bringing automated threat analysis and real-time defense to commercial banks and telecommunications in Malawi.',
-      content: 'Senga Systems has launched its flagship SengaShield AI engine, designed to give Malawian enterprises active defense against ransomware, data breaches, and cyber threats.',
-      featured: true,
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80'
+      category: 'NEWS',
+      author: 'Mr. Farook Kalumbi',
+      authorId: 'usr_farook_001',
+      date: '2026-08-28',
+      excerpt: 'Empowering regional banks and government institutions with high-throughput neural processing clusters.',
+      content: 'Full article content detailing the strategic AI hardware and model deployment across Central Africa.',
+      status: 'PUBLISHED',
+      createdAt: '2026-08-28T09:00:00Z'
     },
     {
       id: 'p2',
-      title: 'Mastering Enterprise Cloud Migration & ICT Modernization',
-      type: 'insights',
-      category: 'Cloud & Infrastructure',
-      author: 'Tiwonge Phiri',
-      date: '2026-08-10',
-      excerpt: 'Key strategies for African organizations transitioning legacy infrastructure into high-availability cloud hybrid architecture.',
-      content: 'As digital transformation accelerates across East and Southern Africa, cloud adoption requires careful planning around data sovereignty, connectivity, and zero-trust security.',
-      featured: true,
-      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'p3',
-      title: 'Malawi Executive Cybersecurity Summit 2026',
+      title: 'Annual Cybersecurity & SengaShield Defense Summit 2026',
       type: 'events',
-      category: 'Conference',
-      author: 'Kondwani Mwale',
-      date: '2026-09-25',
-      location: 'Bingu International Convention Centre (BICC), Lilongwe',
-      excerpt: 'Join tech leaders, CTOs, and cybersecurity experts for a full-day summit on defending critical national ICT infrastructure.',
-      content: 'Hands-on sessions on zero-trust implementation, AI risk governance, and blockchain encryption.',
-      seatsAvailable: 45,
-      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'
-    },
-    {
-      id: 'p4',
-      title: 'Scheduled System Upgrade: Core Data Infrastructure',
-      type: 'announcements',
-      category: 'System Maintenance',
-      author: 'System Operations',
-      date: '2026-08-18',
-      urgency: 'Normal',
-      excerpt: 'Routine server maintenance scheduled for Sunday midnight GMT+2. Cloud hosting services will remain fully redundant.',
-      content: 'No disruption expected for SengaShield active clients.'
+      category: 'EVENT',
+      author: 'Mr. Farook Kalumbi',
+      authorId: 'usr_farook_001',
+      date: '2026-09-15',
+      location: 'Ufulu Gardens Conference Centre, Lilongwe',
+      excerpt: 'Join leading cloud architects and threat intelligence officers for a hands-on zero-trust security workshop.',
+      content: 'Register for live technical demonstrations on automated threat mitigation and encryption standards.',
+      status: 'PUBLISHED',
+      createdAt: '2026-08-29T11:30:00Z'
     }
   ],
   vacancies: [
     {
       id: 'v1',
-      title: 'Senior AI / Machine Learning Engineer',
-      department: 'Software Engineering',
-      location: 'Lilongwe (Hybrid)',
-      type: 'Full-time',
-      deadline: '2026-09-15',
-      description: 'Lead the development of custom LLM and computer vision models for our enterprise clients in financial services and logistics.',
-      requirements: ['3+ years Python/PyTorch experience', 'Deep knowledge of NLP and modern transformer architecture', 'Experience deploying containerized ML pipelines on AWS/Azure']
+      title: 'Senior AI & Machine Learning Systems Architect',
+      department: 'AI & Data Intelligence',
+      type: 'Full-Time',
+      location: 'Mzuzu / Remote',
+      deadline: '2026-09-30',
+      description: 'Lead model optimization, distributed training pipelines, and RAG architectures for client systems.',
+      requirements: ['5+ years Python & PyTorch', 'LLM fine-tuning experience', 'BSc/MSc Computer Science'],
+      createdBy: 'usr_farook_001',
+      creatorName: 'Mr. Farook Kalumbi',
+      status: 'ACTIVE',
+      createdAt: '2026-08-27T10:00:00Z'
     },
     {
       id: 'v2',
-      title: 'Cybersecurity Threat Analyst',
-      department: 'SengaShield Defense Unit',
-      location: 'Blantyre (On-site)',
-      type: 'Full-time',
-      deadline: '2026-09-20',
-      description: 'Monitor, detect, and respond to cyber security incidents across managed customer networks in real-time.',
-      requirements: ['CEH, CISSP, or CompTIA Security+ certification', 'SIEM log monitoring expertise', 'Strong background in network forensics']
+      title: 'Cybersecurity Operations & Threat Analyst',
+      department: 'Security Operations',
+      type: 'Full-Time',
+      location: 'Lilongwe Office',
+      deadline: '2026-09-25',
+      description: 'Monitor SengaShield SOC telemetry, conduct vulnerability assessments, and respond to incidents.',
+      requirements: ['CEH/CISSP certification', 'SIEM log monitoring', 'Network packet analysis'],
+      createdBy: 'usr_003',
+      creatorName: 'Chisomo Banda',
+      status: 'ACTIVE',
+      createdAt: '2026-08-28T14:15:00Z'
     }
   ],
   quotes: [
     {
       id: 'q1',
-      clientName: 'NICO Holdings Tech Division',
-      email: 'tech@nico-example.mw',
+      clientName: 'Malawi National Microfinance Bank',
+      email: 'tech@microfinance.mw',
       phone: '+265 999 123 789',
-      serviceRequested: 'Full-Stack Software Development',
-      budget: '$25,000 - $50,000',
-      details: 'We need an enterprise client mobile portal with biometric authentication and core banking backend integration.',
-      status: 'New',
-      submittedAt: '2026-08-19T14:30:00Z'
+      company: 'MNMB',
+      serviceRequested: 'AI & Automation Integration',
+      details: 'Requesting automated document processing and loan scoring system audit.',
+      attachedFile: 'RFP_Microfinance_2026.pdf',
+      status: 'PENDING',
+      handledBy: 'usr_farook_001',
+      submittedAt: '2026-08-30T16:00:00Z'
     }
   ],
   consultations: [
     {
       id: 'c1',
-      clientName: 'FDH Bank Operations',
-      email: 'ops@fdh-example.mw',
-      phone: '+265 888 456 123',
-      consultantNeeded: 'Cybersecurity & SengaShield Audit',
-      preferredDate: '2026-08-25',
+      clientName: 'Blantyre Commercial Logistics Ltd',
+      email: 'info@bcl.mw',
+      phone: '+265 888 123 789',
+      consultantNeeded: 'Cloud & ICT Infrastructure Audit',
+      preferredDate: '2026-09-05',
       timeSlot: '10:00 AM',
-      notes: 'Initial discussion for penetration testing of our web applications.',
-      status: 'Confirmed'
+      status: 'CONFIRMED',
+      createdAt: '2026-08-29T08:00:00Z'
     }
   ],
-  tickets: [
-    {
-      id: 't1',
-      ticketNo: 'SNG-8892',
-      clientName: 'National Bank Malawi',
-      subject: 'SSL Certificate Renewal Assistance',
-      priority: 'Medium',
-      status: 'In Progress',
-      date: '2026-08-18'
+  partners: [
+    { 
+      id: 'pt1', 
+      name: 'Microsoft Cloud Partner', 
+      category: 'Cloud Infrastructure', 
+      logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80', 
+      createdBy: 'usr_farook_001',
+      status: 'ACTIVE' 
+    },
+    { 
+      id: 'pt2', 
+      name: 'NVIDIA AI Inception', 
+      category: 'Hardware Acceleration', 
+      logo: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80', 
+      createdBy: 'usr_farook_001',
+      status: 'ACTIVE' 
+    }
+  ],
+  activities: [
+    { 
+      id: 'act_1', 
+      userId: 'usr_farook_001',
+      userName: 'Mr. Farook Kalumbi', 
+      avatar: '/farook_avatar.jpg', 
+      action: 'Published AI Infrastructure News Post', 
+      entity: 'POST',
+      entityId: 'p1',
+      timeAgo: '10 mins ago',
+      createdAt: new Date().toISOString()
+    },
+    { 
+      id: 'act_2', 
+      userId: 'usr_003',
+      userName: 'Chisomo Banda', 
+      avatar: null, 
+      action: 'Posted Senior AI Systems Architect Vacancy', 
+      entity: 'VACANCY',
+      entityId: 'v1',
+      timeAgo: '2 hours ago',
+      createdAt: new Date().toISOString()
+    },
+    { 
+      id: 'act_3', 
+      userId: 'system',
+      userName: 'System Telemetry', 
+      avatar: null, 
+      action: 'Received Quote Request from Malawi Microfinance', 
+      entity: 'QUOTE',
+      entityId: 'q1',
+      timeAgo: '4 hours ago',
+      createdAt: new Date().toISOString()
     }
   ]
 };
 
-// Ensure data file exists
-if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
-}
+// Always sync initial data file with updated schema
+fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
 
 export function readDB() {
   try {
