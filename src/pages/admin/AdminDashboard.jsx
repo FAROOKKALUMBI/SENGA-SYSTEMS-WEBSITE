@@ -333,85 +333,141 @@ export default function AdminDashboard() {
         })}
       </section>
 
-      {/* 4. PERFORMANCE ANALYTICS SUMMARY CHARTS */}
+      {/* 4. ENHANCED PERFORMANCE ANALYTICS CHARTS WITH CLEAR LABELS & AXIS DATA */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Content Performance Chart */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-4">
+        {/* Content Performance Bar Chart */}
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] border border-blue-200 flex items-center justify-center">
                 <BarChart3 className="w-4 h-4" />
               </div>
-              <h3 className="text-lg font-black text-slate-900">📊 Content Performance</h3>
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Content Engagement & Views</h3>
+                <span className="text-xs text-slate-500 font-medium">Monthly views per category</span>
+              </div>
             </div>
-            <span className="text-xs text-slate-500 font-bold font-mono">Posts vs Page Views</span>
+            <span className="text-xs text-[#2563EB] font-black bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+              Total: 11,180 Views
+            </span>
           </div>
 
-          <p className="text-xs text-slate-600 font-medium">Monthly publication output compared against public audience engagement.</p>
-
-          {/* SVG Bar Chart Representation */}
-          <div className="pt-4 space-y-3">
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-bold text-slate-700">
-                <span>AI & Innovation Press</span>
-                <span className="text-[#2563EB]">4,820 Views</span>
+          {/* Visual Bar Chart Grid with Labels */}
+          <div className="space-y-4 pt-2">
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-bold text-slate-800">
+                <span className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]"></span>
+                  <span>AI & Enterprise Innovation Press</span>
+                </span>
+                <span className="text-[#2563EB] font-black">4,820 Views (43%)</span>
               </div>
-              <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-                <div className="bg-[#2563EB] h-full w-[82%] rounded-full"></div>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-bold text-slate-700">
-                <span>Cybersecurity Summit Announcements</span>
-                <span className="text-emerald-600">3,450 Views</span>
-              </div>
-              <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-                <div className="bg-emerald-500 h-full w-[65%] rounded-full"></div>
+              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div className="bg-[#2563EB] h-full rounded-full transition-all duration-500 w-[86%]"></div>
               </div>
             </div>
 
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs font-bold text-slate-700">
-                <span>Enterprise Cloud Migration Insights</span>
-                <span className="text-purple-600">2,910 Views</span>
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-bold text-slate-800">
+                <span className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                  <span>Cybersecurity Summit Announcements</span>
+                </span>
+                <span className="text-emerald-700 font-black">3,450 Views (31%)</span>
               </div>
-              <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
-                <div className="bg-purple-500 h-full w-[54%] rounded-full"></div>
+              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 w-[62%]"></div>
               </div>
             </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs font-bold text-slate-700">
+                <span className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                  <span>Cloud Architecture & Hybrid Insights</span>
+                </span>
+                <span className="text-purple-700 font-black">2,910 Views (26%)</span>
+              </div>
+              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div className="bg-purple-500 h-full rounded-full transition-all duration-500 w-[52%]"></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-bold">
+            <span>Data range: May – August 2026</span>
+            <Link to="/admin/posts" className="text-[#2563EB] hover:underline flex items-center gap-1">
+              <span>View Articles →</span>
+            </Link>
           </div>
         </div>
 
-        {/* Quote Trends & Conversion */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-4">
+        {/* Quote Request & Conversion Trends Area Graph */}
+        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 border border-emerald-200 flex items-center justify-center">
                 <MessageSquare className="w-4 h-4" />
               </div>
-              <h3 className="text-lg font-black text-slate-900">📈 Quote Trends & Conversion</h3>
+              <div>
+                <h3 className="text-lg font-black text-slate-900">Quote Inquiries & Conversions</h3>
+                <span className="text-xs text-slate-500 font-medium">Monthly lead pipeline velocity</span>
+              </div>
             </div>
-            <span className="text-xs text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+            <span className="text-xs text-emerald-800 font-black bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
               72% Conversion Rate
             </span>
           </div>
 
-          <p className="text-xs text-slate-600 font-medium">Quote inquiry requests leading to confirmed client consultation sessions.</p>
-
-          <div className="grid grid-cols-2 gap-4 pt-2">
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-              <span className="text-[11px] font-bold text-slate-500 uppercase">Quote Inquiries Received</span>
-              <span className="text-2xl font-black text-slate-900 block">18</span>
-              <span className="text-[10px] font-bold text-emerald-600">↑ 18% vs last month</span>
+          {/* SVG Area Line Graph with Coordinates */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 border-b border-slate-100 pb-1">
+              <span>20 Quotes (Max Peak)</span>
+              <span className="text-emerald-700">Peak: 18 Requests in August</span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-              <span className="text-[11px] font-bold text-slate-500 uppercase">Consultations Scheduled</span>
-              <span className="text-2xl font-black text-slate-900 block">8 Sessions</span>
-              <span className="text-[10px] font-bold text-emerald-600">↑ 8% vs last week</span>
+            <div className="h-32 w-full relative pt-2">
+              <svg className="w-full h-full overflow-visible" viewBox="0 0 300 80">
+                <defs>
+                  <linearGradient id="quoteGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
+
+                {/* Gridlines */}
+                <line x1="0" y1="20" x2="300" y2="20" stroke="#f1f5f9" strokeDasharray="4 4" />
+                <line x1="0" y1="50" x2="300" y2="50" stroke="#f1f5f9" strokeDasharray="4 4" />
+
+                {/* Area Fill */}
+                <polygon points="0,80 0,60 75,45 150,30 225,25 300,10 300,80" fill="url(#quoteGradient)" />
+
+                {/* Main Curve Line */}
+                <path d="M0,60 Q37,52 75,45 T150,30 T225,25 T300,10" fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" />
+
+                {/* Data Point Circles */}
+                <circle cx="75" cy="45" r="4" fill="#10b981" />
+                <circle cx="150" cy="30" r="4" fill="#10b981" />
+                <circle cx="225" cy="25" r="4" fill="#10b981" />
+                <circle cx="300" cy="10" r="5" fill="#059669" stroke="#ffffff" strokeWidth="2" />
+              </svg>
             </div>
+
+            {/* X-Axis Month Labels */}
+            <div className="flex justify-between text-[11px] font-bold text-slate-500 pt-1 border-t border-slate-100">
+              <span>May (6)</span>
+              <span>Jun (10)</span>
+              <span>Jul (14)</span>
+              <span className="text-[#2563EB] font-black">Aug (18 Quotes)</span>
+            </div>
+          </div>
+
+          <div className="pt-2 flex items-center justify-between text-xs text-slate-600 font-bold border-t border-slate-100">
+            <span>Scheduled Consultations: 8 Sessions</span>
+            <Link to="/admin/leads" className="text-[#2563EB] hover:underline flex items-center gap-1">
+              <span>Manage Leads →</span>
+            </Link>
           </div>
         </div>
 
@@ -425,7 +481,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
             <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
               <Activity className="w-5 h-5 text-[#2563EB]" />
-              <span>📋 Recent Activity Audit Feed</span>
+              <span>Recent Activity Audit Feed</span>
             </h3>
             <Link to="/admin/analytics" className="text-xs font-black text-[#2563EB] hover:underline flex items-center gap-1">
               <span>View All Activity</span>
@@ -469,7 +525,7 @@ export default function AdminDashboard() {
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4">
             <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
               <Calendar className="w-4 h-4 text-purple-600" />
-              <span>📅 Upcoming Events & Summit</span>
+              <span>Upcoming Events & Summit</span>
             </h3>
 
             <div className="space-y-3">
@@ -487,7 +543,7 @@ export default function AdminDashboard() {
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-3">
             <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>🔔 System Security Telemetry</span>
+              <span>System Security Telemetry</span>
             </h3>
 
             <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900 space-y-1">
