@@ -23,7 +23,7 @@ export default function AdminSettings() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
             <span className="text-slate-400 font-bold uppercase block">Name</span>
-            <span className="text-white font-extrabold text-sm block">{user?.name || 'Farook Kalumbi'}</span>
+            <span className="text-[#2563EB] font-extrabold text-sm block">{user?.name || 'Mr. Farook Kalumbi'}</span>
           </div>
           <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
             <span className="text-slate-400 font-bold uppercase block">Email Address</span>
@@ -42,3 +42,4 @@ export default function AdminSettings() {
     </div>
   );
 }
+

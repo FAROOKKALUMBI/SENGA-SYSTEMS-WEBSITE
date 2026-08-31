@@ -67,16 +67,16 @@ export const SYSTEM_ROLES = [
   }
 ];
 
-// DEFAULT SYSTEM ADMINISTRATOR: FAROOK KALUMBI (COO)
+// DEFAULT SYSTEM ADMINISTRATOR: MR. FAROOK KALUMBI (COO)
 export const DEFAULT_COO_USER = {
   id: 'usr_farook_001',
-  name: 'Farook Kalumbi',
+  name: 'Mr. Farook Kalumbi',
   email: 'farook@sengasystems.com',
   title: 'Chief Operating Officer',
   role: 'System Administrator',
   roleCode: 'SYSTEM_ADMIN',
   status: 'ACTIVE',
-  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+  avatar: '/farook_avatar.jpg',
   lastLogin: 'Today at 08:30 AM'
 };
 

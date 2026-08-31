@@ -33,7 +33,7 @@ export default function AdminDashboard() {
   };
 
   const currentUser = user || {
-    name: 'Farook Kalumbi',
+    name: 'Mr. Farook Kalumbi',
     title: 'Chief Operating Officer',
     role: 'System Administrator'
   };
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-              {getGreeting()}, {currentUser.name.split(' ')[0]} 👋
+              {getGreeting()}, {currentUser.name} 👋
             </h1>
 
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 font-medium pt-1">
