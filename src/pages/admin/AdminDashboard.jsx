@@ -27,21 +27,10 @@ import {
   Eye,
   Check,
   Flame,
-  Target
+  Target,
+  Settings
 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
-
-// High-quality Flaticon icon URLs matching Homepage design
-const FLATICON_ICONS = {
-  posts: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png',      // News / Document
-  vacancies: 'https://cdn-icons-png.flaticon.com/512/3855/3855319.png',  // Briefcase / Careers
-  quotes: 'https://cdn-icons-png.flaticon.com/512/3135/3135706.png',     // Sales / Quotes
-  sessions: 'https://cdn-icons-png.flaticon.com/512/2693/2693507.png',   // Calendar / Schedule
-  users: 'https://cdn-icons-png.flaticon.com/512/921/921347.png',        // Staff / Users
-  partners: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',   // Partnership / Handshake
-  analytics: 'https://cdn-icons-png.flaticon.com/512/3589/3589886.png',  // Bar Chart / Analytics
-  settings: 'https://cdn-icons-png.flaticon.com/512/3524/3524659.png'    // Gear / Settings
-};
 
 export default function AdminDashboard() {
   const { user, posts, vacancies, quotes, consultations, users, partners, activities, stats } = useCMS();
@@ -87,15 +76,17 @@ export default function AdminDashboard() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate]);
 
-  // Enhanced 6 Metric Cards with Flaticon Icons, Sparklines & View All Links
+  // Metric Cards with Homepage-Style Professional Vector Icon Badges
   const statsCards = [
     {
       title: 'PUBLISHED POSTS',
       count: posts.length || 12,
       subtitle: 'News, Insights & Announcements',
       trend: '↑ 12% vs last month',
-      flaticon: FLATICON_ICONS.posts,
+      icon: FileText,
+      color: 'text-[#2563EB]',
       bgColor: 'bg-blue-50 border-blue-200',
+      iconContainer: 'bg-blue-100 text-[#2563EB] border border-blue-300',
       sparklineColor: '#2563EB',
       sparklinePath: 'M0,25 Q15,10 30,22 T60,8 T90,18 T120,5',
       path: '/admin/posts'
@@ -105,8 +96,10 @@ export default function AdminDashboard() {
       count: vacancies.length || 2,
       subtitle: 'Open career opportunities',
       trend: '↑ 25% vs last week',
-      flaticon: FLATICON_ICONS.vacancies,
+      icon: Briefcase,
+      color: 'text-pink-600',
       bgColor: 'bg-pink-50 border-pink-200',
+      iconContainer: 'bg-pink-100 text-pink-600 border border-pink-300',
       sparklineColor: '#db2777',
       sparklinePath: 'M0,20 Q15,25 30,12 T60,18 T90,8 T120,4',
       path: '/admin/vacancies'
@@ -116,8 +109,10 @@ export default function AdminDashboard() {
       count: quotes.length || 18,
       subtitle: 'Client project submissions',
       trend: '↑ 18% vs last month',
-      flaticon: FLATICON_ICONS.quotes,
+      icon: MessageSquare,
+      color: 'text-amber-600',
       bgColor: 'bg-amber-50 border-amber-200',
+      iconContainer: 'bg-amber-100 text-amber-600 border border-amber-300',
       sparklineColor: '#d97706',
       sparklinePath: 'M0,22 Q15,15 30,20 T60,10 T90,14 T120,6',
       path: '/admin/leads'
@@ -127,8 +122,10 @@ export default function AdminDashboard() {
       count: consultations.length || 8,
       subtitle: 'Technical consultations',
       trend: '↑ 8% vs last week',
-      flaticon: FLATICON_ICONS.sessions,
+      icon: Calendar,
+      color: 'text-emerald-600',
       bgColor: 'bg-emerald-50 border-emerald-200',
+      iconContainer: 'bg-emerald-100 text-emerald-600 border border-emerald-300',
       sparklineColor: '#059669',
       sparklinePath: 'M0,24 Q15,18 30,22 T60,12 T90,10 T120,5',
       path: '/admin/leads'
@@ -138,8 +135,10 @@ export default function AdminDashboard() {
       count: users.length || 4,
       subtitle: 'Registered system users',
       trend: '↑ 10% vs last month',
-      flaticon: FLATICON_ICONS.users,
+      icon: Users,
+      color: 'text-purple-600',
       bgColor: 'bg-purple-50 border-purple-200',
+      iconContainer: 'bg-purple-100 text-purple-600 border border-purple-300',
       sparklineColor: '#9333ea',
       sparklinePath: 'M0,20 Q15,12 30,18 T60,8 T90,15 T120,7',
       path: '/admin/roles'
@@ -149,21 +148,23 @@ export default function AdminDashboard() {
       count: partners.length || 6,
       subtitle: 'Partner organizations',
       trend: '↑ 15% vs last month',
-      flaticon: FLATICON_ICONS.partners,
+      icon: Handshake,
+      color: 'text-cyan-600',
       bgColor: 'bg-cyan-50 border-cyan-200',
+      iconContainer: 'bg-cyan-100 text-cyan-600 border border-cyan-300',
       sparklineColor: '#0891b2',
       sparklinePath: 'M0,26 Q15,20 30,14 T60,16 T90,6 T120,3',
       path: '/admin/partners'
     }
   ];
 
-  // Quick Action Buttons with Flaticon Badges & Keyboard Shortcuts
+  // Quick Action Buttons with Homepage-Style Icon Badges & Shortcuts
   const quickActions = [
-    { label: 'New Post', shortcut: '⌘N', path: '/admin/posts', flaticon: FLATICON_ICONS.posts, hoverBg: 'hover:bg-blue-50 hover:border-blue-300', desc: 'Publish article or news' },
-    { label: 'Add Vacancy', shortcut: '⌘V', path: '/admin/vacancies', flaticon: FLATICON_ICONS.vacancies, hoverBg: 'hover:bg-pink-50 hover:border-pink-300', desc: 'Post new job opening' },
-    { label: 'View Quotes', shortcut: '⌘Q', path: '/admin/leads', flaticon: FLATICON_ICONS.quotes, hoverBg: 'hover:bg-amber-50 hover:border-amber-300', desc: 'Manage client inquiries' },
-    { label: 'Add Staff', shortcut: '⌘U', path: '/admin/roles', flaticon: FLATICON_ICONS.users, hoverBg: 'hover:bg-purple-50 hover:border-purple-300', desc: 'Create employee account' },
-    { label: 'Analytics', shortcut: '⌘A', path: '/admin/analytics', flaticon: FLATICON_ICONS.analytics, hoverBg: 'hover:bg-cyan-50 hover:border-cyan-300', desc: 'View performance report' }
+    { label: 'New Post', shortcut: '⌘N', path: '/admin/posts', icon: FileText, color: 'text-[#2563EB]', iconBg: 'bg-blue-100 text-[#2563EB] border-blue-300', hoverBg: 'hover:bg-blue-50 hover:border-blue-300', desc: 'Publish article or news' },
+    { label: 'Add Vacancy', shortcut: '⌘V', path: '/admin/vacancies', icon: Briefcase, color: 'text-pink-600', iconBg: 'bg-pink-100 text-pink-600 border-pink-300', hoverBg: 'hover:bg-pink-50 hover:border-pink-300', desc: 'Post new job opening' },
+    { label: 'View Quotes', shortcut: '⌘Q', path: '/admin/leads', icon: MessageSquare, color: 'text-amber-600', iconBg: 'bg-amber-100 text-amber-600 border-amber-300', hoverBg: 'hover:bg-amber-50 hover:border-amber-300', desc: 'Manage client inquiries' },
+    { label: 'Add Staff', shortcut: '⌘U', path: '/admin/roles', icon: Users, color: 'text-purple-600', iconBg: 'bg-purple-100 text-purple-600 border-purple-300', hoverBg: 'hover:bg-purple-50 hover:border-purple-300', desc: 'Create employee account' },
+    { label: 'Analytics', shortcut: '⌘A', path: '/admin/analytics', icon: BarChart3, color: 'text-cyan-600', iconBg: 'bg-cyan-100 text-cyan-600 border-cyan-300', hoverBg: 'hover:bg-cyan-50 hover:border-cyan-300', desc: 'View performance report' }
   ];
 
   // Upcoming Scheduled Events
@@ -241,7 +242,7 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      {/* 2. IMPROVED QUICK ACTION BAR WITH FLATICON BADGES & SHORTCUTS */}
+      {/* 2. QUICK ACTION BAR WITH HOMEPAGE-STYLE ICON BADGES */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-black text-slate-700 uppercase tracking-wider">Quick Action Shortcuts</h3>
@@ -249,81 +250,87 @@ export default function AdminDashboard() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {quickActions.map((action, idx) => (
-            <Link
-              key={idx}
-              to={action.path}
-              className={`p-4 rounded-2xl bg-white border border-slate-200 ${action.hoverBg} text-slate-900 shadow-xs flex flex-col justify-between space-y-3 transition-all group`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-slate-50 p-2 flex items-center justify-center border border-slate-200 shadow-xs">
-                  <img src={action.flaticon} alt={action.label} className="w-full h-full object-contain filter drop-shadow-xs" />
+          {quickActions.map((action, idx) => {
+            const Icon = action.icon;
+            return (
+              <Link
+                key={idx}
+                to={action.path}
+                className={`p-4 rounded-2xl bg-white border border-slate-200 ${action.hoverBg} text-slate-900 shadow-xs flex flex-col justify-between space-y-3 transition-all group`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className={`w-10 h-10 rounded-xl ${action.iconBg} flex items-center justify-center shadow-xs`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-mono font-bold">
+                    {action.shortcut}
+                  </span>
                 </div>
-                <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-mono font-bold">
-                  {action.shortcut}
-                </span>
-              </div>
 
-              <div>
-                <span className="text-sm font-black text-slate-900 block group-hover:text-[#2563EB] transition-colors">{action.label}</span>
-                <span className="text-[11px] text-slate-500 font-medium block">{action.desc}</span>
-              </div>
-            </Link>
-          ))}
+                <div>
+                  <span className="text-sm font-black text-slate-900 block group-hover:text-[#2563EB] transition-colors">{action.label}</span>
+                  <span className="text-[11px] text-slate-500 font-medium block">{action.desc}</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      {/* 3. 6 STATS CARDS WITH FLATICON ICONS, SPARKLINE GRAPHS & VIEW ALL LINKS */}
+      {/* 3. 6 STATS CARDS WITH HOMEPAGE-STYLE ICON BADGES & SPARKLINE GRAPHS */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-        {statsCards.map((card, idx) => (
-          <div
-            key={idx}
-            className="bg-white border border-slate-200 hover:border-blue-400 rounded-3xl p-6 shadow-md flex flex-col justify-between space-y-4 group transition-all"
-          >
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-500 block">{card.title}</span>
-                <span className="text-3xl font-black text-slate-900 block">{card.count}</span>
-                <span className="text-xs font-bold text-slate-600 block">{card.subtitle}</span>
+        {statsCards.map((card, idx) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={idx}
+              className="bg-white border border-slate-200 hover:border-blue-400 rounded-3xl p-6 shadow-md flex flex-col justify-between space-y-4 group transition-all"
+            >
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <span className="text-xs font-black uppercase tracking-wider text-slate-500 block">{card.title}</span>
+                  <span className="text-3xl font-black text-slate-900 block">{card.count}</span>
+                  <span className="text-xs font-bold text-slate-600 block">{card.subtitle}</span>
+                </div>
+                <div className={`w-12 h-12 rounded-2xl ${card.iconContainer} p-2.5 flex items-center justify-center shrink-0 shadow-xs`}>
+                  <Icon className="w-6 h-6" />
+                </div>
               </div>
-              <div className={`w-12 h-12 rounded-2xl border ${card.bgColor} p-2.5 flex items-center justify-center shrink-0 shadow-sm`}>
-                <img src={card.flaticon} alt={card.title} className="w-full h-full object-contain filter drop-shadow-xs" />
+
+              {/* Sparkline Chart & Growth Trend */}
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                  {card.trend}
+                </span>
+
+                {/* SVG Sparkline Path */}
+                <div className="w-24 h-8">
+                  <svg className="w-full h-full overflow-visible" viewBox="0 0 120 30">
+                    <path
+                      d={card.sparklinePath}
+                      fill="none"
+                      stroke={card.sparklineColor}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              {/* View All Link at Bottom */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[11px] text-slate-500 font-bold">Updated real-time</span>
+                <Link
+                  to={card.path}
+                  className="text-xs font-black text-[#2563EB] hover:underline flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                >
+                  <span>View All</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
-
-            {/* Sparkline Chart & Growth Trend */}
-            <div className="flex items-center justify-between pt-2">
-              <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
-                {card.trend}
-              </span>
-
-              {/* SVG Sparkline Path */}
-              <div className="w-24 h-8">
-                <svg className="w-full h-full overflow-visible" viewBox="0 0 120 30">
-                  <path
-                    d={card.sparklinePath}
-                    fill="none"
-                    stroke={card.sparklineColor}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            {/* View All Link at Bottom */}
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-[11px] text-slate-500 font-bold">Updated real-time</span>
-              <Link
-                to={card.path}
-                className="text-xs font-black text-[#2563EB] hover:underline flex items-center gap-1 group-hover:translate-x-1 transition-transform"
-              >
-                <span>View All</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </section>
 
       {/* 4. PERFORMANCE ANALYTICS SUMMARY CHARTS */}
@@ -333,7 +340,9 @@ export default function AdminDashboard() {
         <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2.5">
-              <img src={FLATICON_ICONS.analytics} alt="Analytics" className="w-6 h-6 object-contain" />
+              <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] border border-blue-200 flex items-center justify-center">
+                <BarChart3 className="w-4 h-4" />
+              </div>
               <h3 className="text-lg font-black text-slate-900">📊 Content Performance</h3>
             </div>
             <span className="text-xs text-slate-500 font-bold font-mono">Posts vs Page Views</span>
@@ -379,7 +388,9 @@ export default function AdminDashboard() {
         <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2.5">
-              <img src={FLATICON_ICONS.quotes} alt="Quotes" className="w-6 h-6 object-contain" />
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 border border-emerald-200 flex items-center justify-center">
+                <MessageSquare className="w-4 h-4" />
+              </div>
               <h3 className="text-lg font-black text-slate-900">📈 Quote Trends & Conversion</h3>
             </div>
             <span className="text-xs text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
