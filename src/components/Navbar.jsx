@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Shield, 
   ChevronDown, 
@@ -9,8 +9,6 @@ import {
   Menu, 
   X, 
   ArrowRight,
-  Moon,
-  Sun,
   BrainCircuit,
   Code,
   ShieldCheck,
@@ -22,30 +20,15 @@ import {
 import { useCMS } from '../context/CMSContext';
 
 export default function Navbar() {
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const [darkMode, setDarkMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('senga_dark_mode') === 'true';
-    }
-    return false;
-  });
   const { openQuoteModal } = useCMS();
-
-  React.useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
-      localStorage.setItem('senga_dark_mode', 'true');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark');
-      localStorage.setItem('senga_dark_mode', 'false');
-    }
-  }, [darkMode]);
 
   const handleMouseEnter = (name) => setActiveDropdown(name);
   const handleMouseLeave = () => setActiveDropdown(null);
+  const isSectionActive = (section) => location.pathname === section || location.pathname.startsWith(`${section}/`);
+  const navLinkClass = (section) => `nav-link-motion flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${isSectionActive(section) ? 'bg-[#f1f5f9] text-[#1E2364] font-bold' : 'hover:text-blue-600'}`;
 
   return (
     <header className="sticky top-0 z-50 w-full font-['Plus_Jakarta_Sans',sans-serif]">
@@ -120,7 +103,7 @@ export default function Navbar() {
           {/* Center Navigation Links (Single Column Dropdowns matching Updates menu) */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-700">
             {/* Home (Active Soft Light Gray Pill) */}
-            <Link to="/" className="px-5 py-2.5 rounded-xl bg-[#f1f5f9] text-[#1E2364] font-bold shadow-xs transition-all">
+            <Link to="/" className={`px-5 py-2.5 rounded-xl transition-all ${location.pathname === '/' ? 'bg-[#f1f5f9] text-[#1E2364] font-bold shadow-xs' : 'hover:text-blue-600'}`}>
               Home
             </Link>
 
@@ -130,7 +113,7 @@ export default function Navbar() {
               onMouseEnter={() => handleMouseEnter('about')}
               onMouseLeave={handleMouseLeave}
             >
-              <Link to="/about" className="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:text-blue-600 transition-colors">
+              <Link to="/about" className={navLinkClass('/about')}>
                 <span>About</span>
                 <ChevronDown className="w-4 h-4 text-slate-400" />
               </Link>
@@ -154,7 +137,7 @@ export default function Navbar() {
               onMouseEnter={() => handleMouseEnter('services')}
               onMouseLeave={handleMouseLeave}
             >
-              <Link to="/services" className="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:text-blue-600 transition-colors">
+              <Link to="/services" className={navLinkClass('/services')}>
                 <span>Services</span>
                 <ChevronDown className="w-4 h-4 text-slate-400" />
               </Link>
@@ -194,23 +177,19 @@ export default function Navbar() {
               onMouseEnter={() => handleMouseEnter('updates')}
               onMouseLeave={handleMouseLeave}
             >
-              <Link to="/updates" className="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:text-blue-600 transition-colors">
+              <Link to="/updates" className={navLinkClass('/updates')}>
                 <span>Updates</span>
                 <ChevronDown className="w-4 h-4 text-slate-400" />
               </Link>
               {activeDropdown === 'updates' && (
                 <div className="absolute top-full left-0 w-60 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="bg-white rounded-xl p-2 border border-slate-200 shadow-xl">
-                    <Link to="/updates" className="block px-3 py-2 rounded-lg text-sm text-slate-900 hover:bg-blue-50 hover:text-blue-600 font-bold">Updates Overview</Link>
-                    <div className="my-1 border-t border-slate-100"></div>
-                    <Link to="/updates/news" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">News & Press</Link>
-                    <Link to="/updates/events" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Training & Events</Link>
-                    <Link to="/updates/insights" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Insights & AI Trends</Link>
-                    <Link to="/updates/vacancies" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600 flex items-center justify-between">
+                    <Link to="/updates/news" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">News</Link>
+                    <Link to="/updates/events" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Events</Link>
+                    <Link to="/updates/vacancies" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600 flex items-center justify-between">
                       <span>Vacancies</span>
                       <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-mono font-bold">Hiring</span>
                     </Link>
-                    <Link to="/updates/announcements" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Announcements</Link>
                   </div>
                 </div>
               )}
@@ -222,7 +201,7 @@ export default function Navbar() {
               onMouseEnter={() => handleMouseEnter('contact')}
               onMouseLeave={handleMouseLeave}
             >
-              <Link to="/contact" className="flex items-center gap-1.5 px-3 py-2 rounded-xl hover:text-blue-600 transition-colors">
+              <Link to="/contact" className={navLinkClass('/contact')}>
                 <span>Contact</span>
                 <ChevronDown className="w-4 h-4 text-slate-400" />
               </Link>
@@ -239,16 +218,8 @@ export default function Navbar() {
             </div>
           </nav>
 
-          {/* Far Right Action Controls (Dark Mode Moon + Envelope Get a Quote Button) */}
+          {/* Far Right Action Controls */}
           <div className="hidden lg:flex items-center gap-4">
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-full text-slate-600 hover:bg-slate-100 hover:text-blue-600 transition-colors cursor-pointer"
-              title="Toggle Dark Mode"
-            >
-              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            </button>
-
             <Link
               to="/quote"
               className="px-6 py-3 rounded-xl bg-[#2b66bf] hover:bg-[#21519a] text-white font-extrabold text-sm shadow-md transition-all cursor-pointer flex items-center gap-2"
@@ -272,11 +243,11 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-4 text-slate-900">
           <div className="space-y-2">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold hover:text-blue-600">Home</Link>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold hover:text-blue-600">About</Link>
-            <Link to="/services" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold hover:text-blue-600">Services</Link>
-            <Link to="/updates" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold hover:text-blue-600">Updates</Link>
-            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold hover:text-blue-600">Contact</Link>
+            <Link to="/" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${location.pathname === '/' ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Home</Link>
+            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/about') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>About</Link>
+            <Link to="/services" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/services') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Services</Link>
+            <Link to="/updates" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/updates') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Updates</Link>
+            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/contact') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Contact</Link>
             <Link to="/admin/login" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold text-blue-600">Staff Portal Login</Link>
           </div>
           <Link

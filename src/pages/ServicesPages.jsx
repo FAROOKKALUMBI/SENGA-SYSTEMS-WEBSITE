@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Bot,
   BrainCircuit, 
@@ -35,6 +35,7 @@ import {
   Mail
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
+import Reveal from '../components/Reveal';
 
 export const serviceCategories = [
   {
@@ -338,11 +339,15 @@ export default function ServicesPages() {
         <div className="max-w-7xl mx-auto space-y-10">
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-            {serviceCategories.map((cat) => {
+            {serviceCategories.map((cat, index) => {
               const CatIcon = cat.icon;
               return (
-                <div 
+                <Reveal
                   key={cat.id} 
+                  style={{ transitionDelay: `${index * 80}ms` }}
+                  className="service-card"
+                >
+                <div 
                   id={cat.id} 
                   className="scroll-mt-28 relative overflow-hidden bg-[#FFFFFF] rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 p-6 sm:p-7 space-y-5 text-slate-900 flex flex-col justify-between group"
                 >
@@ -379,6 +384,7 @@ export default function ServicesPages() {
                     </ul>
                   </div>
                 </div>
+                </Reveal>
               );
             })}
           </div>

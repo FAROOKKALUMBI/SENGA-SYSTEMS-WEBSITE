@@ -38,6 +38,171 @@
   background-size: 24px 24px;
 }
 
+.page-transition {
+  animation: fade-slide-up 0.4s ease-out both;
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card {
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 30px -12px rgba(37, 99, 235, 0.38);
+}
+
+.staggered-grid.is-visible > div > div {
+  animation: fade-slide-up 0.5s ease-out both;
+}
+
+.staggered-grid.is-visible > div > div:nth-child(1) { animation-delay: 0ms; }
+.staggered-grid.is-visible > div > div:nth-child(2) { animation-delay: 80ms; }
+.staggered-grid.is-visible > div > div:nth-child(3) { animation-delay: 160ms; }
+.staggered-grid.is-visible > div > div:nth-child(4) { animation-delay: 240ms; }
+
+.primary-button,
+button.bg-\[\#2563EB\],
+ a.bg-\[\#2563EB\],
+button[class*="bg-[#2563EB]"],
+a[class*="bg-[#2563EB]"],
+button[class*="bg-blue-600"],
+a[class*="bg-blue-600"] {
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary-button:hover,
+button.bg-\[\#2563EB\]:hover,
+a.bg-\[\#2563EB\]:hover,
+button[class*="bg-[#2563EB]"]:hover,
+a[class*="bg-[#2563EB]"]:hover,
+button[class*="bg-blue-600"]:hover,
+a[class*="bg-blue-600"]:hover {
+  transform: scale(1.05);
+  background-color: #1d4ed8;
+}
+
+.primary-button:active,
+button.bg-\[\#2563EB\]:active,
+a.bg-\[\#2563EB\]:active,
+button[class*="bg-[#2563EB]"]:active,
+a[class*="bg-[#2563EB]"]:active,
+button[class*="bg-blue-600"]:active,
+a[class*="bg-blue-600"]:active {
+  transform: scale(0.95);
+}
+
+.secondary-button {
+  background-color: transparent;
+  border: 2px solid #2563EB;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.secondary-button:hover {
+  background-color: #2563EB;
+  color: #FFFFFF;
+}
+
+a[class*="border-[#2563EB]"],
+button[class*="border-[#2563EB]"] {
+  background-color: transparent;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+a[class*="border-[#2563EB]"]:hover,
+button[class*="border-[#2563EB]"]:hover {
+  background-color: #2563EB;
+  color: #FFFFFF;
+}
+
+.ghost-button,
+.nav-link-motion {
+  position: relative;
+}
+
+.ghost-button::after,
+.nav-link-motion::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.25rem;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.ghost-button:hover::after,
+.nav-link-motion:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+input, select, textarea {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #E2E8F0 25%, #F8FAFC 50%, #E2E8F0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 9999px;
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes skeleton-pulse {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

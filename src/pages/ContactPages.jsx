@@ -25,7 +25,7 @@ import { useCMS } from '../context/CMSContext';
 export default function ContactPages({ forceSubpath }) {
   const location = useLocation();
   const subpath = forceSubpath || (location.pathname.split('/contact/')[1] || (location.pathname === '/quote' ? 'quote' : ''));
-  const { submitQuote, submitConsultation } = useCMS();
+  const { submitQuote, submitConsultation, submitContact, submitPayment } = useCMS();
 
   // Contact Form State
   const [contactSubmitted, setContactSubmitted] = useState(false);
@@ -75,9 +75,16 @@ export default function ContactPages({ forceSubpath }) {
     notes: ''
   });
 
-  const handleContactSubmit = (e) => {
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
+    await submitContact(contactData);
     setContactSubmitted(true);
+  };
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+    await submitPayment({ ...paymentData, currency });
+    setPaymentDone(true);
   };
 
   const handleQuoteSubmit = async (e) => {
@@ -560,7 +567,7 @@ export default function ContactPages({ forceSubpath }) {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={(e) => { e.preventDefault(); setPaymentDone(true); }} className="space-y-5">
+                  <form onSubmit={handlePaymentSubmit} className="space-y-5">
                     
                     {/* Select Currency */}
                     <div>

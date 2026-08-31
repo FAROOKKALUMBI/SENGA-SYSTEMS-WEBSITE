@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { CMSProvider } from './context/CMSContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -25,10 +25,12 @@ import AdminAnalytics from './pages/admin/AdminAnalytics';
 import AdminSettings from './pages/admin/AdminSettings';
 
 function PublicLayout({ children }) {
+  const location = useLocation();
+
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#0B132B]">
       <Navbar />
-      <main className="flex-1">
+      <main key={`${location.pathname}${location.search}`} className="flex-1 page-transition">
         {children}
       </main>
       <Footer />

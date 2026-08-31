@@ -86,11 +86,12 @@ export default function Footer() {
           <div className="lg:col-span-3 space-y-4">
             <h4 className="text-white font-bold text-base tracking-wide">Our Services</h4>
             <ul className="space-y-2.5 text-sm font-normal text-slate-300">
-              <li><Link to="/services/ai" className="hover:text-white transition-colors">AI & Automation</Link></li>
-              <li><Link to="/services/fullstack" className="hover:text-white transition-colors">Software Engineering</Link></li>
-              <li><Link to="/services/cybersecurity" className="hover:text-white transition-colors">Security & Compliance</Link></li>
-              <li><Link to="/services/ict-infrastructure" className="hover:text-white transition-colors">ICT & Infrastructure</Link></li>
-              <li><Link to="/services/sengashield" className="hover:text-white transition-colors">Design & Transformation</Link></li>
+              <li><Link to="/services#ai-automation" className="hover:text-white transition-colors">AI & Automation</Link></li>
+              <li><Link to="/services#software-engineering" className="hover:text-white transition-colors">Software Engineering</Link></li>
+              <li><Link to="/services#data-analytics" className="hover:text-white transition-colors">Data & Analytics</Link></li>
+              <li><Link to="/services#security-compliance" className="hover:text-white transition-colors">Security & Compliance</Link></li>
+              <li><Link to="/services#ict-infrastructure" className="hover:text-white transition-colors">ICT & Infrastructure</Link></li>
+              <li><Link to="/services#design-transformation" className="hover:text-white transition-colors">Design & Transformation</Link></li>
             </ul>
           </div>
 

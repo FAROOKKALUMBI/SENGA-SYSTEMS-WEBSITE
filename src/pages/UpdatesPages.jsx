@@ -45,12 +45,9 @@ export default function UpdatesPages() {
 
               {/* Tabs */}
               <div className="flex flex-wrap items-center gap-2">
-                <Link to="/updates" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${!type ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>All Updates</Link>
                 <Link to="/updates/news" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${type === 'news' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>News</Link>
                 <Link to="/updates/events" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${type === 'events' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Events</Link>
-                <Link to="/updates/insights" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${type === 'insights' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Insights</Link>
                 <Link to="/updates/vacancies" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${type === 'vacancies' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Vacancies</Link>
-                <Link to="/updates/announcements" className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${type === 'announcements' ? 'bg-blue-600 text-white shadow-md' : 'bg-white/10 text-slate-200 hover:bg-white/20 hover:text-white'}`}>Announcements</Link>
               </div>
             </div>
           </div>
@@ -73,7 +70,7 @@ export default function UpdatesPages() {
 
             {vacancies.length === 0 ? (
               <div className="bg-[#d9d9d9] border border-slate-300 p-12 rounded-3xl text-center text-slate-700 font-medium">
-                No open vacancies at the moment. Check back soon!
+                No vacancies have been posted yet. Please check back soon.
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -138,7 +135,9 @@ export default function UpdatesPages() {
 
             {filteredPosts.length === 0 ? (
               <div className="bg-[#d9d9d9] border border-slate-300 p-12 rounded-3xl text-center text-slate-700 font-medium">
-                No published articles found in this category.
+                {type === 'news' && 'No news has been posted yet. Please check back soon.'}
+                {type === 'events' && 'No events have been posted yet. Please check back soon.'}
+                {!type && 'No news or events have been posted yet. Please check back soon.'}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

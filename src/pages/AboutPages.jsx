@@ -18,12 +18,11 @@ import {
   Phone,
   Download,
   FileText,
-  Play,
-  ExternalLink,
   Sparkles,
   MessageSquare
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
+import Reveal from '../components/Reveal';
 
 export default function AboutPages() {
   const location = useLocation();
@@ -135,9 +134,9 @@ export default function AboutPages() {
         {(!subpath || subpath === 'profile') && (
           <section className="max-w-7xl mx-auto space-y-16">
             
-            {/* Top Company Overview Wrapped in #d9d9d9 Background Card Container */}
-            <div className="bg-[#d9d9d9] p-8 sm:p-12 rounded-3xl border border-slate-300 shadow-md">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+            {/* Top Company Overview with a full-width #d9d9d9 background */}
+            <div className="relative left-1/2 -translate-x-1/2 w-screen -mt-16 bg-[#d9d9d9] px-4 md:px-12 py-16">
+              <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
                 
                 {/* Left Column: ABOUT OUR COMPANY / Company Overview Text */}
                 <div className="lg:col-span-7 space-y-5">
@@ -167,35 +166,18 @@ export default function AboutPages() {
                 <div className="lg:col-span-5 space-y-4">
                   <div className="bg-white/80 p-4 rounded-3xl border border-slate-300 shadow-sm space-y-4">
                     
-                    {/* YouTube Video Player Embed */}
-                    <div className="relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-900 border border-slate-300">
-                      <iframe
-                        className="w-full h-full"
-                        src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0"
-                        title="Senga Systems YouTube Video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
+                    {/* YouTube video placeholder until the official video is ready */}
+                    <div className="relative flex aspect-video items-center justify-center rounded-2xl border border-slate-300 bg-slate-900 px-6 text-center shadow-md">
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-extrabold text-white">Company video coming soon</h3>
+                        <p className="text-xs leading-relaxed text-slate-300">
+                          Our official YouTube video has not been implemented yet. Please check back soon.
+                        </p>
+                      </div>
                     </div>
 
                     {/* Video Label & Download Button Below */}
                     <div className="space-y-3 pt-1">
-                      <div className="flex items-center justify-between text-xs font-extrabold text-slate-800">
-                        <span className="flex items-center gap-1.5 text-[#23275c]">
-                          <Play className="w-3.5 h-3.5 text-red-600 fill-red-600" />
-                          <span>Watch Senga Systems on YouTube</span>
-                        </span>
-                        <a
-                          href="https://www.youtube.com/@SengaSystems"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-[#2563EB] hover:underline flex items-center gap-1 text-[11px]"
-                        >
-                          <span>Channel</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-
                       <a
                         href="/assets/documents/Senga_Systems_Company_Profile.pdf"
                         download="Senga_Systems_Company_Profile.pdf"
@@ -243,6 +225,7 @@ export default function AboutPages() {
                 Our Core Values
               </h2>
               
+              <Reveal className="staggered-grid">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
                 <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-md space-y-3">
@@ -286,6 +269,7 @@ export default function AboutPages() {
                 </div>
 
               </div>
+              </Reveal>
             </div>
 
             {/* CALL TO ACTION BANNER (media_1788204814083.png) */}
@@ -343,33 +327,15 @@ export default function AboutPages() {
                 <History className="w-7 h-7" />
               </div>
               <h2 className="text-3xl sm:text-4xl font-black text-[#0F172A]">Our Journey of Excellence</h2>
-              <p className="text-sm text-slate-600 font-medium">From a pioneering cybersecurity team to Malawi's leading tech hub.</p>
+              <p className="text-sm text-slate-600 font-medium">Senga Systems is beginning its journey to deliver secure, AI-driven digital solutions.</p>
             </div>
 
             <div className="space-y-8 relative border-l-2 border-blue-200 ml-4 pl-6 sm:pl-8 py-2">
               <div className="relative">
-                <span className="absolute -left-[33px] sm:-left-[41px] top-1 w-5 h-5 rounded-full bg-[#2563EB] border-4 border-white shadow-sm"></span>
-                <span className="text-xs font-mono font-black text-[#2563EB] uppercase">2016</span>
-                <h3 className="text-lg font-black text-[#0F172A]">Founding of Senga Systems</h3>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">Established in Lilongwe to provide specialized network security and software advisory.</p>
-              </div>
-              <div className="relative">
-                <span className="absolute -left-[33px] sm:-left-[41px] top-1 w-5 h-5 rounded-full bg-cyan-600 border-4 border-white shadow-sm"></span>
-                <span className="text-xs font-mono font-black text-cyan-700 uppercase">2019</span>
-                <h3 className="text-lg font-black text-[#0F172A]">Expansion into Enterprise Banking & Cloud</h3>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">Partnered with commercial banks across Malawi to deploy zero-trust backend systems.</p>
-              </div>
-              <div className="relative">
-                <span className="absolute -left-[33px] sm:-left-[41px] top-1 w-5 h-5 rounded-full bg-indigo-600 border-4 border-white shadow-sm"></span>
-                <span className="text-xs font-mono font-black text-indigo-700 uppercase">2023</span>
-                <h3 className="text-lg font-black text-[#0F172A]">Launch of SengaShield AI Engine</h3>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">Introduced autonomous 24/7 threat protection powered by custom AI models.</p>
-              </div>
-              <div className="relative">
                 <span className="absolute -left-[33px] sm:-left-[41px] top-1 w-5 h-5 rounded-full bg-emerald-600 border-4 border-white shadow-sm"></span>
                 <span className="text-xs font-mono font-black text-emerald-700 uppercase">2026</span>
-                <h3 className="text-lg font-black text-[#0F172A]">Nationwide Leadership & AI Transformation</h3>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">Operating full-scale AI labs, cybersecurity hubs and enterprise cloud data centers.</p>
+                <h3 className="text-lg font-black text-[#0F172A]">Registration of Senga Systems</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">Officially registered in 2026, Senga Systems turns a student dream into a formal technology startup. With a passionate team from Mzuzu University, we are ready to deliver secure, AI-driven digital solutions across Malawi and Africa. The journey has just begun.</p>
               </div>
             </div>
           </section>
@@ -380,25 +346,21 @@ export default function AboutPages() {
           <section className="max-w-7xl mx-auto space-y-10">
             <div className="text-center space-y-2">
               <h2 className="text-3xl sm:text-4xl font-black text-[#0F172A]">Executive Leadership Team</h2>
-              <p className="text-sm text-slate-600 font-medium">The visionary engineers and leaders behind Senga Systems.</p>
+              <p className="text-sm text-slate-600 font-medium">Our executive leadership information is currently under development.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {leadersList.map((leader, idx) => (
-                <div key={idx} className="bg-[#d9d9d9] rounded-3xl p-6 border border-slate-300 shadow-md space-y-4 text-center group hover:shadow-lg transition-all">
-                  <img
-                    src={leader.image}
-                    alt={leader.name}
-                    className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-blue-600 group-hover:scale-105 transition-transform"
-                  />
-                  <div>
-                    <h3 className="font-black text-[#0F172A] text-base">{leader.name}</h3>
-                    <p className="text-xs text-[#2563EB] font-bold mt-0.5">{leader.title}</p>
-                    <p className="text-xs text-slate-700 mt-2 leading-relaxed font-medium">{leader.bio}</p>
-                  </div>
+            <Reveal className="max-w-3xl mx-auto" style={{ transitionDelay: '80ms' }}>
+            <div className="relative overflow-hidden min-h-[220px] bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-10 flex items-center justify-center text-center group">
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-[#2563EB] rounded-l-2xl"></div>
+              <div className="space-y-3">
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-[#D9D9D9] text-slate-900 flex items-center justify-center shadow-inner">
+                  <Users className="w-8 h-8" />
                 </div>
-              ))}
+                <h3 className="text-xl font-extrabold text-slate-900">Executive members coming soon</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">Executive member information will be updated as this section is developed.</p>
+              </div>
             </div>
+            </Reveal>
           </section>
         )}
 
@@ -407,18 +369,21 @@ export default function AboutPages() {
           <section className="max-w-7xl mx-auto space-y-10">
             <div className="text-center space-y-2">
               <h2 className="text-3xl sm:text-4xl font-black text-[#0F172A]">Global Strategic Partners</h2>
-              <p className="text-sm text-slate-600 font-medium">Collaborating with world leaders to power Malawi's digital ecosystem.</p>
+              <p className="text-sm text-slate-600 font-medium">Our strategic partnerships will be announced as Senga Systems grows.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {partnersList.map((partner, idx) => (
-                <div key={idx} className="bg-[#d9d9d9] p-6 rounded-2xl border border-slate-300 shadow-md space-y-3">
-                  <span className="text-xs font-mono text-[#2563EB] uppercase tracking-wider font-bold">{partner.cat}</span>
-                  <h3 className="font-black text-[#0F172A] text-xl">{partner.name}</h3>
-                  <p className="text-xs text-slate-700 leading-relaxed font-medium">{partner.desc}</p>
+            <Reveal className="max-w-3xl mx-auto" style={{ transitionDelay: '80ms' }}>
+            <div className="relative overflow-hidden min-h-[220px] bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-10 flex items-center justify-center text-center group">
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-[#2563EB] rounded-l-2xl"></div>
+              <div className="space-y-3">
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-[#D9D9D9] text-slate-900 flex items-center justify-center shadow-inner">
+                  <Globe className="w-8 h-8" />
                 </div>
-              ))}
+                <h3 className="text-xl font-extrabold text-slate-900">Partnerships coming soon</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">We currently do not have strategic partners. This information will be updated as the company grows.</p>
+              </div>
             </div>
+            </Reveal>
           </section>
         )}
 

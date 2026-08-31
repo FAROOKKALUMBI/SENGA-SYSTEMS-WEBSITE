@@ -195,8 +195,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* White Gradient Brush Fade at Bottom of Section */}
-        <div className="absolute bottom-0 inset-x-0 h-12 bg-gradient-to-b from-transparent via-white/40 to-white pointer-events-none"></div>
       </section>
 
       {/* 3. ABOUT SENGA SYSTEMS SECTION */}
@@ -328,12 +326,12 @@ export default function HomePage() {
       </section>
 
       {/* NEWS AND EVENTS DISPLAY SECTION */}
-      <section className="bg-white dark:bg-slate-900 py-16 px-4 md:px-12 border-t border-slate-200 dark:border-slate-800">
+      <section className="bg-white py-16 px-4 md:px-12 border-t border-slate-200">
         <div className="max-w-7xl mx-auto space-y-10">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 News and Events
               </h2>
             </div>
@@ -349,19 +347,19 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {posts && posts.length > 0 ? (
               posts.slice(0, 4).map((post) => (
-                <div key={post.id} className="p-6 rounded-2xl bg-[#D9D9D9]/50 dark:bg-slate-800/80 border border-slate-300/60 dark:border-slate-700 flex flex-col justify-between space-y-4">
+                <div key={post.id} className="p-6 rounded-2xl bg-[#D9D9D9]/50 border border-slate-300/60 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
                     {post.image && (
                       <img src={post.image} alt={post.title} className="w-full h-44 rounded-xl object-cover" />
                     )}
                     <div className="flex items-center justify-between text-xs font-bold text-[#2563EB]">
                       <span className="uppercase font-extrabold">{post.type}</span>
-                      <span className="text-slate-500 dark:text-slate-400">{post.date}</span>
+                      <span className="text-slate-500">{post.date}</span>
                     </div>
-                    <h4 className="text-lg font-extrabold text-slate-900 dark:text-white leading-snug">{post.title}</h4>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">{post.excerpt || post.content}</p>
+                    <h4 className="text-lg font-extrabold text-slate-900 leading-snug">{post.title}</h4>
+                    <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">{post.excerpt || post.content}</p>
                   </div>
-                  <div className="pt-3 border-t border-slate-300/60 dark:border-slate-700 flex items-center justify-between text-xs font-bold text-[#2563EB]">
+                  <div className="pt-3 border-t border-slate-300/60 flex items-center justify-between text-xs font-bold text-[#2563EB]">
                     <span>By {post.author || 'Senga Team'}</span>
                     <Link to="/updates" className="hover:underline flex items-center gap-1">
                       <span>Read More</span>
@@ -371,7 +369,7 @@ export default function HomePage() {
                 </div>
               ))
             ) : (
-              <div className="p-8 rounded-2xl bg-[#D9D9D9]/40 dark:bg-slate-800 text-center text-xs text-slate-500 col-span-2">
+              <div className="p-8 rounded-2xl bg-[#D9D9D9]/40 text-center text-xs text-slate-500 col-span-2">
                 No news articles or events published yet.
               </div>
             )}
