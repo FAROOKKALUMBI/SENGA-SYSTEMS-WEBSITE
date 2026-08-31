@@ -36,8 +36,15 @@ export default function AdminLogin() {
           
           {/* Top Dark Navy Banner */}
           <div className="bg-[#23275c] p-8 sm:p-10 text-center text-white space-y-2 border-b border-indigo-900/40">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/15 text-cyan-300 flex items-center justify-center mx-auto mb-3 shadow-inner">
-              <Shield className="w-6 h-6" />
+            <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 p-2 flex items-center justify-center mx-auto mb-3 shadow-inner">
+              <img 
+                src="/assets/logo/senga-symbol-icon.png" 
+                alt="Senga Systems Logo" 
+                className="w-full h-full object-contain filter drop-shadow-md" 
+                onError={(e) => {
+                  e.target.src = '/assets/logo/senga-logo-white.png';
+                }}
+              />
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               Employee Login
