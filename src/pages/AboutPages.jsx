@@ -133,7 +133,7 @@ export default function AboutPages() {
                 </div>
                 <h2 className="text-2xl font-black text-[#0F172A]">Our Mission</h2>
                 <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                  To empower businesses, government agencies and organizations across Malawi and Africa through secure, state-of-the-art software engineering, AI automation and unyielding cybersecurity defenses.
+                  To develop innovative, secure and intelligent digital solutions that empower businesses, organizations, government agencies and communities across Malawi and Africa through state-of-the-art software engineering, AI automation and unyielding cybersecurity defenses.
                 </p>
               </div>
 
@@ -143,7 +143,7 @@ export default function AboutPages() {
                 </div>
                 <h2 className="text-2xl font-black text-[#0F172A]">Our Vision</h2>
                 <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                  To be the undisputed leader in intelligent innovation and secure digital infrastructure across Africa, driving economic growth and technology self-reliance.
+                  To become Africa's undisputed leader in intelligent innovation and secure digital infrastructure, recognized for delivering secure, AI-driven and impactful digital solutions that drive economic growth and technology self-reliance across the continent.
                 </p>
               </div>
             </div>
@@ -156,29 +156,37 @@ export default function AboutPages() {
                   <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center">
                     <Shield className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">Uncompromised Security</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">Zero-trust engineering principles in every line of code.</p>
+                  <h3 className="font-bold text-[#0F172A] text-base">1. 🔒 Uncompromised Security & Trust</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    "Zero-trust engineering principles in every line of code. Security is integrated into every stage of our development lifecycle, ensuring resilient, reliable, and data-protected solutions."
+                  </p>
                 </div>
                 <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center">
                     <Award className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">Excellence & Precision</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">Delivering world-class code quality and system performance.</p>
+                  <h3 className="font-bold text-[#0F172A] text-base">2. ⚡ Excellence, Precision & Innovation</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    "Delivering world-class code quality and system performance through agile methodologies, AI, and automation to keep our clients ahead in a rapidly evolving digital landscape."
+                  </p>
                 </div>
                 <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
-                    <Globe className="w-5 h-5" />
+                    <Users className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">Local Innovation</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">Building software solutions tailored for African business environments.</p>
+                  <h3 className="font-bold text-[#0F172A] text-base">3. 👥 Human-Centered Client Partnership</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    "Creating intuitive, accessible, and user-focused digital experiences with long-term dedicated technical support and advisory tailored to your business objectives."
+                  </p>
                 </div>
                 <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                    <Users className="w-5 h-5" />
+                    <Globe className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-[#0F172A] text-base">Client Partnership</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">Long-term dedicated technical support and advisory.</p>
+                  <h3 className="font-bold text-[#0F172A] text-base">4. 🌍 Local Innovation & African Impact</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    "Building software solutions tailored for African business environments, driving economic growth and technology self-reliance across the continent."
+                  </p>
                 </div>
               </div>
             </div>
