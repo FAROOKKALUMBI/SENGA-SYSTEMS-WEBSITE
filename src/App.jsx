@@ -20,6 +20,9 @@ import AdminPosts from './pages/admin/AdminPosts';
 import AdminVacancies from './pages/admin/AdminVacancies';
 import AdminLeads from './pages/admin/AdminLeads';
 import AdminRoles from './pages/admin/AdminRoles';
+import AdminPartners from './pages/admin/AdminPartners';
+import AdminAnalytics from './pages/admin/AdminAnalytics';
+import AdminSettings from './pages/admin/AdminSettings';
 
 function PublicLayout({ children }) {
   return (
@@ -55,6 +58,9 @@ export default function App() {
             <Route path="vacancies" element={<AdminVacancies />} />
             <Route path="leads" element={<AdminLeads />} />
             <Route path="roles" element={<AdminRoles />} />
+            <Route path="partners" element={<AdminPartners />} />
+            <Route path="analytics" element={<AdminAnalytics />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>
       </Router>
