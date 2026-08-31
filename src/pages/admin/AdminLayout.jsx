@@ -56,15 +56,20 @@ export default function AdminLayout() {
       {/* 1. TOP HEADER (Deep Navy #23275c with Senga Systems Brand & White Text) */}
       <header className="sticky top-0 z-40 bg-[#23275c] text-white border-b-2 border-[#2b66bf] px-4 md:px-8 py-3.5 flex items-center justify-between shadow-lg">
         
-        {/* Brand & Tagline */}
+        {/* Brand & Logo Lockup (Matching Home Page) */}
         <div className="flex items-center gap-3">
-          <Link to="/admin/dashboard" className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shadow-md">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="font-extrabold text-lg text-white tracking-tight block">SENGA SYSTEMS</span>
-              <span className="text-[10px] font-bold tracking-wider text-blue-300 block -mt-1">Building Intelligent Digital Solutions</span>
+          <Link to="/admin/dashboard" className="flex items-center gap-3 group">
+            <img 
+              src="/assets/logo/senga-logo-white.png" 
+              alt="SENGA SYSTEMS™ Logo" 
+              className="h-10 sm:h-11 object-contain shrink-0 transition-transform group-hover:scale-105"
+              onError={(e) => {
+                e.target.src = '/assets/logo/senga-logo.png';
+              }}
+            />
+            <div className="hidden sm:block leading-tight">
+              <span className="font-extrabold text-base text-white tracking-wide block">SENGA SYSTEMS</span>
+              <span className="text-[10px] font-bold tracking-wider text-blue-300 block">Building Intelligent Digital Solutions</span>
             </div>
           </Link>
         </div>
