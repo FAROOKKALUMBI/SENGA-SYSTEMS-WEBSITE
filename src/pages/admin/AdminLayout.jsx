@@ -15,7 +15,11 @@ import {
   ShieldCheck, 
   ChevronDown,
   User,
-  HelpCircle
+  HelpCircle,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  X
 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 
@@ -26,6 +30,8 @@ export default function AdminLayout() {
   
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const currentUser = user || {
     name: 'Mr. Farook Kalumbi',
@@ -73,8 +79,15 @@ export default function AdminLayout() {
       {/* 1. TOP HEADER (Deep Navy #23275c with Senga Systems Brand & White Text) */}
       <header className="sticky top-0 z-40 bg-[#23275c] text-white border-b-2 border-[#2b66bf] px-4 md:px-8 py-3.5 flex items-center justify-between shadow-lg">
         
-        {/* Brand & Logo Lockup (Matching Home Page) */}
+        {/* Brand & Logo Lockup + Mobile Toggle */}
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-xl bg-white/10 text-white md:hidden hover:bg-white/20"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
           <Link to="/admin/dashboard" className="flex items-center gap-3 group">
             <img 
               src="/assets/logo/senga-logo-white.png" 
@@ -186,26 +199,49 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      {/* MAIN BODY: LIGHT SIDEBAR + LIGHT CONTENT CONTAINER */}
+      {/* MAIN BODY: COLLAPSIBLE SIDEBAR + CONTENT AREA */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* SIDEBAR NAVIGATION (Clean White Light Mode) */}
-        <aside className="w-64 bg-white border-r border-slate-200 p-4 hidden md:flex flex-col justify-between shrink-0 shadow-xs">
+        {/* COLLAPSIBLE SIDEBAR NAVIGATION (Desktop) */}
+        <aside 
+          className={`bg-white border-r border-slate-200 p-4 hidden md:flex flex-col justify-between shrink-0 shadow-xs transition-all duration-300 ${
+            isSidebarCollapsed ? 'w-20' : 'w-64'
+          }`}
+        >
           <div className="space-y-6">
             
-            {/* User Profile Card inside Sidebar */}
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3">
-              <img
-                src={currentUser.avatar || '/farook_avatar.jpg'}
-                alt={currentUser.name}
-                className="w-10 h-10 rounded-xl object-cover border border-blue-400 shrink-0"
-              />
-              <div className="overflow-hidden">
-                <span className="font-extrabold text-xs text-slate-900 truncate block">{currentUser.name}</span>
-                <span className="text-[10px] font-extrabold text-[#2563EB] bg-blue-100 px-2 py-0.5 rounded-full inline-block mt-0.5">
-                  {currentUser.title || 'Chief Operating Officer'}
-                </span>
-              </div>
+            {/* Sidebar Header: Profile Summary + Minimize/Expand Toggle */}
+            <div className="flex items-center justify-between">
+              {!isSidebarCollapsed ? (
+                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3 flex-1 mr-2 overflow-hidden">
+                  <img
+                    src={currentUser.avatar || '/farook_avatar.jpg'}
+                    alt={currentUser.name}
+                    className="w-10 h-10 rounded-xl object-cover border border-blue-400 shrink-0"
+                  />
+                  <div className="overflow-hidden">
+                    <span className="font-extrabold text-xs text-slate-900 truncate block">{currentUser.name}</span>
+                    <span className="text-[10px] font-extrabold text-[#2563EB] bg-blue-100 px-2 py-0.5 rounded-full inline-block mt-0.5">
+                      {currentUser.title || 'Chief Operating Officer'}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={currentUser.avatar || '/farook_avatar.jpg'}
+                  alt={currentUser.name}
+                  className="w-10 h-10 rounded-xl object-cover border-2 border-[#2563EB] mx-auto"
+                />
+              )}
+
+              {/* Minimise / Expand Toggle Button */}
+              <button
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer border border-slate-300 shrink-0"
+                title={isSidebarCollapsed ? "Expand Sidebar" : "Minimize Sidebar"}
+              >
+                {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+              </button>
             </div>
 
             {/* Navigation Links */}
@@ -217,42 +253,101 @@ export default function AdminLayout() {
                   <Link
                     key={item.path}
                     to={item.path}
+                    title={isSidebarCollapsed ? item.label : undefined}
                     className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold transition-all ${
+                      isSidebarCollapsed ? 'justify-center px-2' : ''
+                    } ${
                       isActive
                         ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/20'
                         : 'text-slate-700 hover:text-[#2563EB] hover:bg-slate-100'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                    <span>{item.label}</span>
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                    {!isSidebarCollapsed && <span>{item.label}</span>}
                   </Link>
                 );
               })}
             </nav>
           </div>
 
-          {/* Bottom Sidebar Action */}
-          <div className="pt-4 border-t border-slate-200 space-y-2">
+          {/* Bottom Sidebar Sign Out */}
+          <div className="pt-4 border-t border-slate-200">
             <button
               onClick={handleSignOut}
-              className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-red-100 text-slate-700 hover:text-red-600 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer border border-slate-200"
+              title={isSidebarCollapsed ? "Sign Out" : undefined}
+              className={`w-full py-2.5 rounded-xl bg-slate-100 hover:bg-red-100 text-slate-700 hover:text-red-600 text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer border border-slate-200 ${
+                isSidebarCollapsed ? 'px-0' : ''
+              }`}
             >
-              <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
+              <LogOut className="w-4 h-4 text-red-500" />
+              {!isSidebarCollapsed && <span>Sign Out</span>}
             </button>
           </div>
         </aside>
 
-        {/* MAIN PAGE CONTENT */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-8 bg-slate-100/70">
-          <Outlet />
+        {/* MOBILE SIDEBAR DRAWER */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs md:hidden flex">
+            <div className="w-64 bg-white h-full p-4 flex flex-col justify-between space-y-6 shadow-2xl">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <span className="font-extrabold text-sm text-slate-900">Navigation Menu</span>
+                  <button onClick={() => setMobileMenuOpen(false)} className="p-1 rounded-lg text-slate-500 hover:bg-slate-100">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <nav className="space-y-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-extrabold ${
+                          isActive ? 'bg-[#2563EB] text-white' : 'text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              <button
+                onClick={handleSignOut}
+                className="w-full py-2.5 rounded-xl bg-red-50 text-red-600 text-xs font-bold flex items-center justify-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* MAIN PAGE CONTENT WRAPPER */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
         </main>
+
       </div>
 
       {/* FOOTER */}
-      <footer className="bg-white border-t border-slate-200 px-6 py-4 text-center text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-2">
-        <span>© 2025 Senga Systems Limited • Admin version 2.4.0</span>
-        <span>Support Email: <a href="mailto:help@sengasystems.com" className="text-[#2563EB] hover:underline font-semibold">help@sengasystems.com</a></span>
+      <footer className="bg-white border-t border-slate-200 px-4 md:px-8 py-3 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div>© 2026 Senga Systems Limited. All rights reserved.</div>
+        <div className="flex items-center gap-4">
+          <span className="font-semibold text-slate-700">Admin Portal v2.4.0</span>
+          <span>•</span>
+          <a href="mailto:help@sengasystems.com" className="text-[#2563EB] font-semibold hover:underline">
+            Support Email: help@sengasystems.com
+          </a>
+        </div>
       </footer>
 
     </div>
