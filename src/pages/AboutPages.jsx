@@ -15,11 +15,13 @@ import {
   HelpCircle,
   Linkedin,
   Mail,
+  Phone,
   Download,
   FileText,
   Play,
   ExternalLink,
-  Sparkles
+  Sparkles,
+  MessageSquare
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
 
@@ -50,7 +52,7 @@ export default function AboutPages() {
     },
     {
       q: 'How do I request a consultation or quote?',
-      a: 'You can click "Get a Quote" on any page or schedule a direct consultation via our Contact hub or by emailing info@sengasystems.mw.'
+      a: 'You can click "Get a Quote" on any page or schedule a direct consultation via our Contact hub or by emailing info@senga.systems.'
     }
   ];
 
@@ -99,13 +101,17 @@ export default function AboutPages() {
           <div className="bg-[#23275c] rounded-3xl p-6 sm:p-8 space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
-                <span className="text-xs uppercase tracking-wider font-extrabold text-blue-300">Home / About Us</span>
-                <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-1">
+                <span className="text-xs uppercase tracking-wider font-extrabold text-blue-300">HOME / ABOUT US</span>
+                <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-1 leading-tight">
                   {subpath === 'history' && 'Company History & Milestones'}
                   {subpath === 'leadership' && 'Executive Leadership Team'}
                   {subpath === 'partners' && 'Our Strategic Partners'}
                   {subpath === 'faqs' && 'Frequently Asked Questions'}
-                  {(!subpath || subpath === 'profile') && 'Building Intelligent Digital Solutions That Matter'}
+                  {(!subpath || subpath === 'profile') && (
+                    <>
+                      Building Intelligent Digital <br className="hidden sm:inline" /> Solutions That Matter
+                    </>
+                  )}
                 </h1>
               </div>
 
@@ -129,86 +135,88 @@ export default function AboutPages() {
         {(!subpath || subpath === 'profile') && (
           <section className="max-w-7xl mx-auto space-y-16">
             
-            {/* Top Company Overview Grid with YouTube Video Player & Download Button on the Right */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-              
-              {/* Left Column: ABOUT OUR COMPANY / Company Overview Text */}
-              <div className="lg:col-span-7 space-y-5">
-                <div>
-                  <span className="text-xs uppercase tracking-wider font-extrabold text-[#2563EB] block">
-                    ABOUT OUR COMPANY
-                  </span>
-                  <h2 className="text-3xl sm:text-4xl font-black text-[#23275c] tracking-tight mt-1">
-                    Company Overview
-                  </h2>
-                </div>
-
-                <div className="space-y-4 text-slate-700 text-sm sm:text-base leading-relaxed font-normal">
-                  <p>
-                    At Senga Systems, we transform ideas into innovative digital solutions by combining artificial intelligence, modern software engineering, and human-centered design. We build secure, scalable, and high-performance technologies that help businesses, organizations, and communities improve efficiency, embrace digital transformation, and create lasting impact.
-                  </p>
-                  <p>
-                    Our customer base spans multiple sectors, including financial institutions, telecommunications companies, government agencies, educational institutions, and private enterprises. We deliver enterprise-grade technology solutions tailored to meet the evolving needs of modern organizations, ranging from AI-driven automation and cloud infrastructure to cybersecurity, data analytics, and systems integration.
-                  </p>
-                  <p>
-                    Through a strong combination of technical expertise, strategic partnerships, and deep industry knowledge, Senga Systems has built a reputation for reliability, innovation, and high-quality service delivery across Malawi and Africa.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right Column: YouTube Video Player & Download Company Profile Button */}
-              <div className="lg:col-span-5 space-y-4">
-                <div className="bg-[#d9d9d9] p-4 rounded-3xl border border-slate-300 shadow-md space-y-4">
-                  
-                  {/* YouTube Video Player Embed */}
-                  <div className="relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-900 border border-slate-400/40">
-                    <iframe
-                      className="w-full h-full"
-                      src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0"
-                      title="Senga Systems YouTube Video"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+            {/* Top Company Overview Wrapped in #d9d9d9 Background Card Container */}
+            <div className="bg-[#d9d9d9] p-8 sm:p-12 rounded-3xl border border-slate-300 shadow-md">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                
+                {/* Left Column: ABOUT OUR COMPANY / Company Overview Text */}
+                <div className="lg:col-span-7 space-y-5">
+                  <div>
+                    <span className="text-xs uppercase tracking-wider font-extrabold text-[#2563EB] block">
+                      ABOUT OUR COMPANY
+                    </span>
+                    <h2 className="text-3xl sm:text-4xl font-black text-[#23275c] tracking-tight mt-1">
+                      Company Overview
+                    </h2>
                   </div>
 
-                  {/* Video Label & Download Button Below */}
-                  <div className="space-y-3 pt-1">
-                    <div className="flex items-center justify-between text-xs font-extrabold text-slate-800">
-                      <span className="flex items-center gap-1.5 text-[#23275c]">
-                        <Play className="w-3.5 h-3.5 text-red-600 fill-red-600" />
-                        <span>Watch Senga Systems on YouTube</span>
-                      </span>
+                  <div className="space-y-4 text-slate-800 text-sm sm:text-base leading-relaxed font-normal">
+                    <p>
+                      At Senga Systems, we transform ideas into innovative digital solutions by combining artificial intelligence, modern software engineering, and human-centered design. We build secure, scalable, and high-performance technologies that help businesses, organizations, and communities improve efficiency, embrace digital transformation, and create lasting impact.
+                    </p>
+                    <p>
+                      Our customer base spans multiple sectors, including financial institutions, telecommunications companies, government agencies, educational institutions, and private enterprises. We deliver enterprise-grade technology solutions tailored to meet the evolving needs of modern organizations, ranging from AI-driven automation and cloud infrastructure to cybersecurity, data analytics, and systems integration.
+                    </p>
+                    <p>
+                      Through a strong combination of technical expertise, strategic partnerships, and deep industry knowledge, Senga Systems has built a reputation for reliability, innovation, and high-quality service delivery across Malawi and Africa.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Column: YouTube Video Player & Download Company Profile Button */}
+                <div className="lg:col-span-5 space-y-4">
+                  <div className="bg-white/80 p-4 rounded-3xl border border-slate-300 shadow-sm space-y-4">
+                    
+                    {/* YouTube Video Player Embed */}
+                    <div className="relative rounded-2xl overflow-hidden shadow-md aspect-video bg-slate-900 border border-slate-300">
+                      <iframe
+                        className="w-full h-full"
+                        src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0"
+                        title="Senga Systems YouTube Video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+
+                    {/* Video Label & Download Button Below */}
+                    <div className="space-y-3 pt-1">
+                      <div className="flex items-center justify-between text-xs font-extrabold text-slate-800">
+                        <span className="flex items-center gap-1.5 text-[#23275c]">
+                          <Play className="w-3.5 h-3.5 text-red-600 fill-red-600" />
+                          <span>Watch Senga Systems on YouTube</span>
+                        </span>
+                        <a
+                          href="https://www.youtube.com/@SengaSystems"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#2563EB] hover:underline flex items-center gap-1 text-[11px]"
+                        >
+                          <span>Channel</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+
                       <a
-                        href="https://www.youtube.com/@SengaSystems"
+                        href="/assets/documents/Senga_Systems_Company_Profile.pdf"
+                        download="Senga_Systems_Company_Profile.pdf"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[#2563EB] hover:underline flex items-center gap-1 text-[11px]"
+                        className="w-full py-3.5 px-4 rounded-2xl bg-[#23275c] hover:bg-[#1d2252] text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all cursor-pointer border border-blue-900"
                       >
-                        <span>Channel</span>
-                        <ExternalLink className="w-3 h-3" />
+                        <Download className="w-4 h-4 text-blue-300" />
+                        <span>Download Company Profile (PDF)</span>
                       </a>
                     </div>
 
-                    <a
-                      href="/assets/documents/Senga_Systems_Company_Profile.pdf"
-                      download="Senga_Systems_Company_Profile.pdf"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full py-3.5 px-4 rounded-2xl bg-[#23275c] hover:bg-[#1d2252] text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all cursor-pointer border border-blue-900"
-                    >
-                      <Download className="w-4 h-4 text-blue-300" />
-                      <span>Download Company Profile (PDF)</span>
-                    </a>
                   </div>
-
                 </div>
-              </div>
 
+              </div>
             </div>
 
             {/* Mission & Vision Cards with #d9d9d9 Background */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
-              <div className="bg-[#d9d9d9] p-8 rounded-3xl border border-slate-300 shadow-sm space-y-4 relative overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-[#d9d9d9] p-8 rounded-3xl border border-slate-300 shadow-md space-y-4 relative overflow-hidden">
                 <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
                   <Target className="w-6 h-6" />
                 </div>
@@ -218,7 +226,7 @@ export default function AboutPages() {
                 </p>
               </div>
 
-              <div className="bg-[#d9d9d9] p-8 rounded-3xl border border-slate-300 shadow-sm space-y-4 relative overflow-hidden">
+              <div className="bg-[#d9d9d9] p-8 rounded-3xl border border-slate-300 shadow-md space-y-4 relative overflow-hidden">
                 <div className="w-12 h-12 rounded-2xl bg-cyan-600 text-white flex items-center justify-center shadow-xs">
                   <Eye className="w-6 h-6" />
                 </div>
@@ -230,14 +238,14 @@ export default function AboutPages() {
             </div>
 
             {/* Company Values with #23275c Heading, No Numbering/Emojis & #d9d9d9 Cards */}
-            <div className="space-y-8 pt-2">
+            <div className="space-y-8">
               <h2 className="text-3xl font-black text-[#23275c] text-center">
                 Our Core Values
               </h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-md space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
                     <Shield className="w-5 h-5" />
                   </div>
@@ -247,7 +255,7 @@ export default function AboutPages() {
                   </p>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-md space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center shadow-xs">
                     <Award className="w-5 h-5" />
                   </div>
@@ -257,7 +265,7 @@ export default function AboutPages() {
                   </p>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-md space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
                     <Users className="w-5 h-5" />
                   </div>
@@ -267,7 +275,7 @@ export default function AboutPages() {
                   </p>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-sm space-y-3">
+                <div className="p-6 rounded-2xl bg-[#d9d9d9] border border-slate-300 shadow-md space-y-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
                     <Globe className="w-5 h-5" />
                   </div>
@@ -277,6 +285,50 @@ export default function AboutPages() {
                   </p>
                 </div>
 
+              </div>
+            </div>
+
+            {/* CALL TO ACTION BANNER (media_1788204814083.png) */}
+            <div className="bg-[#23275c] rounded-3xl p-8 sm:p-14 text-center text-white space-y-6 shadow-2xl relative overflow-hidden border border-indigo-900">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 text-xs font-semibold tracking-wide border border-white/15">
+                Lets Build Together
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight max-w-3xl mx-auto leading-tight">
+                Ready To Empower Your Business With Technology?
+              </h2>
+
+              <p className="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                Partner With Senga Systems For Intelligent, Secure and Scalable Digital Solutions.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+                <button
+                  onClick={openQuoteModal}
+                  className="px-8 py-3.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-lg transition-all cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Get a Free Consultation</span>
+                </button>
+
+                <a
+                  href="tel:+265884288849"
+                  className="px-8 py-3.5 rounded-xl border border-white/40 hover:bg-white/10 text-white font-extrabold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Call Us Now</span>
+                </a>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-6 pt-4 text-xs sm:text-sm font-semibold text-slate-200">
+                <a href="tel:+265884288849" className="flex items-center gap-2 hover:text-white transition-colors">
+                  <Phone className="w-4 h-4 text-cyan-400" />
+                  <span>(+265) 884 288 849</span>
+                </a>
+                <a href="mailto:info@senga.systems" className="flex items-center gap-2 hover:text-white transition-colors">
+                  <Mail className="w-4 h-4 text-cyan-400" />
+                  <span>info@senga.systems</span>
+                </a>
               </div>
             </div>
 
@@ -333,7 +385,7 @@ export default function AboutPages() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {leadersList.map((leader, idx) => (
-                <div key={idx} className="bg-[#d9d9d9] rounded-3xl p-6 border border-slate-300 shadow-sm space-y-4 text-center group hover:shadow-md transition-all">
+                <div key={idx} className="bg-[#d9d9d9] rounded-3xl p-6 border border-slate-300 shadow-md space-y-4 text-center group hover:shadow-lg transition-all">
                   <img
                     src={leader.image}
                     alt={leader.name}
@@ -360,7 +412,7 @@ export default function AboutPages() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {partnersList.map((partner, idx) => (
-                <div key={idx} className="bg-[#d9d9d9] p-6 rounded-2xl border border-slate-300 shadow-sm space-y-3">
+                <div key={idx} className="bg-[#d9d9d9] p-6 rounded-2xl border border-slate-300 shadow-md space-y-3">
                   <span className="text-xs font-mono text-[#2563EB] uppercase tracking-wider font-bold">{partner.cat}</span>
                   <h3 className="font-black text-[#0F172A] text-xl">{partner.name}</h3>
                   <p className="text-xs text-slate-700 leading-relaxed font-medium">{partner.desc}</p>
@@ -385,7 +437,7 @@ export default function AboutPages() {
               {faqsList.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#d9d9d9] border border-slate-300 rounded-2xl overflow-hidden cursor-pointer shadow-xs"
+                  className="bg-[#d9d9d9] border border-slate-300 rounded-2xl overflow-hidden cursor-pointer shadow-md"
                   onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
                 >
                   <div className="p-5 flex items-center justify-between gap-4">

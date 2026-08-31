@@ -72,34 +72,34 @@ export default function UpdatesPages() {
             </div>
 
             {vacancies.length === 0 ? (
-              <div className="bg-slate-50 border border-slate-200 p-12 rounded-3xl text-center text-slate-500 font-medium">
+              <div className="bg-[#d9d9d9] border border-slate-300 p-12 rounded-3xl text-center text-slate-700 font-medium">
                 No open vacancies at the moment. Check back soon!
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {vacancies.map((job) => (
-                  <div key={job.id} className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+                  <div key={job.id} className="bg-[#d9d9d9] p-6 sm:p-8 rounded-3xl border border-slate-300 shadow-md space-y-4 flex flex-col justify-between">
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-md bg-blue-100 text-[#2563EB] font-mono text-[11px] font-bold">{job.department}</span>
-                        <span className="text-xs font-mono text-slate-500 font-semibold">{job.type}</span>
+                        <span className="px-3 py-1 rounded-lg bg-blue-600 text-white font-mono text-[11px] font-bold">{job.department}</span>
+                        <span className="text-xs font-mono text-slate-700 font-bold">{job.type}</span>
                       </div>
 
                       <h3 className="text-xl font-black text-[#0F172A]">{job.title}</h3>
 
-                      <div className="flex items-center gap-4 text-xs text-slate-500 font-medium">
+                      <div className="flex items-center gap-4 text-xs text-slate-700 font-semibold">
                         <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5 text-[#2563EB]" /> {job.location}</span>
                         <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-[#2563EB]" /> Deadline: {job.deadline}</span>
                       </div>
 
-                      <p className="text-xs text-slate-600 leading-relaxed font-medium">{job.description}</p>
+                      <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal">{job.description}</p>
 
                       {job.requirements && (
                         <div className="space-y-1.5 pt-2">
-                          <span className="text-[11px] font-bold text-slate-700 uppercase">Requirements:</span>
+                          <span className="text-[11px] font-bold text-slate-900 uppercase">Requirements:</span>
                           {job.requirements.map((req, i) => (
-                            <div key={i} className="flex items-center gap-2 text-xs text-slate-600 font-medium">
-                              <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            <div key={i} className="flex items-center gap-2 text-xs text-slate-800 font-medium">
+                              <CheckCircle className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
                               <span>{req}</span>
                             </div>
                           ))}
@@ -107,10 +107,10 @@ export default function UpdatesPages() {
                       )}
                     </div>
 
-                    <div className="pt-4 border-t border-slate-200">
+                    <div className="pt-4 border-t border-slate-300">
                       <a
                         href={`mailto:careers@sengasystems.mw?subject=Application for ${encodeURIComponent(job.title)}`}
-                        className="w-full py-2.5 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-xs"
+                        className="w-full py-3 rounded-xl bg-[#23275c] hover:bg-blue-900 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-md"
                       >
                         <span>Apply for Position</span>
                         <ArrowRight className="w-4 h-4" />
@@ -137,13 +137,13 @@ export default function UpdatesPages() {
             </div>
 
             {filteredPosts.length === 0 ? (
-              <div className="bg-slate-50 border border-slate-200 p-12 rounded-3xl text-center text-slate-500 font-medium">
+              <div className="bg-[#d9d9d9] border border-slate-300 p-12 rounded-3xl text-center text-slate-700 font-medium">
                 No published articles found in this category.
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredPosts.map((post) => (
-                  <div key={post.id} className="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col justify-between group hover:shadow-md transition-all">
+                  <div key={post.id} className="bg-[#d9d9d9] rounded-3xl border border-slate-300 overflow-hidden shadow-md flex flex-col justify-between group hover:shadow-xl transition-all">
                     {post.image && (
                       <div className="h-48 overflow-hidden bg-slate-200">
                         <img
@@ -153,23 +153,23 @@ export default function UpdatesPages() {
                         />
                       </div>
                     )}
-                    <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="p-6 sm:p-7 space-y-3 flex-1 flex flex-col justify-between">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#2563EB] text-[10px] font-bold uppercase tracking-wider">
+                          <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">
                             {post.category || post.type}
                           </span>
-                          <span className="text-[11px] text-slate-500 font-medium">{post.date}</span>
+                          <span className="text-[11px] text-slate-700 font-semibold">{post.date}</span>
                         </div>
                         <h3 className="font-black text-[#0F172A] text-lg group-hover:text-[#2563EB] transition-colors leading-snug">
                           {post.title}
                         </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed font-medium line-clamp-3">
+                        <p className="text-xs sm:text-sm text-slate-800 leading-relaxed font-normal line-clamp-3">
                           {post.excerpt || post.content}
                         </p>
                       </div>
 
-                      <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-[#2563EB]">
+                      <div className="pt-4 border-t border-slate-300 flex items-center justify-between text-xs font-bold text-[#23275c]">
                         <span>Read Full Story</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
