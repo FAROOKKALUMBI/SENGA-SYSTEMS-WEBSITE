@@ -90,9 +90,12 @@ export function CMSProvider({ children }) {
   const [vacancies, setVacancies] = useState([]);
   const [quotes, setQuotes] = useState([]);
   const [consultations, setConsultations] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [users, setUsers] = useState([]);
   const [partners, setPartners] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [settings, setSettings] = useState({});
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -104,14 +107,29 @@ export function CMSProvider({ children }) {
   const refreshData = async () => {
     setLoading(true);
     try {
-      const [postsRes, vacanciesRes, quotesRes, consultationsRes, usersRes, partnersRes, activitiesRes, statsRes] = await Promise.allSettled([
+      const [
+        postsRes, 
+        vacanciesRes, 
+        quotesRes, 
+        consultationsRes, 
+        contactsRes,
+        paymentsRes,
+        usersRes, 
+        partnersRes, 
+        activitiesRes, 
+        settingsRes,
+        statsRes
+      ] = await Promise.allSettled([
         api.getPosts(),
         api.getVacancies(),
         api.getQuotes(),
         api.getConsultations(),
+        api.getContacts(),
+        api.getPayments(),
         api.getUsers(),
         api.getPartners(),
         api.getActivities(),
+        api.getSettings(),
         api.getStats()
       ]);
 
@@ -119,12 +137,15 @@ export function CMSProvider({ children }) {
       if (vacanciesRes.status === 'fulfilled') setVacancies(vacanciesRes.value);
       if (quotesRes.status === 'fulfilled') setQuotes(quotesRes.value);
       if (consultationsRes.status === 'fulfilled') setConsultations(consultationsRes.value);
+      if (contactsRes.status === 'fulfilled') setContacts(contactsRes.value);
+      if (paymentsRes.status === 'fulfilled') setPayments(paymentsRes.value);
       if (usersRes.status === 'fulfilled') setUsers(usersRes.value);
       if (partnersRes.status === 'fulfilled') setPartners(partnersRes.value);
       if (activitiesRes.status === 'fulfilled') setActivities(activitiesRes.value);
+      if (settingsRes.status === 'fulfilled') setSettings(settingsRes.value);
       if (statsRes.status === 'fulfilled') setStats(statsRes.value);
     } catch (err) {
-      console.warn('Backend offline, using fallback state:', err);
+      console.warn('Backend offline, using current memory state:', err);
     } finally {
       setLoading(false);
     }
@@ -162,7 +183,7 @@ export function CMSProvider({ children }) {
     localStorage.removeItem('senga_admin_user');
   };
 
-  // Actions linked to Database with userId / foreign key wiring
+  // Posts CRUD
   const addPost = async (postData) => {
     const payload = {
       ...postData,
@@ -190,6 +211,19 @@ export function CMSProvider({ children }) {
     }
   };
 
+  const updatePost = async (id, postData) => {
+    try {
+      const res = await api.updatePost(id, postData);
+      if (res.success) {
+        setPosts(prev => prev.map(p => p.id === id ? res.post : p));
+        return res.post;
+      }
+    } catch (err) {
+      console.warn('API update error:', err);
+    }
+    setPosts(prev => prev.map(p => p.id === id ? { ...p, ...postData } : p));
+  };
+
   const deletePost = async (id) => {
     try {
       await api.deletePost(id);
@@ -199,6 +233,7 @@ export function CMSProvider({ children }) {
     setPosts(prev => prev.filter(p => p.id !== id));
   };
 
+  // Vacancies CRUD
   const addVacancy = async (vacData) => {
     const payload = {
       ...vacData,
@@ -225,6 +260,19 @@ export function CMSProvider({ children }) {
     }
   };
 
+  const updateVacancy = async (id, vacData) => {
+    try {
+      const res = await api.updateVacancy(id, vacData);
+      if (res.success) {
+        setVacancies(prev => prev.map(v => v.id === id ? res.vacancy : v));
+        return res.vacancy;
+      }
+    } catch (err) {
+      console.warn('API update error:', err);
+    }
+    setVacancies(prev => prev.map(v => v.id === id ? { ...v, ...vacData } : v));
+  };
+
   const deleteVacancy = async (id) => {
     try {
       await api.deleteVacancy(id);
@@ -234,6 +282,105 @@ export function CMSProvider({ children }) {
     setVacancies(prev => prev.filter(v => v.id !== id));
   };
 
+  // Quotes CRUD
+  const submitQuote = async (quoteData) => {
+    try {
+      const res = await api.createQuote(quoteData);
+      if (res.success) {
+        setQuotes(prev => [res.quote, ...prev]);
+        return res.quote;
+      }
+    } catch (err) {
+      const newQuote = {
+        id: 'q_' + Date.now(),
+        date: new Date().toISOString().split('T')[0],
+        status: 'PENDING',
+        ...quoteData
+      };
+      setQuotes(prev => [newQuote, ...prev]);
+      return newQuote;
+    }
+  };
+
+  const updateQuoteStatus = async (id, status) => {
+    try {
+      await api.updateQuoteStatus(id, status);
+    } catch (err) {
+      console.warn('API quote update error:', err);
+    }
+    setQuotes(prev => prev.map(q => q.id === id ? { ...q, status } : q));
+  };
+
+  const deleteQuote = async (id) => {
+    try {
+      await api.deleteQuote(id);
+    } catch (err) {
+      console.warn('API quote delete error:', err);
+    }
+    setQuotes(prev => prev.filter(q => q.id !== id));
+  };
+
+  // Consultations CRUD
+  const submitConsultation = async (consultData) => {
+    try {
+      const res = await api.createConsultation(consultData);
+      if (res.success) {
+        setConsultations(prev => [res.consultation, ...prev]);
+        return res.consultation;
+      }
+    } catch (err) {
+      const newConsult = {
+        id: 'c_' + Date.now(),
+        status: 'CONFIRMED',
+        ...consultData
+      };
+      setConsultations(prev => [newConsult, ...prev]);
+      return newConsult;
+    }
+  };
+
+  // Contact Messages
+  const submitContact = async (contactData) => {
+    try {
+      const res = await api.submitContact(contactData);
+      if (res.success) {
+        setContacts(prev => [res.contact, ...prev]);
+        return res.contact;
+      }
+    } catch (err) {
+      const newContact = {
+        id: 'cnt_' + Date.now(),
+        status: 'NEW',
+        createdAt: new Date().toISOString(),
+        ...contactData
+      };
+      setContacts(prev => [newContact, ...prev]);
+      return newContact;
+    }
+  };
+
+  // Payment Gateway
+  const submitPayment = async (paymentData) => {
+    try {
+      const res = await api.submitPayment(paymentData);
+      if (res.success) {
+        setPayments(prev => [res.payment, ...prev]);
+        return res.payment;
+      }
+    } catch (err) {
+      const newPayment = {
+        id: 'pay_' + Date.now(),
+        status: 'COMPLETED',
+        transactionId: 'TXN-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+        createdAt: new Date().toISOString(),
+        ...paymentData
+      };
+      setPayments(prev => [newPayment, ...prev]);
+      return newPayment;
+    }
+  };
+
+  // Users & Roles CRUD
   const addUser = async (userData) => {
     const payload = {
       ...userData,
@@ -258,6 +405,19 @@ export function CMSProvider({ children }) {
     }
   };
 
+  const updateUser = async (id, userData) => {
+    try {
+      const res = await api.updateUser(id, userData);
+      if (res.success) {
+        setUsers(prev => prev.map(u => u.id === id ? res.user : u));
+        return res.user;
+      }
+    } catch (err) {
+      console.warn('API update user error:', err);
+    }
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, ...userData } : u));
+  };
+
   const updateUserRole = async (id, roleCode) => {
     const roleObj = SYSTEM_ROLES.find(r => r.id === roleCode) || SYSTEM_ROLES[0];
     try {
@@ -268,41 +428,55 @@ export function CMSProvider({ children }) {
     setUsers(prev => prev.map(u => u.id === id ? { ...u, role: roleObj.name, roleCode: roleObj.id } : u));
   };
 
-  const submitQuote = async (quoteData) => {
+  const deleteUser = async (id) => {
     try {
-      const res = await api.createQuote(quoteData);
+      await api.deleteUser(id);
+    } catch (err) {
+      console.warn('API delete user error:', err);
+    }
+    setUsers(prev => prev.filter(u => u.id !== id));
+  };
+
+  // Partners CRUD
+  const addPartner = async (partnerData) => {
+    try {
+      const res = await api.createPartner(partnerData);
       if (res.success) {
-        setQuotes(prev => [res.quote, ...prev]);
-        return res.quote;
+        setPartners(prev => [...prev, res.partner]);
+        return res.partner;
       }
     } catch (err) {
-      const newQuote = {
-        id: 'q_' + Date.now(),
-        date: new Date().toISOString().split('T')[0],
-        status: 'PENDING',
-        ...quoteData
+      const newPartner = {
+        id: 'pt_' + Date.now(),
+        status: 'ACTIVE',
+        ...partnerData
       };
-      setQuotes(prev => [newQuote, ...prev]);
-      return newQuote;
+      setPartners(prev => [...prev, newPartner]);
+      return newPartner;
     }
   };
 
-  const submitConsultation = async (consultData) => {
+  const deletePartner = async (id) => {
     try {
-      const res = await api.createConsultation(consultData);
+      await api.deletePartner(id);
+    } catch (err) {
+      console.warn('API delete partner error:', err);
+    }
+    setPartners(prev => prev.filter(p => p.id !== id));
+  };
+
+  // Settings
+  const updateSettings = async (newSettings) => {
+    try {
+      const res = await api.updateSettings(newSettings);
       if (res.success) {
-        setConsultations(prev => [res.consultation, ...prev]);
-        return res.consultation;
+        setSettings(res.settings);
+        return res.settings;
       }
     } catch (err) {
-      const newConsult = {
-        id: 'c_' + Date.now(),
-        status: 'CONFIRMED',
-        ...consultData
-      };
-      setConsultations(prev => [newConsult, ...prev]);
-      return newConsult;
+      console.warn('API update settings error:', err);
     }
+    setSettings(prev => ({ ...prev, ...newSettings }));
   };
 
   const openQuoteModal = (service = '') => {
@@ -322,19 +496,34 @@ export function CMSProvider({ children }) {
         vacancies,
         quotes,
         consultations,
+        contacts,
+        payments,
         users,
         partners,
         activities,
+        settings,
         stats,
         systemRoles: SYSTEM_ROLES,
+        loading,
         addPost,
+        updatePost,
         deletePost,
         addVacancy,
+        updateVacancy,
         deleteVacancy,
-        addUser,
-        updateUserRole,
         submitQuote,
+        updateQuoteStatus,
+        deleteQuote,
         submitConsultation,
+        submitContact,
+        submitPayment,
+        addUser,
+        updateUser,
+        updateUserRole,
+        deleteUser,
+        addPartner,
+        deletePartner,
+        updateSettings,
         isQuoteOpen,
         setIsQuoteOpen,
         openQuoteModal,

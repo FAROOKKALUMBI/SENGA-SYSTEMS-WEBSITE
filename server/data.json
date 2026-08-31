@@ -9,7 +9,7 @@
       "roleCode": "SYSTEM_ADMIN",
       "status": "ACTIVE",
       "avatar": "/farook_avatar.jpg",
-      "lastLogin": "Today at 08:30 AM",
+      "lastLogin": "Just now",
       "createdAt": "2025-01-01T00:00:00Z"
     },
     {
@@ -49,152 +49,10 @@
       "createdAt": "2025-01-12T00:00:00Z"
     }
   ],
-  "posts": [
-    {
-      "id": "p1",
-      "title": "Senga Systems Deploys Enterprise AI Infrastructure in Malawi",
-      "type": "news",
-      "category": "NEWS",
-      "author": "Mr. Farook Kalumbi",
-      "authorId": "usr_farook_001",
-      "date": "2026-08-28",
-      "excerpt": "Empowering regional banks and government institutions with high-throughput neural processing clusters.",
-      "content": "Full article content detailing the strategic AI hardware and model deployment across Central Africa.",
-      "status": "PUBLISHED",
-      "createdAt": "2026-08-28T09:00:00Z"
-    },
-    {
-      "id": "p2",
-      "title": "Annual Cybersecurity & SengaShield Defense Summit 2026",
-      "type": "events",
-      "category": "EVENT",
-      "author": "Mr. Farook Kalumbi",
-      "authorId": "usr_farook_001",
-      "date": "2026-09-15",
-      "location": "Ufulu Gardens Conference Centre, Lilongwe",
-      "excerpt": "Join leading cloud architects and threat intelligence officers for a hands-on zero-trust security workshop.",
-      "content": "Register for live technical demonstrations on automated threat mitigation and encryption standards.",
-      "status": "PUBLISHED",
-      "createdAt": "2026-08-29T11:30:00Z"
-    }
-  ],
-  "vacancies": [
-    {
-      "id": "v1",
-      "title": "Senior AI & Machine Learning Systems Architect",
-      "department": "AI & Data Intelligence",
-      "type": "Full-Time",
-      "location": "Mzuzu / Remote",
-      "deadline": "2026-09-30",
-      "description": "Lead model optimization, distributed training pipelines, and RAG architectures for client systems.",
-      "requirements": [
-        "5+ years Python & PyTorch",
-        "LLM fine-tuning experience",
-        "BSc/MSc Computer Science"
-      ],
-      "createdBy": "usr_farook_001",
-      "creatorName": "Mr. Farook Kalumbi",
-      "status": "ACTIVE",
-      "createdAt": "2026-08-27T10:00:00Z"
-    },
-    {
-      "id": "v2",
-      "title": "Cybersecurity Operations & Threat Analyst",
-      "department": "Security Operations",
-      "type": "Full-Time",
-      "location": "Lilongwe Office",
-      "deadline": "2026-09-25",
-      "description": "Monitor SengaShield SOC telemetry, conduct vulnerability assessments, and respond to incidents.",
-      "requirements": [
-        "CEH/CISSP certification",
-        "SIEM log monitoring",
-        "Network packet analysis"
-      ],
-      "createdBy": "usr_003",
-      "creatorName": "Chisomo Banda",
-      "status": "ACTIVE",
-      "createdAt": "2026-08-28T14:15:00Z"
-    }
-  ],
-  "quotes": [
-    {
-      "id": "q1",
-      "clientName": "Malawi National Microfinance Bank",
-      "email": "tech@microfinance.mw",
-      "phone": "+265 999 123 789",
-      "company": "MNMB",
-      "serviceRequested": "AI & Automation Integration",
-      "details": "Requesting automated document processing and loan scoring system audit.",
-      "attachedFile": "RFP_Microfinance_2026.pdf",
-      "status": "PENDING",
-      "handledBy": "usr_farook_001",
-      "submittedAt": "2026-08-30T16:00:00Z"
-    }
-  ],
-  "consultations": [
-    {
-      "id": "c1",
-      "clientName": "Blantyre Commercial Logistics Ltd",
-      "email": "info@bcl.mw",
-      "phone": "+265 888 123 789",
-      "consultantNeeded": "Cloud & ICT Infrastructure Audit",
-      "preferredDate": "2026-09-05",
-      "timeSlot": "10:00 AM",
-      "status": "CONFIRMED",
-      "createdAt": "2026-08-29T08:00:00Z"
-    }
-  ],
-  "partners": [
-    {
-      "id": "pt1",
-      "name": "Microsoft Cloud Partner",
-      "category": "Cloud Infrastructure",
-      "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80",
-      "createdBy": "usr_farook_001",
-      "status": "ACTIVE"
-    },
-    {
-      "id": "pt2",
-      "name": "NVIDIA AI Inception",
-      "category": "Hardware Acceleration",
-      "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80",
-      "createdBy": "usr_farook_001",
-      "status": "ACTIVE"
-    }
-  ],
-  "activities": [
-    {
-      "id": "act_1",
-      "userId": "usr_farook_001",
-      "userName": "Mr. Farook Kalumbi",
-      "avatar": "/farook_avatar.jpg",
-      "action": "Published AI Infrastructure News Post",
-      "entity": "POST",
-      "entityId": "p1",
-      "timeAgo": "10 mins ago",
-      "createdAt": "2026-08-31T18:19:16.840Z"
-    },
-    {
-      "id": "act_2",
-      "userId": "usr_003",
-      "userName": "Chisomo Banda",
-      "avatar": null,
-      "action": "Posted Senior AI Systems Architect Vacancy",
-      "entity": "VACANCY",
-      "entityId": "v1",
-      "timeAgo": "2 hours ago",
-      "createdAt": "2026-08-31T18:19:16.840Z"
-    },
-    {
-      "id": "act_3",
-      "userId": "system",
-      "userName": "System Telemetry",
-      "avatar": null,
-      "action": "Received Quote Request from Malawi Microfinance",
-      "entity": "QUOTE",
-      "entityId": "q1",
-      "timeAgo": "4 hours ago",
-      "createdAt": "2026-08-31T18:19:16.840Z"
-    }
-  ]
+  "posts": [],
+  "vacancies": [],
+  "quotes": [],
+  "consultations": [],
+  "partners": [],
+  "activities": []
 }

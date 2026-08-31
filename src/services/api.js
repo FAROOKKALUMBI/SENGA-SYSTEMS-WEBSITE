@@ -14,7 +14,7 @@ export async function fetchApi(endpoint, options = {}) {
     }
     return await res.json();
   } catch (error) {
-    console.warn(`API request to ${endpoint} failed, utilizing local fallback state:`, error.message);
+    console.warn(`API request to ${endpoint} failed:`, error.message);
     throw error;
   }
 }
@@ -27,28 +27,47 @@ export const api = {
   // Posts
   getPosts: (type) => fetchApi(`/posts${type ? `?type=${type}` : ''}`),
   createPost: (post) => fetchApi('/posts', { method: 'POST', body: JSON.stringify(post) }),
+  updatePost: (id, post) => fetchApi(`/posts/${id}`, { method: 'PUT', body: JSON.stringify(post) }),
   deletePost: (id) => fetchApi(`/posts/${id}`, { method: 'DELETE' }),
 
   // Vacancies
   getVacancies: () => fetchApi('/vacancies'),
   createVacancy: (vacancy) => fetchApi('/vacancies', { method: 'POST', body: JSON.stringify(vacancy) }),
+  updateVacancy: (id, vacancy) => fetchApi(`/vacancies/${id}`, { method: 'PUT', body: JSON.stringify(vacancy) }),
   deleteVacancy: (id) => fetchApi(`/vacancies/${id}`, { method: 'DELETE' }),
 
   // Quotes
   getQuotes: () => fetchApi('/quotes'),
   createQuote: (quote) => fetchApi('/quotes', { method: 'POST', body: JSON.stringify(quote) }),
   updateQuoteStatus: (id, status) => fetchApi(`/quotes/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+  deleteQuote: (id) => fetchApi(`/quotes/${id}`, { method: 'DELETE' }),
 
   // Consultations
   getConsultations: () => fetchApi('/consultations'),
   createConsultation: (data) => fetchApi('/consultations', { method: 'POST', body: JSON.stringify(data) }),
 
+  // Contact Submissions
+  getContacts: () => fetchApi('/contacts'),
+  submitContact: (data) => fetchApi('/contact', { method: 'POST', body: JSON.stringify(data) }),
+
+  // Payments
+  getPayments: () => fetchApi('/payments'),
+  submitPayment: (data) => fetchApi('/payments', { method: 'POST', body: JSON.stringify(data) }),
+
   // Users & Roles
   getUsers: () => fetchApi('/users'),
   createUser: (user) => fetchApi('/users', { method: 'POST', body: JSON.stringify(user) }),
+  updateUser: (id, user) => fetchApi(`/users/${id}`, { method: 'PUT', body: JSON.stringify(user) }),
   updateUserRole: (id, roleCode) => fetchApi(`/users/${id}`, { method: 'PUT', body: JSON.stringify({ roleCode }) }),
+  deleteUser: (id) => fetchApi(`/users/${id}`, { method: 'DELETE' }),
 
   // Partners & Activities
   getPartners: () => fetchApi('/partners'),
-  getActivities: () => fetchApi('/activities')
+  createPartner: (partner) => fetchApi('/partners', { method: 'POST', body: JSON.stringify(partner) }),
+  deletePartner: (id) => fetchApi(`/partners/${id}`, { method: 'DELETE' }),
+  getActivities: () => fetchApi('/activities'),
+
+  // Settings
+  getSettings: () => fetchApi('/settings'),
+  updateSettings: (settings) => fetchApi('/settings', { method: 'PUT', body: JSON.stringify(settings) })
 };

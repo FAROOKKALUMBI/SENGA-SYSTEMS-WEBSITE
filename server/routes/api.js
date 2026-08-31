@@ -6,7 +6,7 @@ const router = express.Router();
 // Helper to generate unique ID
 const uid = () => Math.random().toString(36).substring(2, 9);
 
-// 1. Auth Login Route (Returns User ID, Title, Role, and Permissions)
+// 1. Auth Login Route
 router.post('/auth/login', (req, res) => {
   const { email, password } = req.body;
   const db = readDB();
@@ -46,11 +46,13 @@ router.get('/stats', (req, res) => {
     quoteRequests: db.quotes.length,
     bookedSessions: db.consultations.length,
     totalUsers: db.users.length,
-    activePartners: db.partners ? db.partners.length : 0
+    activePartners: db.partners ? db.partners.length : 0,
+    totalContacts: db.contacts ? db.contacts.length : 0,
+    totalPayments: db.payments ? db.payments.length : 0
   });
 });
 
-// 3. Posts Endpoints (News, Events, Insights, Announcements) with authorId / userId
+// 3. Posts Endpoints (News, Events, Insights, Announcements)
 router.get('/posts', (req, res) => {
   const db = readDB();
   const { type } = req.query;
@@ -83,7 +85,7 @@ router.post('/posts', (req, res) => {
 
   db.posts.unshift(newPost);
   
-  // Add Audit Activity Log in DB
+  // Add Audit Activity Log
   const activity = {
     id: 'act_' + uid(),
     userId: authorUser.id,
@@ -102,6 +104,17 @@ router.post('/posts', (req, res) => {
   res.status(201).json({ success: true, post: newPost, activity });
 });
 
+router.put('/posts/:id', (req, res) => {
+  const db = readDB();
+  const index = db.posts.findIndex(p => p.id === req.params.id);
+  if (index !== -1) {
+    db.posts[index] = { ...db.posts[index], ...req.body };
+    writeDB(db);
+    return res.json({ success: true, post: db.posts[index] });
+  }
+  res.status(404).json({ error: 'Post not found' });
+});
+
 router.delete('/posts/:id', (req, res) => {
   const db = readDB();
   db.posts = db.posts.filter(p => p.id !== req.params.id);
@@ -109,7 +122,7 @@ router.delete('/posts/:id', (req, res) => {
   res.json({ success: true });
 });
 
-// 4. Vacancies Endpoints with createdBy / userId
+// 4. Vacancies Endpoints
 router.get('/vacancies', (req, res) => {
   const db = readDB();
   res.json(db.vacancies);
@@ -125,7 +138,7 @@ router.post('/vacancies', (req, res) => {
     title,
     department: department || 'Software Engineering',
     type: type || 'Full-Time',
-    location: location || 'Mzuzu / Remote',
+    location: location || 'Lilongwe / Remote',
     deadline: deadline || '2026-09-30',
     description: description || '',
     requirements: Array.isArray(requirements) ? requirements : [],
@@ -154,6 +167,17 @@ router.post('/vacancies', (req, res) => {
 
   writeDB(db);
   res.status(201).json({ success: true, vacancy: newVacancy, activity });
+});
+
+router.put('/vacancies/:id', (req, res) => {
+  const db = readDB();
+  const index = db.vacancies.findIndex(v => v.id === req.params.id);
+  if (index !== -1) {
+    db.vacancies[index] = { ...db.vacancies[index], ...req.body };
+    writeDB(db);
+    return res.json({ success: true, vacancy: db.vacancies[index] });
+  }
+  res.status(404).json({ error: 'Vacancy not found' });
 });
 
 router.delete('/vacancies/:id', (req, res) => {
@@ -205,6 +229,24 @@ router.post('/quotes', (req, res) => {
   res.status(201).json({ success: true, quote: newQuote });
 });
 
+router.put('/quotes/:id', (req, res) => {
+  const db = readDB();
+  const index = db.quotes.findIndex(q => q.id === req.params.id);
+  if (index !== -1) {
+    db.quotes[index] = { ...db.quotes[index], ...req.body };
+    writeDB(db);
+    return res.json({ success: true, quote: db.quotes[index] });
+  }
+  res.status(404).json({ error: 'Quote not found' });
+});
+
+router.delete('/quotes/:id', (req, res) => {
+  const db = readDB();
+  db.quotes = db.quotes.filter(q => q.id !== req.params.id);
+  writeDB(db);
+  res.json({ success: true });
+});
+
 // 6. Consultations Endpoints
 router.get('/consultations', (req, res) => {
   const db = readDB();
@@ -220,11 +262,110 @@ router.post('/consultations', (req, res) => {
     ...req.body
   };
   db.consultations.unshift(newConsultation);
+
+  const activity = {
+    id: 'act_' + uid(),
+    userId: 'system',
+    userName: 'Consultation Booker',
+    avatar: null,
+    action: `Scheduled consultation for ${newConsultation.clientName}`,
+    entity: 'CONSULTATION',
+    entityId: newConsultation.id,
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+  if (!db.activities) db.activities = [];
+  db.activities.unshift(activity);
+
   writeDB(db);
   res.status(201).json({ success: true, consultation: newConsultation });
 });
 
-// 7. Users / Roles Management Endpoints with createdBy / userId
+// 7. Contact Messages Endpoints
+router.get('/contacts', (req, res) => {
+  const db = readDB();
+  res.json(db.contacts || []);
+});
+
+router.post('/contact', (req, res) => {
+  const db = readDB();
+  const newContact = {
+    id: 'cnt_' + uid(),
+    fullName: req.body.fullName || '',
+    email: req.body.email || '',
+    phone: req.body.phone || '',
+    companyName: req.body.companyName || '',
+    subject: req.body.subject || 'General Inquiry',
+    message: req.body.message || '',
+    status: 'NEW',
+    createdAt: new Date().toISOString()
+  };
+
+  if (!db.contacts) db.contacts = [];
+  db.contacts.unshift(newContact);
+
+  const activity = {
+    id: 'act_' + uid(),
+    userId: 'system',
+    userName: 'Contact Form',
+    avatar: null,
+    action: `Received contact message from ${newContact.fullName}: "${newContact.subject}"`,
+    entity: 'CONTACT',
+    entityId: newContact.id,
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+  if (!db.activities) db.activities = [];
+  db.activities.unshift(activity);
+
+  writeDB(db);
+  res.status(201).json({ success: true, contact: newContact });
+});
+
+// 8. Payments Endpoints
+router.get('/payments', (req, res) => {
+  const db = readDB();
+  res.json(db.payments || []);
+});
+
+router.post('/payments', (req, res) => {
+  const db = readDB();
+  const newPayment = {
+    id: 'pay_' + uid(),
+    customerName: req.body.customerName || '',
+    email: req.body.email || '',
+    phone: req.body.phone || '',
+    invoiceNo: req.body.invoiceNo || 'INV-' + uid().toUpperCase(),
+    description: req.body.description || 'Senga Systems Technical Services',
+    amount: req.body.amount || '0.00',
+    currency: req.body.currency || 'USD',
+    status: 'COMPLETED',
+    transactionId: 'TXN-' + uid().toUpperCase(),
+    createdAt: new Date().toISOString()
+  };
+
+  if (!db.payments) db.payments = [];
+  db.payments.unshift(newPayment);
+
+  const activity = {
+    id: 'act_' + uid(),
+    userId: 'system',
+    userName: 'Payment Gateway',
+    avatar: null,
+    action: `Processed payment of ${newPayment.currency} ${newPayment.amount} for Invoice #${newPayment.invoiceNo}`,
+    entity: 'PAYMENT',
+    entityId: newPayment.id,
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+  if (!db.activities) db.activities = [];
+  db.activities.unshift(activity);
+
+  writeDB(db);
+  res.status(201).json({ success: true, payment: newPayment });
+});
+
+// 9. Users / Roles Management Endpoints
 router.get('/users', (req, res) => {
   const db = readDB();
   res.json(db.users);
@@ -281,16 +422,62 @@ router.put('/users/:id', (req, res) => {
   res.status(404).json({ error: 'User not found' });
 });
 
-// 8. Partners Endpoints
+router.delete('/users/:id', (req, res) => {
+  const db = readDB();
+  db.users = db.users.filter(u => u.id !== req.params.id);
+  writeDB(db);
+  res.json({ success: true });
+});
+
+// 10. Partners Endpoints
 router.get('/partners', (req, res) => {
   const db = readDB();
   res.json(db.partners || []);
 });
 
-// 9. Activities Feed Endpoint
+router.post('/partners', (req, res) => {
+  const db = readDB();
+  const newPartner = {
+    id: 'pt_' + uid(),
+    name: req.body.name,
+    category: req.body.category || 'Strategic Partner',
+    logo: req.body.logo || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=120&q=80',
+    status: 'ACTIVE',
+    createdAt: new Date().toISOString()
+  };
+
+  if (!db.partners) db.partners = [];
+  db.partners.push(newPartner);
+  writeDB(db);
+  res.status(201).json({ success: true, partner: newPartner });
+});
+
+router.delete('/partners/:id', (req, res) => {
+  const db = readDB();
+  if (db.partners) {
+    db.partners = db.partners.filter(p => p.id !== req.params.id);
+    writeDB(db);
+  }
+  res.json({ success: true });
+});
+
+// 11. Activities Feed Endpoint
 router.get('/activities', (req, res) => {
   const db = readDB();
   res.json(db.activities || []);
+});
+
+// 12. Settings Endpoints
+router.get('/settings', (req, res) => {
+  const db = readDB();
+  res.json(db.settings || {});
+});
+
+router.put('/settings', (req, res) => {
+  const db = readDB();
+  db.settings = { ...db.settings, ...req.body };
+  writeDB(db);
+  res.json({ success: true, settings: db.settings });
 });
 
 export default router;

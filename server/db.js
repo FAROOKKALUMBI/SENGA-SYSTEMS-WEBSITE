@@ -145,6 +145,33 @@ const initialData = {
       createdAt: '2026-08-29T08:00:00Z'
     }
   ],
+  contacts: [
+    {
+      id: 'cnt_1',
+      fullName: 'David Phiri',
+      email: 'david@enterprise.mw',
+      phone: '+265 888 444 333',
+      companyName: 'Phiri Enterprises',
+      subject: 'Inquiry on SengaShield Implementation',
+      message: 'We would like to explore enterprise licensing for our retail branches.',
+      status: 'NEW',
+      createdAt: '2026-08-30T10:00:00Z'
+    }
+  ],
+  payments: [
+    {
+      id: 'pay_1',
+      customerName: 'Chikondi Mwale',
+      email: 'chikondi@tech.mw',
+      phone: '+265 999 555 222',
+      invoiceNo: 'INV-2026-0089',
+      description: 'Cloud Server Maintenance - Q3',
+      amount: '450.00',
+      currency: 'USD',
+      status: 'COMPLETED',
+      createdAt: '2026-08-30T12:00:00Z'
+    }
+  ],
   partners: [
     { 
       id: 'pt1', 
@@ -174,39 +201,37 @@ const initialData = {
       entityId: 'p1',
       timeAgo: '10 mins ago',
       createdAt: new Date().toISOString()
-    },
-    { 
-      id: 'act_2', 
-      userId: 'usr_003',
-      userName: 'Chisomo Banda', 
-      avatar: null, 
-      action: 'Posted Senior AI Systems Architect Vacancy', 
-      entity: 'VACANCY',
-      entityId: 'v1',
-      timeAgo: '2 hours ago',
-      createdAt: new Date().toISOString()
-    },
-    { 
-      id: 'act_3', 
-      userId: 'system',
-      userName: 'System Telemetry', 
-      avatar: null, 
-      action: 'Received Quote Request from Malawi Microfinance', 
-      entity: 'QUOTE',
-      entityId: 'q1',
-      timeAgo: '4 hours ago',
-      createdAt: new Date().toISOString()
     }
-  ]
+  ],
+  settings: {
+    siteName: 'Senga Systems',
+    supportEmail: 'info@senga.systems',
+    supportPhone: '(+265) 884 288 849',
+    maintenanceMode: false,
+    theme: 'light',
+    allowQuotes: true,
+    notificationsEnabled: true
+  }
 };
 
-// Always sync initial data file with updated schema
-fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+// If data file doesn't exist, create it with initialData
+if (!fs.existsSync(DATA_FILE)) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+}
 
 export function readDB() {
   try {
+    if (!fs.existsSync(DATA_FILE)) {
+      fs.writeFileSync(DATA_FILE, JSON.stringify(initialData, null, 2));
+      return initialData;
+    }
     const data = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    // ensure all arrays exist
+    if (!parsed.contacts) parsed.contacts = [];
+    if (!parsed.payments) parsed.payments = [];
+    if (!parsed.settings) parsed.settings = initialData.settings;
+    return parsed;
   } catch (err) {
     console.error('Error reading DB, using initial data:', err);
     return initialData;
