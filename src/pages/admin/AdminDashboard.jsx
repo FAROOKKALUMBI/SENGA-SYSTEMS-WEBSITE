@@ -76,7 +76,7 @@ export default function AdminDashboard() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [navigate]);
 
-  // Metric Cards with Homepage-Style Professional Vector Icon Badges
+  // Metric Cards with Homepage-Style Professional Vector Icon Badges & 2px Borders
   const statsCards = [
     {
       title: 'PUBLISHED POSTS',
@@ -85,8 +85,8 @@ export default function AdminDashboard() {
       trend: '↑ 12% vs last month',
       icon: FileText,
       color: 'text-[#2563EB]',
-      bgColor: 'bg-blue-50 border-blue-200',
-      iconContainer: 'bg-blue-100 text-[#2563EB] border border-blue-300',
+      bgColor: 'bg-blue-50 border-2 border-blue-200',
+      iconContainer: 'bg-blue-100 text-[#2563EB] border-2 border-blue-300',
       sparklineColor: '#2563EB',
       sparklinePath: 'M0,25 Q15,10 30,22 T60,8 T90,18 T120,5',
       path: '/admin/posts'
@@ -98,8 +98,8 @@ export default function AdminDashboard() {
       trend: '↑ 25% vs last week',
       icon: Briefcase,
       color: 'text-pink-600',
-      bgColor: 'bg-pink-50 border-pink-200',
-      iconContainer: 'bg-pink-100 text-pink-600 border border-pink-300',
+      bgColor: 'bg-pink-50 border-2 border-pink-200',
+      iconContainer: 'bg-pink-100 text-pink-600 border-2 border-pink-300',
       sparklineColor: '#db2777',
       sparklinePath: 'M0,20 Q15,25 30,12 T60,18 T90,8 T120,4',
       path: '/admin/vacancies'
@@ -111,8 +111,8 @@ export default function AdminDashboard() {
       trend: '↑ 18% vs last month',
       icon: MessageSquare,
       color: 'text-amber-600',
-      bgColor: 'bg-amber-50 border-amber-200',
-      iconContainer: 'bg-amber-100 text-amber-600 border border-amber-300',
+      bgColor: 'bg-amber-50 border-2 border-amber-200',
+      iconContainer: 'bg-amber-100 text-amber-600 border-2 border-amber-300',
       sparklineColor: '#d97706',
       sparklinePath: 'M0,22 Q15,15 30,20 T60,10 T90,14 T120,6',
       path: '/admin/leads'
@@ -124,8 +124,8 @@ export default function AdminDashboard() {
       trend: '↑ 8% vs last week',
       icon: Calendar,
       color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50 border-emerald-200',
-      iconContainer: 'bg-emerald-100 text-emerald-600 border border-emerald-300',
+      bgColor: 'bg-emerald-50 border-2 border-emerald-200',
+      iconContainer: 'bg-emerald-100 text-emerald-600 border-2 border-emerald-300',
       sparklineColor: '#059669',
       sparklinePath: 'M0,24 Q15,18 30,22 T60,12 T90,10 T120,5',
       path: '/admin/leads'
@@ -137,8 +137,8 @@ export default function AdminDashboard() {
       trend: '↑ 10% vs last month',
       icon: Users,
       color: 'text-purple-600',
-      bgColor: 'bg-purple-50 border-purple-200',
-      iconContainer: 'bg-purple-100 text-purple-600 border border-purple-300',
+      bgColor: 'bg-purple-50 border-2 border-purple-200',
+      iconContainer: 'bg-purple-100 text-purple-600 border-2 border-purple-300',
       sparklineColor: '#9333ea',
       sparklinePath: 'M0,20 Q15,12 30,18 T60,8 T90,15 T120,7',
       path: '/admin/roles'
@@ -150,21 +150,21 @@ export default function AdminDashboard() {
       trend: '↑ 15% vs last month',
       icon: Handshake,
       color: 'text-cyan-600',
-      bgColor: 'bg-cyan-50 border-cyan-200',
-      iconContainer: 'bg-cyan-100 text-cyan-600 border border-cyan-300',
+      bgColor: 'bg-cyan-50 border-2 border-cyan-200',
+      iconContainer: 'bg-cyan-100 text-cyan-600 border-2 border-cyan-300',
       sparklineColor: '#0891b2',
       sparklinePath: 'M0,26 Q15,20 30,14 T60,16 T90,6 T120,3',
       path: '/admin/partners'
     }
   ];
 
-  // Quick Action Buttons with Homepage-Style Icon Badges & Shortcuts
+  // Quick Action Buttons with 2px Borders & Shortcuts
   const quickActions = [
-    { label: 'New Post', shortcut: '⌘N', path: '/admin/posts', icon: FileText, color: 'text-[#2563EB]', iconBg: 'bg-blue-100 text-[#2563EB] border-blue-300', hoverBg: 'hover:bg-blue-50 hover:border-blue-300', desc: 'Publish article or news' },
-    { label: 'Add Vacancy', shortcut: '⌘V', path: '/admin/vacancies', icon: Briefcase, color: 'text-pink-600', iconBg: 'bg-pink-100 text-pink-600 border-pink-300', hoverBg: 'hover:bg-pink-50 hover:border-pink-300', desc: 'Post new job opening' },
-    { label: 'View Quotes', shortcut: '⌘Q', path: '/admin/leads', icon: MessageSquare, color: 'text-amber-600', iconBg: 'bg-amber-100 text-amber-600 border-amber-300', hoverBg: 'hover:bg-amber-50 hover:border-amber-300', desc: 'Manage client inquiries' },
-    { label: 'Add Staff', shortcut: '⌘U', path: '/admin/roles', icon: Users, color: 'text-purple-600', iconBg: 'bg-purple-100 text-purple-600 border-purple-300', hoverBg: 'hover:bg-purple-50 hover:border-purple-300', desc: 'Create employee account' },
-    { label: 'Analytics', shortcut: '⌘A', path: '/admin/analytics', icon: BarChart3, color: 'text-cyan-600', iconBg: 'bg-cyan-100 text-cyan-600 border-cyan-300', hoverBg: 'hover:bg-cyan-50 hover:border-cyan-300', desc: 'View performance report' }
+    { label: 'New Post', shortcut: '⌘N', path: '/admin/posts', icon: FileText, color: 'text-[#2563EB]', iconBg: 'bg-blue-100 text-[#2563EB] border-2 border-blue-300', hoverBg: 'hover:bg-blue-50 hover:border-blue-400', desc: 'Publish article or news' },
+    { label: 'Add Vacancy', shortcut: '⌘V', path: '/admin/vacancies', icon: Briefcase, color: 'text-pink-600', iconBg: 'bg-pink-100 text-pink-600 border-2 border-pink-300', hoverBg: 'hover:bg-pink-50 hover:border-pink-400', desc: 'Post new job opening' },
+    { label: 'View Quotes', shortcut: '⌘Q', path: '/admin/leads', icon: MessageSquare, color: 'text-amber-600', iconBg: 'bg-amber-100 text-amber-600 border-2 border-amber-300', hoverBg: 'hover:bg-amber-50 hover:border-amber-400', desc: 'Manage client inquiries' },
+    { label: 'Add Staff', shortcut: '⌘U', path: '/admin/roles', icon: Users, color: 'text-purple-600', iconBg: 'bg-purple-100 text-purple-600 border-2 border-purple-300', hoverBg: 'hover:bg-purple-50 hover:border-purple-400', desc: 'Create employee account' },
+    { label: 'Analytics', shortcut: '⌘A', path: '/admin/analytics', icon: BarChart3, color: 'text-cyan-600', iconBg: 'bg-cyan-100 text-cyan-600 border-2 border-cyan-300', hoverBg: 'hover:bg-cyan-50 hover:border-cyan-400', desc: 'View performance report' }
   ];
 
   // Upcoming Scheduled Events
@@ -176,14 +176,14 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8 font-['Plus_Jakarta_Sans',sans-serif]">
       
-      {/* 1. GREETING BANNER & SEARCH CONTROL CENTER */}
-      <section className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6 text-slate-900">
+      {/* 1. GREETING BANNER & SEARCH CONTROL CENTER WITH 2PX BORDER */}
+      <section className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6 text-slate-900">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <span className="text-xs uppercase tracking-wider font-black text-[#2563EB]">Control Center</span>
-              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-black flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border-2 border-emerald-300 text-[11px] font-black flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span>System Status: Operational</span>
               </span>
@@ -203,14 +203,14 @@ export default function AdminDashboard() {
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/admin/posts"
-              className="px-5 py-3 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center gap-2"
+              className="px-5 py-3 rounded-xl bg-[#2563EB] hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center gap-2 border-2 border-blue-600"
             >
               <Plus className="w-4 h-4" />
               <span>Publish Article</span>
             </Link>
             <Link
               to="/admin/vacancies"
-              className="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-extrabold text-xs border border-slate-300 flex items-center gap-2 transition-all"
+              className="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-extrabold text-xs border-2 border-slate-300 flex items-center gap-2 transition-all"
             >
               <Briefcase className="w-4 h-4 text-[#2563EB]" />
               <span>Post Vacancy</span>
@@ -220,7 +220,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Global Control Center Search Bar */}
-        <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
+        <div className="pt-4 border-t-2 border-slate-200 flex flex-col sm:flex-row items-center gap-3">
           <div className="relative flex-1 w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
             <input
@@ -228,13 +228,13 @@ export default function AdminDashboard() {
               placeholder="Search posts, vacancies, quote inquiries, or staff members..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-[#2563EB]"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border-2 border-slate-300 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:border-[#2563EB]"
             />
           </div>
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="px-3 py-2.5 rounded-xl bg-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-300"
+              className="px-3 py-2.5 rounded-xl bg-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-300 border-2 border-slate-300"
             >
               Clear Search
             </button>
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      {/* 2. QUICK ACTION BAR WITH HOMEPAGE-STYLE ICON BADGES */}
+      {/* 2. QUICK ACTION BAR WITH 2PX BORDER LINES */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-black text-slate-700 uppercase tracking-wider">Quick Action Shortcuts</h3>
@@ -256,13 +256,13 @@ export default function AdminDashboard() {
               <Link
                 key={idx}
                 to={action.path}
-                className={`p-4 rounded-2xl bg-white border border-slate-200 ${action.hoverBg} text-slate-900 shadow-xs flex flex-col justify-between space-y-3 transition-all group`}
+                className={`p-4 rounded-2xl bg-white border-2 border-slate-300 ${action.hoverBg} text-slate-900 shadow-xs flex flex-col justify-between space-y-3 transition-all group`}
               >
                 <div className="flex items-center justify-between">
                   <div className={`w-10 h-10 rounded-xl ${action.iconBg} flex items-center justify-center shadow-xs`}>
                     <Icon className="w-5 h-5" />
                   </div>
-                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-mono font-bold">
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[10px] font-mono font-bold border border-slate-200">
                     {action.shortcut}
                   </span>
                 </div>
@@ -277,14 +277,14 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      {/* 3. 6 STATS CARDS WITH HOMEPAGE-STYLE ICON BADGES & SPARKLINE GRAPHS */}
+      {/* 3. 6 STATS CARDS WITH 2PX BORDER LINES & SPARKLINE GRAPHS */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
         {statsCards.map((card, idx) => {
           const Icon = card.icon;
           return (
             <div
               key={idx}
-              className="bg-white border border-slate-200 hover:border-blue-400 rounded-3xl p-6 shadow-md flex flex-col justify-between space-y-4 group transition-all"
+              className="bg-white border-2 border-slate-300 hover:border-blue-500 rounded-3xl p-6 shadow-md flex flex-col justify-between space-y-4 group transition-all"
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
@@ -299,7 +299,7 @@ export default function AdminDashboard() {
 
               {/* Sparkline Chart & Growth Trend */}
               <div className="flex items-center justify-between pt-2">
-                <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+                <span className="text-xs font-black text-emerald-600 bg-emerald-50 border-2 border-emerald-200 px-2.5 py-1 rounded-full">
                   {card.trend}
                 </span>
 
@@ -318,7 +318,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* View All Link at Bottom */}
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <div className="pt-3 border-t-2 border-slate-200 flex items-center justify-between">
                 <span className="text-[11px] text-slate-500 font-bold">Updated real-time</span>
                 <Link
                   to={card.path}
@@ -333,14 +333,14 @@ export default function AdminDashboard() {
         })}
       </section>
 
-      {/* 4. ENHANCED PERFORMANCE ANALYTICS CHARTS WITH CLEAR LABELS & AXIS DATA */}
+      {/* 4. PERFORMANCE ANALYTICS SUMMARY CHARTS WITH 2PX BORDERS */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Content Performance Bar Chart */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        {/* Content Performance Chart */}
+        <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+          <div className="flex items-center justify-between border-b-2 border-slate-200 pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] border border-blue-200 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] border-2 border-blue-200 flex items-center justify-center">
                 <BarChart3 className="w-4 h-4" />
               </div>
               <div>
@@ -348,12 +348,11 @@ export default function AdminDashboard() {
                 <span className="text-xs text-slate-500 font-medium">Monthly views per category</span>
               </div>
             </div>
-            <span className="text-xs text-[#2563EB] font-black bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+            <span className="text-xs text-[#2563EB] font-black bg-blue-50 px-2.5 py-1 rounded-full border-2 border-blue-200">
               Total: 11,180 Views
             </span>
           </div>
 
-          {/* Visual Bar Chart Grid with Labels */}
           <div className="space-y-4 pt-2">
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-bold text-slate-800">
@@ -363,7 +362,7 @@ export default function AdminDashboard() {
                 </span>
                 <span className="text-[#2563EB] font-black">4,820 Views (43%)</span>
               </div>
-              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200">
                 <div className="bg-[#2563EB] h-full rounded-full transition-all duration-500 w-[86%]"></div>
               </div>
             </div>
@@ -376,7 +375,7 @@ export default function AdminDashboard() {
                 </span>
                 <span className="text-emerald-700 font-black">3,450 Views (31%)</span>
               </div>
-              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200">
                 <div className="bg-emerald-500 h-full rounded-full transition-all duration-500 w-[62%]"></div>
               </div>
             </div>
@@ -389,13 +388,13 @@ export default function AdminDashboard() {
                 </span>
                 <span className="text-purple-700 font-black">2,910 Views (26%)</span>
               </div>
-              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+              <div className="w-full bg-slate-100 h-3.5 rounded-full overflow-hidden p-0.5 border-2 border-slate-200">
                 <div className="bg-purple-500 h-full rounded-full transition-all duration-500 w-[52%]"></div>
               </div>
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-bold">
+          <div className="pt-3 border-t-2 border-slate-200 flex items-center justify-between text-xs text-slate-500 font-bold">
             <span>Data range: May – August 2026</span>
             <Link to="/admin/posts" className="text-[#2563EB] hover:underline flex items-center gap-1">
               <span>View Articles →</span>
@@ -403,11 +402,11 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quote Request & Conversion Trends Area Graph */}
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        {/* Quote Trends & Conversion Chart */}
+        <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+          <div className="flex items-center justify-between border-b-2 border-slate-200 pb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 border border-emerald-200 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center">
                 <MessageSquare className="w-4 h-4" />
               </div>
               <div>
@@ -415,14 +414,13 @@ export default function AdminDashboard() {
                 <span className="text-xs text-slate-500 font-medium">Monthly lead pipeline velocity</span>
               </div>
             </div>
-            <span className="text-xs text-emerald-800 font-black bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+            <span className="text-xs text-emerald-800 font-black bg-emerald-50 px-2.5 py-1 rounded-full border-2 border-emerald-200">
               72% Conversion Rate
             </span>
           </div>
 
-          {/* SVG Area Line Graph with Coordinates */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 border-b border-slate-100 pb-1">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 border-b-2 border-slate-100 pb-1">
               <span>20 Quotes (Max Peak)</span>
               <span className="text-emerald-700">Peak: 18 Requests in August</span>
             </div>
@@ -436,17 +434,12 @@ export default function AdminDashboard() {
                   </linearGradient>
                 </defs>
 
-                {/* Gridlines */}
-                <line x1="0" y1="20" x2="300" y2="20" stroke="#f1f5f9" strokeDasharray="4 4" />
-                <line x1="0" y1="50" x2="300" y2="50" stroke="#f1f5f9" strokeDasharray="4 4" />
+                <line x1="0" y1="20" x2="300" y2="20" stroke="#cbd5e1" strokeDasharray="4 4" strokeWidth="1.5" />
+                <line x1="0" y1="50" x2="300" y2="50" stroke="#cbd5e1" strokeDasharray="4 4" strokeWidth="1.5" />
 
-                {/* Area Fill */}
                 <polygon points="0,80 0,60 75,45 150,30 225,25 300,10 300,80" fill="url(#quoteGradient)" />
-
-                {/* Main Curve Line */}
                 <path d="M0,60 Q37,52 75,45 T150,30 T225,25 T300,10" fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" />
 
-                {/* Data Point Circles */}
                 <circle cx="75" cy="45" r="4" fill="#10b981" />
                 <circle cx="150" cy="30" r="4" fill="#10b981" />
                 <circle cx="225" cy="25" r="4" fill="#10b981" />
@@ -454,8 +447,7 @@ export default function AdminDashboard() {
               </svg>
             </div>
 
-            {/* X-Axis Month Labels */}
-            <div className="flex justify-between text-[11px] font-bold text-slate-500 pt-1 border-t border-slate-100">
+            <div className="flex justify-between text-[11px] font-bold text-slate-500 pt-1 border-t-2 border-slate-200">
               <span>May (6)</span>
               <span>Jun (10)</span>
               <span>Jul (14)</span>
@@ -463,7 +455,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="pt-2 flex items-center justify-between text-xs text-slate-600 font-bold border-t border-slate-100">
+          <div className="pt-2 flex items-center justify-between text-xs text-slate-600 font-bold border-t-2 border-slate-200">
             <span>Scheduled Consultations: 8 Sessions</span>
             <Link to="/admin/leads" className="text-[#2563EB] hover:underline flex items-center gap-1">
               <span>Manage Leads →</span>
@@ -473,12 +465,12 @@ export default function AdminDashboard() {
 
       </section>
 
-      {/* 5. RECENT ACTIVITY FEED & UPCOMING EVENTS */}
+      {/* 5. RECENT ACTIVITY FEED & UPCOMING EVENTS WITH 2PX BORDERS */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Left 8 Cols: Recent Activity Feed */}
-        <div className="lg:col-span-8 bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div className="lg:col-span-8 bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
+          <div className="flex items-center justify-between border-b-2 border-slate-200 pb-4">
             <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
               <Activity className="w-5 h-5 text-[#2563EB]" />
               <span>Recent Activity Audit Feed</span>
@@ -492,8 +484,8 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             {activities && activities.length > 0 ? (
               activities.map((act) => (
-                <div key={act.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-4 hover:bg-blue-50/50 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 border border-blue-300 flex items-center justify-center text-[#2563EB] font-black shrink-0">
+                <div key={act.id} className="p-4 rounded-2xl bg-slate-50 border-2 border-slate-200 flex items-start gap-4 hover:bg-blue-50/50 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 border-2 border-blue-300 flex items-center justify-center text-[#2563EB] font-black shrink-0">
                     {act.avatar ? (
                       <img src={act.avatar} alt={act.userName || act.user} className="w-full h-full rounded-xl object-cover" />
                     ) : (
@@ -522,15 +514,15 @@ export default function AdminDashboard() {
         <div className="lg:col-span-4 space-y-6">
           
           {/* Upcoming Events */}
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-4">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+          <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 shadow-md space-y-4">
+            <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b-2 border-slate-200 pb-3">
               <Calendar className="w-4 h-4 text-purple-600" />
               <span>Upcoming Events & Summit</span>
             </h3>
 
             <div className="space-y-3">
               {upcomingEvents.map((evt) => (
-                <div key={evt.id} className="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200 space-y-1">
+                <div key={evt.id} className="p-3.5 rounded-2xl bg-purple-50/60 border-2 border-purple-200 space-y-1">
                   <span className="text-[10px] font-black text-purple-700 uppercase block">{evt.date} • {evt.location}</span>
                   <h4 className="text-xs font-black text-slate-900">{evt.title}</h4>
                   <span className="text-[11px] font-bold text-slate-500 block">{evt.seats}</span>
@@ -540,13 +532,13 @@ export default function AdminDashboard() {
           </div>
 
           {/* Quick System Telemetry Alert */}
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-md space-y-3">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+          <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 shadow-md space-y-3">
+            <h3 className="text-base font-black text-slate-900 flex items-center gap-2 border-b-2 border-slate-200 pb-3">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>System Security Telemetry</span>
             </h3>
 
-            <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900 space-y-1">
+            <div className="p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-200 text-xs font-bold text-emerald-900 space-y-1">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Zero Vulnerabilities Detected</span>
