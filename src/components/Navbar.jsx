@@ -23,7 +23,15 @@ export default function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { openQuoteModal } = useCMS();
+
+  React.useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 40);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleMouseEnter = (name) => setActiveDropdown(name);
   const handleMouseLeave = () => setActiveDropdown(null);
@@ -31,7 +39,7 @@ export default function Navbar() {
   const navLinkClass = (section) => `nav-link-motion flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors ${isSectionActive(section) ? 'bg-[#f1f5f9] text-[#1E2364] font-bold' : 'hover:text-blue-600'}`;
 
   return (
-    <header className="sticky top-0 z-50 w-full font-['Plus_Jakarta_Sans',sans-serif]">
+    <header className={`sticky top-0 z-50 w-full font-['Plus_Jakarta_Sans',sans-serif] navbar-shell ${isScrolled ? 'is-scrolled' : ''}`}>
       
       {/* 1. TOP BAR (Exact Figma Color: #23275c Deep Purple-Navy with Top Blue Accent) */}
       <div className="bg-[#23275c] border-t-2 border-[#2b66bf] text-white text-xs py-2.5 px-4 md:px-12">
@@ -49,23 +57,15 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Right Languages & Login */}
+          {/* Right Senga Way & Login */}
           <div className="flex items-center gap-4 text-xs">
-            <span className="text-slate-500/80">|</span>
-
-            {/* Language Switcher */}
-            <div className="flex items-center gap-2.5 font-bold text-[11px] tracking-wider">
-              <span className="px-2.5 py-1 rounded bg-[#2b66bf] text-white shadow-sm">EN</span>
-              <span className="text-slate-300 hover:text-white cursor-pointer px-1">PT</span>
-              <span className="text-slate-300 hover:text-white cursor-pointer px-1">FR</span>
-            </div>
-
-            <span className="text-slate-500/80">|</span>
+            <Link to="/senga-way" className="px-3 py-1.5 rounded-lg bg-[#53eafd] text-[#0f264d] font-extrabold hover:bg-[#2fd3e8] transition-colors">
+              The Senga Way
+            </Link>
 
             {/* Login Link */}
-            <Link to="/admin/login" className="flex items-center gap-1 text-slate-200 hover:text-white transition-colors text-xs font-semibold">
-              <span>Login</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-300" />
+            <Link to="/admin/login" className="px-3 py-1.5 rounded-lg border border-white/60 text-white font-extrabold hover:bg-white/10 transition-colors text-xs">
+              Login
             </Link>
           </div>
 
@@ -74,7 +74,7 @@ export default function Navbar() {
 
       {/* 2. MAIN NAVBAR (Pure White Background & Tightly Cropped Transparent SENGA SYSTEMS Logo) */}
       <div className="bg-white text-slate-900 border-b border-slate-200/80 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 md:px-12 py-3 flex items-center justify-between">
+        <div className={`max-w-7xl mx-auto px-4 md:px-12 flex items-center justify-between transition-[padding] duration-300 ${isScrolled ? 'py-2' : 'py-3'}`}>
           
           {/* Left Branding Lockup (Tightly Cropped Logo Image) */}
           <Link to="/" className="flex items-center gap-6 group">
@@ -115,10 +115,10 @@ export default function Navbar() {
             >
               <Link to="/about" className={navLinkClass('/about')}>
                 <span>About</span>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
+                <ChevronDown className={`chevron-motion w-4 h-4 text-slate-400 ${activeDropdown === 'about' ? 'rotate-180' : ''}`} />
               </Link>
               {activeDropdown === 'about' && (
-                <div className="absolute top-full left-0 w-60 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="dropdown-panel absolute top-full left-0 w-60 pt-2">
                   <div className="bg-white rounded-xl p-2 border border-slate-200 shadow-xl">
                     <Link to="/about" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-900 hover:bg-blue-50 hover:text-blue-600 font-bold">About Senga Systems</Link>
                     <div className="my-1 border-t border-slate-100"></div>
@@ -139,15 +139,11 @@ export default function Navbar() {
             >
               <Link to="/services" className={navLinkClass('/services')}>
                 <span>Services</span>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
+                <ChevronDown className={`chevron-motion w-4 h-4 text-slate-400 ${activeDropdown === 'services' ? 'rotate-180' : ''}`} />
               </Link>
               {activeDropdown === 'services' && (
-                <div className="absolute top-full left-0 w-64 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="dropdown-panel absolute top-full left-0 w-64 pt-2">
                   <div className="bg-white rounded-xl p-2 border border-slate-200 shadow-xl">
-                    <Link to="/services" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-900 hover:bg-blue-50 hover:text-blue-600 font-bold">
-                      Services Overview
-                    </Link>
-                    <div className="my-1 border-t border-slate-100"></div>
                     <Link to="/services#ai-automation" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">
                       AI & Automation
                     </Link>
@@ -179,10 +175,10 @@ export default function Navbar() {
             >
               <Link to="/updates" className={navLinkClass('/updates')}>
                 <span>Updates</span>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
+                <ChevronDown className={`chevron-motion w-4 h-4 text-slate-400 ${activeDropdown === 'updates' ? 'rotate-180' : ''}`} />
               </Link>
               {activeDropdown === 'updates' && (
-                <div className="absolute top-full left-0 w-60 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="dropdown-panel absolute top-full left-0 w-60 pt-2">
                   <div className="bg-white rounded-xl p-2 border border-slate-200 shadow-xl">
                     <Link to="/updates/news" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">News</Link>
                     <Link to="/updates/events" onClick={() => setActiveDropdown(null)} className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Events</Link>
@@ -203,10 +199,10 @@ export default function Navbar() {
             >
               <Link to="/contact" className={navLinkClass('/contact')}>
                 <span>Contact</span>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
+                <ChevronDown className={`chevron-motion w-4 h-4 text-slate-400 ${activeDropdown === 'contact' ? 'rotate-180' : ''}`} />
               </Link>
               {activeDropdown === 'contact' && (
-                <div className="absolute top-full left-0 w-60 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="dropdown-panel absolute top-full left-0 w-60 pt-2">
                   <div className="bg-white rounded-xl p-2 border border-slate-200 shadow-xl">
                     <Link to="/contact" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Contact Us</Link>
                     <Link to="/contact/quote" className="block px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600">Get a Quote</Link>

@@ -26,17 +26,24 @@ import {
   Briefcase
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
+import { api } from '../services/api';
+import Reveal from '../components/Reveal';
 
 export default function HomePage() {
   const { openQuoteModal, posts, vacancies } = useCMS();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
     if (newsletterEmail) {
-      setNewsletterSubscribed(true);
-      setNewsletterEmail('');
+      try {
+        await api.subscribeNewsletter(newsletterEmail);
+        setNewsletterSubscribed(true);
+        setNewsletterEmail('');
+      } catch (error) {
+        console.warn('Newsletter subscription failed:', error);
+      }
     }
   };
 
@@ -81,7 +88,7 @@ export default function HomePage() {
         
         {/* Right Monitor Code Blur Overlay */}
         <div 
-          className="absolute inset-y-0 right-0 w-full lg:w-3/5 bg-cover bg-right bg-no-repeat opacity-40 mix-blend-luminosity pointer-events-none"
+          className="hero-visual absolute inset-y-0 right-0 w-full lg:w-3/5 bg-cover bg-right bg-no-repeat opacity-40 mix-blend-luminosity pointer-events-none"
           style={{ backgroundImage: "url('/assets/images/hero-bg.jpg'), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1600&q=80')" }}
         ></div>
         
@@ -92,34 +99,38 @@ export default function HomePage() {
           <div className="max-w-2xl space-y-6">
             
             <div className="space-y-3">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-none">
+              <span className="hero-badge inline-block text-xs sm:text-sm font-extrabold uppercase tracking-[0.12em] text-blue-200">
+                Secure technology, intelligent innovation
+              </span>
+
+              <h1 className="hero-heading text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-none">
                 Senga Systems.
               </h1>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+              <h2 className="hero-tagline text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
                 Experience the Power of Secure Technology
               </h2>
 
-              <p className="text-lg sm:text-xl text-slate-200 leading-relaxed font-normal pt-2 max-w-xl">
+              <p className="hero-description text-lg sm:text-xl text-slate-200 leading-relaxed font-normal pt-2 max-w-xl">
                 Empower your business with secure and scalable solutions.
               </p>
             </div>
 
             {/* Buttons (Figma Screenshot: White "Explore Services" & Outline "Get Started →") */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="hero-cta flex flex-wrap items-center gap-4 pt-2">
               <Link
                 to="/services"
-                className="px-8 py-3.5 rounded-xl bg-white text-[#0f264d] font-extrabold text-sm hover:bg-slate-100 transition-all shadow-xl cursor-pointer"
+                className="primary-button px-8 py-3.5 rounded-xl bg-white text-[#0f264d] font-extrabold text-sm hover:bg-slate-100 transition-all shadow-xl cursor-pointer"
               >
                 Explore Services
               </Link>
 
               <Link
                 to="/quote"
-                className="px-8 py-3.5 rounded-xl border-2 border-white/90 text-white font-extrabold text-sm hover:bg-white/10 flex items-center gap-2.5 cursor-pointer transition-all"
+                className="secondary-button px-8 py-3.5 rounded-xl border-2 border-white/90 text-white font-extrabold text-sm hover:bg-white/10 flex items-center gap-2.5 cursor-pointer transition-all"
               >
                 <span>Get Started</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="arrow-motion w-4 h-4" />
               </Link>
             </div>
 
@@ -130,7 +141,7 @@ export default function HomePage() {
       {/* 2. THREE OVERLAY FEATURE CARDS (Medium Proportional Icons matching media_1787271420931.png 1:1) */}
       <section className="relative bg-gradient-to-b from-[#122e5a] to-[#1d2252] text-white pt-4 pb-16 px-4 md:px-12">
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-[#252a6a]/60 backdrop-blur-md p-6 rounded-2xl border border-indigo-500/30 shadow-2xl">
+          <Reveal className="feature-grid grid grid-cols-1 md:grid-cols-3 gap-6 bg-[#252a6a]/60 backdrop-blur-md p-6 rounded-2xl border border-indigo-500/30 shadow-2xl">
             
             {/* Card 1: Technical Experts */}
             <div className="flex items-start gap-4 p-2 border-r border-indigo-800/60 last:border-r-0">
@@ -192,7 +203,7 @@ export default function HomePage() {
               </div>
             </div>
 
-          </div>
+          </Reveal>
         </div>
 
       </section>
@@ -200,10 +211,10 @@ export default function HomePage() {
       {/* 3. ABOUT SENGA SYSTEMS SECTION */}
       <section className="bg-white text-slate-900 py-28 md:py-32 px-4 md:px-12 overflow-visible relative">
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <Reveal className="about-grid grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             
             {/* Left Image Column with Plain Light Gray Rotated Rectangle */}
-            <div className="lg:col-span-6 relative max-w-[460px] w-full">
+            <div className="about-image lg:col-span-6 relative max-w-[460px] w-full">
               
               {/* Plain Light Gray (#F1F2F4), Solid, Subtly Rotated Rectangle */}
               <div className="absolute -top-6 -right-6 w-full h-full bg-[#F1F2F4] rounded-[24px] transform rotate-2 pointer-events-none shadow-sm"></div>
@@ -218,7 +229,7 @@ export default function HomePage() {
               </div>
 
               {/* Stat Card */}
-              <div className="absolute -bottom-6 right-2 sm:right-6 bg-[#334155] text-white p-4 sm:p-5 rounded-2xl border border-slate-600/50 w-[250px] sm:w-[270px] shadow-2xl z-20">
+              <div className="stat-card absolute -bottom-6 right-2 sm:right-6 bg-[#334155] text-white p-4 sm:p-5 rounded-2xl border border-slate-600/50 w-[250px] sm:w-[270px] shadow-2xl z-20">
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-3">
                     <div className="flex -space-x-2 shrink-0">
@@ -241,7 +252,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Text Column Content & Tight Button */}
-            <div className="lg:col-span-6 space-y-5 pt-8 lg:pt-0">
+            <div className="about-copy lg:col-span-6 space-y-5 pt-8 lg:pt-0">
               <span className="text-blue-600 font-extrabold text-sm sm:text-base tracking-wider uppercase inline-block">
                 About Senga Systems
               </span>
@@ -262,12 +273,12 @@ export default function HomePage() {
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#2b66bf] hover:bg-[#21519a] text-white font-bold text-xs shadow-md shadow-blue-600/20 transition-all cursor-pointer"
                 >
                   <span>Learn More About Us</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="arrow-motion w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -296,14 +307,15 @@ export default function HomePage() {
           </div>
 
           {/* 6 Service Cards Row (Single Horizontal Row, Card BG #FFFFFF, Left Accent Bar, Tile #D9D9D9) */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+          <div className="staggered-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
             {serviceCards.map((service, idx) => {
               const IconComp = service.icon;
               return (
+                <Reveal key={idx} style={{ transitionDelay: `${idx * 100}ms` }}>
                 <Link
                   key={idx}
                   to={service.path}
-                  className="relative overflow-hidden p-6 rounded-[16px] bg-[#FFFFFF] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col items-center text-center justify-between group min-h-[190px]"
+                  className="homepage-service-card relative overflow-hidden p-6 rounded-[16px] bg-[#FFFFFF] shadow-sm hover:shadow-md transition-all flex flex-col items-center text-center justify-between group min-h-[190px]"
                 >
                   {/* Left Edge Accent Bar (~4px wide, full height) */}
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-[#2563EB] rounded-l-[16px]"></div>
@@ -318,6 +330,7 @@ export default function HomePage() {
                     {service.title}
                   </h3>
                 </Link>
+                </Reveal>
               );
             })}
           </div>
@@ -379,10 +392,10 @@ export default function HomePage() {
 
       {/* 5. GET THE LATEST TECH UPDATES */}
       <section className="bg-[#23275c] text-white py-20 px-4 md:px-12 border-t border-indigo-900/40">
-        <div className="max-w-4xl mx-auto text-center space-y-7">
+        <Reveal className="newsletter-reveal max-w-4xl mx-auto text-center space-y-7">
           
           {/* Top Cyan Envelope Tile */}
-          <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-cyan-400 flex items-center justify-center mx-auto shadow-inner">
+          <div className="subscribe-icon w-14 h-14 rounded-2xl bg-white/10 border border-white/15 text-cyan-400 flex items-center justify-center mx-auto shadow-inner">
             <Mail className="w-7 h-7 text-cyan-300 stroke-[2.2]" />
           </div>
 
@@ -421,15 +434,15 @@ export default function HomePage() {
           <p className="text-xs sm:text-sm text-slate-300 font-medium pt-1">
             Join 100+ IT professionals. No spam, unsubscribe anytime.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* 6. READY TO EMPOWER YOUR BUSINESS */}
       <section className="bg-white py-24 px-4 md:px-12">
-        <div className="max-w-5xl mx-auto bg-[#23275c] text-white rounded-[44px] p-10 md:p-16 text-center space-y-7 shadow-2xl relative overflow-hidden">
+        <Reveal className="cta-reveal max-w-5xl mx-auto bg-[#23275c] text-white rounded-[44px] p-10 md:p-16 text-center space-y-7 shadow-2xl relative overflow-hidden">
           
           {/* Top Pill Badge "Lets Build Together" */}
-          <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 border border-white/15 text-xs font-semibold tracking-wide">
+          <div className="cta-pill inline-block px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 border border-white/15 text-xs font-semibold tracking-wide">
             Lets Build Together
           </div>
 
@@ -474,7 +487,7 @@ export default function HomePage() {
             </div>
           </div>
 
-        </div>
+        </Reveal>
       </section>
 
     </div>

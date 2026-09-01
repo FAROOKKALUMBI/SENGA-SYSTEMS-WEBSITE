@@ -4,6 +4,7 @@ import { useCMS } from '../../context/CMSContext';
 
 export default function AdminPosts() {
   const { posts, addPost, deletePost, user } = useCMS();
+  const canDelete = user?.roleCode === 'SYSTEM_ADMIN';
   const [showCreate, setShowCreate] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -178,13 +179,13 @@ export default function AdminPosts() {
 
               <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-600">By {post.author || 'Senga Team'}</span>
-                <button
+                {canDelete && <button
                   onClick={() => deletePost(post.id)}
                   className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
                   title="Delete Post"
                 >
                   <Trash2 className="w-4 h-4" />
-                </button>
+                </button>}
               </div>
             </div>
           ))}

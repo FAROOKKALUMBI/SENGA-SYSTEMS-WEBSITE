@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Youtube } from 'lucide-react';
+import useReveal from '../hooks/useReveal';
 
 export default function Footer() {
+  const [footerRef, footerInView] = useReveal();
+
   return (
-    <footer className="bg-[#23275c] border-t-2 border-[#2b66bf] text-slate-300 font-['Plus_Jakarta_Sans',sans-serif] pt-16 pb-10">
+    <footer ref={footerRef} className={`footer-reveal ${footerInView ? 'in-view' : ''} bg-[#23275c] border-t-2 border-[#2b66bf] text-slate-300 font-['Plus_Jakarta_Sans',sans-serif] pt-16 pb-10`}>
       <div className="max-w-7xl mx-auto px-4 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-16">
           
@@ -32,38 +35,36 @@ export default function Footer() {
             {/* Social Media Rounded Square Icons */}
             <div className="flex items-center gap-3 pt-2">
               <a 
-                href="https://facebook.com" 
+                href="https://www.facebook.com/share/1Ec8SBEDiM/" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
+                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
                 title="Facebook"
               >
                 <Facebook className="w-4 h-4" />
               </a>
               <a 
-                href="https://twitter.com" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
-                title="Twitter / X"
+                href="#"
+                onClick={(event) => event.preventDefault()}
+                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white/50 cursor-not-allowed transition-colors flex items-center justify-center shadow-sm"
+                title="Twitter / X coming soon"
               >
                 <Twitter className="w-4 h-4" />
               </a>
               <a 
-                href="https://linkedin.com" 
+                href="https://www.linkedin.com/company/senga-systems/" 
                 target="_blank" 
                 rel="noreferrer" 
-                className="w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
+                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
                 title="LinkedIn"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
               <a 
-                href="https://youtube.com" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
-                title="YouTube"
+                href="#"
+                onClick={(event) => event.preventDefault()}
+                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white/50 cursor-not-allowed transition-colors flex items-center justify-center shadow-sm"
+                title="YouTube coming soon"
               >
                 <Youtube className="w-4 h-4" />
               </a>
@@ -73,7 +74,7 @@ export default function Footer() {
           {/* Column 2: Company Navigation */}
           <div className="lg:col-span-2 space-y-4">
             <h4 className="text-white font-bold text-base tracking-wide">Company</h4>
-            <ul className="space-y-2.5 text-sm font-normal text-slate-300">
+            <ul className="footer-links space-y-2.5 text-sm font-normal text-slate-300">
               <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/about/team" className="hover:text-white transition-colors">Our Team</Link></li>
               <li><Link to="/about/partners" className="hover:text-white transition-colors">Partners</Link></li>
@@ -85,7 +86,7 @@ export default function Footer() {
           {/* Column 3: Our Services Navigation */}
           <div className="lg:col-span-3 space-y-4">
             <h4 className="text-white font-bold text-base tracking-wide">Our Services</h4>
-            <ul className="space-y-2.5 text-sm font-normal text-slate-300">
+            <ul className="footer-links space-y-2.5 text-sm font-normal text-slate-300">
               <li><Link to="/services#ai-automation" className="hover:text-white transition-colors">AI & Automation</Link></li>
               <li><Link to="/services#software-engineering" className="hover:text-white transition-colors">Software Engineering</Link></li>
               <li><Link to="/services#data-analytics" className="hover:text-white transition-colors">Data & Analytics</Link></li>

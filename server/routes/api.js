@@ -3,6 +3,23 @@ import { readDB, writeDB } from '../db.js';
 
 const router = express.Router();
 
+const getAccessPolicy = (roleCode) => roleCode === 'SYSTEM_ADMIN'
+  ? { accessLevel: 'Full Access', permissions: 'Everything' }
+  : { accessLevel: 'Medium Access', permissions: 'Content, Services, Vacancies, Partners, Quotes, Support, Analytics' };
+
+// Administrative operations are protected on the API as well as in portal
+// navigation. Sessions are kept in memory for this demo; production should use
+// signed, expiring JWTs or server-side persistent sessions.
+const sessions = new Map();
+const requireSystemAdmin = (req, res, next) => {
+  const token = req.get('Authorization')?.replace(/^Bearer\s+/i, '');
+  const session = token && sessions.get(token);
+  if (session?.roleCode !== 'SYSTEM_ADMIN') {
+    return res.status(403).json({ error: 'System Administrator access is required for this operation.' });
+  }
+  next();
+};
+
 // Helper to generate unique ID
 const uid = () => Math.random().toString(36).substring(2, 9);
 
@@ -30,10 +47,16 @@ router.post('/auth/login', (req, res) => {
   matchedUser.lastLogin = 'Just now';
   writeDB(db);
 
+  const token = 'senga-jwt-token-' + uid();
+  sessions.set(token, { userId: matchedUser.id, roleCode: matchedUser.roleCode });
+
   return res.json({
     success: true,
-    token: 'senga-jwt-token-' + uid(),
-    user: matchedUser
+    token,
+    user: {
+      ...matchedUser,
+      ...getAccessPolicy(matchedUser.roleCode)
+    }
   });
 });
 
@@ -49,6 +72,22 @@ router.get('/stats', (req, res) => {
     activePartners: db.partners ? db.partners.length : 0,
     totalContacts: db.contacts ? db.contacts.length : 0,
     totalPayments: db.payments ? db.payments.length : 0
+  });
+});
+
+// Analytics is readable by both staff and System Administrators. Values and
+// trend points live in the database rather than being embedded in the UI.
+router.get('/analytics', (req, res) => {
+  const db = readDB();
+  const analytics = db.analytics || {};
+  res.json({
+    periodLabel: analytics.periodLabel || 'Last 28 days',
+    monthlyPageViews: analytics.monthlyPageViews || 0,
+    uniqueVisitors: analytics.uniqueVisitors || 0,
+    quoteConversion: analytics.quoteConversion || 0,
+    averageSessionSeconds: analytics.averageSessionSeconds || 0,
+    changes: analytics.changes || {},
+    trends: analytics.trends || []
   });
 });
 
@@ -115,7 +154,7 @@ router.put('/posts/:id', (req, res) => {
   res.status(404).json({ error: 'Post not found' });
 });
 
-router.delete('/posts/:id', (req, res) => {
+router.delete('/posts/:id', requireSystemAdmin, (req, res) => {
   const db = readDB();
   db.posts = db.posts.filter(p => p.id !== req.params.id);
   writeDB(db);
@@ -180,7 +219,7 @@ router.put('/vacancies/:id', (req, res) => {
   res.status(404).json({ error: 'Vacancy not found' });
 });
 
-router.delete('/vacancies/:id', (req, res) => {
+router.delete('/vacancies/:id', requireSystemAdmin, (req, res) => {
   const db = readDB();
   db.vacancies = db.vacancies.filter(v => v.id !== req.params.id);
   writeDB(db);
@@ -240,7 +279,7 @@ router.put('/quotes/:id', (req, res) => {
   res.status(404).json({ error: 'Quote not found' });
 });
 
-router.delete('/quotes/:id', (req, res) => {
+router.delete('/quotes/:id', requireSystemAdmin, (req, res) => {
   const db = readDB();
   db.quotes = db.quotes.filter(q => q.id !== req.params.id);
   writeDB(db);
@@ -323,11 +362,13 @@ router.post('/contact', (req, res) => {
 });
 
 // 8. Payments Endpoints
-router.get('/payments', (req, res) => {
+router.get('/payments', requireSystemAdmin, (req, res) => {
   const db = readDB();
   res.json(db.payments || []);
 });
 
+// Visitors may submit a payment; viewing or managing payment data remains
+// restricted to System Administrators.
 router.post('/payments', (req, res) => {
   const db = readDB();
   const newPayment = {
@@ -365,13 +406,26 @@ router.post('/payments', (req, res) => {
   res.status(201).json({ success: true, payment: newPayment });
 });
 
+// Public newsletter subscriptions are persisted for later staff follow-up.
+router.post('/newsletter', (req, res) => {
+  const email = (req.body.email || '').trim().toLowerCase();
+  if (!email) return res.status(400).json({ error: 'An email address is required.' });
+  const db = readDB();
+  if (!db.newsletterSubscribers) db.newsletterSubscribers = [];
+  if (!db.newsletterSubscribers.some(subscriber => subscriber.email === email)) {
+    db.newsletterSubscribers.unshift({ id: 'sub_' + uid(), email, subscribedAt: new Date().toISOString() });
+    writeDB(db);
+  }
+  res.status(201).json({ success: true });
+});
+
 // 9. Users / Roles Management Endpoints
-router.get('/users', (req, res) => {
+router.get('/users', requireSystemAdmin, (req, res) => {
   const db = readDB();
   res.json(db.users);
 });
 
-router.post('/users', (req, res) => {
+router.post('/users', requireSystemAdmin, (req, res) => {
   const db = readDB();
   const { name, email, title, role, roleCode, createdBy } = req.body;
   const creatorUser = db.users.find(u => u.id === createdBy) || db.users[0];
@@ -411,7 +465,7 @@ router.post('/users', (req, res) => {
   res.status(201).json({ success: true, user: newUser });
 });
 
-router.put('/users/:id', (req, res) => {
+router.put('/users/:id', requireSystemAdmin, (req, res) => {
   const db = readDB();
   const index = db.users.findIndex(u => u.id === req.params.id);
   if (index !== -1) {
@@ -422,7 +476,7 @@ router.put('/users/:id', (req, res) => {
   res.status(404).json({ error: 'User not found' });
 });
 
-router.delete('/users/:id', (req, res) => {
+router.delete('/users/:id', requireSystemAdmin, (req, res) => {
   const db = readDB();
   db.users = db.users.filter(u => u.id !== req.params.id);
   writeDB(db);
@@ -452,7 +506,7 @@ router.post('/partners', (req, res) => {
   res.status(201).json({ success: true, partner: newPartner });
 });
 
-router.delete('/partners/:id', (req, res) => {
+router.delete('/partners/:id', requireSystemAdmin, (req, res) => {
   const db = readDB();
   if (db.partners) {
     db.partners = db.partners.filter(p => p.id !== req.params.id);
@@ -462,18 +516,18 @@ router.delete('/partners/:id', (req, res) => {
 });
 
 // 11. Activities Feed Endpoint
-router.get('/activities', (req, res) => {
+router.get('/activities', requireSystemAdmin, (req, res) => {
   const db = readDB();
   res.json(db.activities || []);
 });
 
 // 12. Settings Endpoints
-router.get('/settings', (req, res) => {
+router.get('/settings', requireSystemAdmin, (req, res) => {
   const db = readDB();
   res.json(db.settings || {});
 });
 
-router.put('/settings', (req, res) => {
+router.put('/settings', requireSystemAdmin, (req, res) => {
   const db = readDB();
   db.settings = { ...db.settings, ...req.body };
   writeDB(db);

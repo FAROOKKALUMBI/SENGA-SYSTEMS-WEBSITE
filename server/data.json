@@ -21,7 +21,7 @@
       "roleCode": "CONTENT_ADMIN",
       "status": "ACTIVE",
       "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-      "lastLogin": "Yesterday at 04:15 PM",
+      "lastLogin": "Just now",
       "createdAt": "2025-01-05T00:00:00Z"
     },
     {
@@ -51,8 +51,58 @@
   ],
   "posts": [],
   "vacancies": [],
-  "quotes": [],
+  "quotes": [
+    {
+      "id": "q_lk66qe4",
+      "clientName": "Farook Kalumbi",
+      "email": "kalumbifarook21@gmail.com",
+      "phone": "",
+      "company": "Nexiv",
+      "serviceRequested": "General Project Inquiry",
+      "details": "I want to parner with Senga Systems",
+      "attachedFile": "Computer_Hardware_Basics_certificate_bsfas1622-my-mzuni-ac-mw_366aa957-de5d-4588-b98e-14923aae3223.pdf",
+      "status": "PENDING",
+      "submittedAt": "2026-09-01T09:57:22.234Z"
+    }
+  ],
   "consultations": [],
   "partners": [],
-  "activities": []
+  "activities": [
+    {
+      "id": "act_i7kek88",
+      "userId": "system",
+      "userName": "Client Portal",
+      "avatar": null,
+      "action": "Received new quote request from Farook Kalumbi",
+      "entity": "QUOTE",
+      "entityId": "q_lk66qe4",
+      "timeAgo": "Just now",
+      "createdAt": "2026-09-01T09:57:22.234Z"
+    }
+  ],
+  "contacts": [],
+  "payments": [],
+  "settings": {
+    "siteName": "Senga Systems",
+    "supportEmail": "info@senga.systems",
+    "supportPhone": "(+265) 884 288 849",
+    "maintenanceMode": false,
+    "theme": "light",
+    "allowQuotes": true,
+    "notificationsEnabled": true
+  },
+  "analytics": {
+    "periodLabel": "Last 28 days: Aug 4 – Aug 31",
+    "monthlyPageViews": 48290,
+    "uniqueVisitors": 12450,
+    "quoteConversion": 8.4,
+    "averageSessionSeconds": 252,
+    "changes": {
+      "pageViews": "14.2% this month",
+      "visitors": "9.8% this month",
+      "conversion": "3.1% higher",
+      "session": "18s longer"
+    },
+    "trends": [1, -1, -1, 0, 0, -2, 0, -1, -1, 0, 1, 0, -1, 0, 0, 0, 2, 2, -1, -1, 2, -1, 0, -1, 1]
+  }
 }

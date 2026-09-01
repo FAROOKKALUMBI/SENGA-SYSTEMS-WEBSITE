@@ -11,6 +11,7 @@ import AboutPages from './pages/AboutPages';
 import ServicesPages from './pages/ServicesPages';
 import UpdatesPages from './pages/UpdatesPages';
 import ContactPages from './pages/ContactPages';
+import SengaWayPage from './pages/SengaWayPage';
 
 // Admin CMS Pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -38,10 +39,23 @@ function PublicLayout({ children }) {
   );
 }
 
+function ScrollToTop() {
+  const { pathname, search, hash } = useLocation();
+
+  React.useEffect(() => {
+    if (!hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  }, [pathname, search, hash]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <CMSProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           {/* Public Website Routes */}
           <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
@@ -50,6 +64,7 @@ export default function App() {
           <Route path="/updates/*" element={<PublicLayout><UpdatesPages /></PublicLayout>} />
           <Route path="/contact/*" element={<PublicLayout><ContactPages /></PublicLayout>} />
           <Route path="/quote" element={<PublicLayout><ContactPages forceSubpath="quote" /></PublicLayout>} />
+          <Route path="/senga-way" element={<PublicLayout><SengaWayPage /></PublicLayout>} />
 
           {/* Admin Staff CMS Portal Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />

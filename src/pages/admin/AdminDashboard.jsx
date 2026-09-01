@@ -174,7 +174,7 @@ export default function AdminDashboard() {
           
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="text-xs uppercase tracking-wider font-black text-[#2563EB]">Control Center</span>
+              <span className="text-xs uppercase tracking-wider font-black text-[#2563EB]">{currentUser.roleCode === 'SYSTEM_ADMIN' ? 'Admin Control Center' : 'Staff Control Center'}</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight flex items-center gap-3">
@@ -244,14 +244,14 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      {/* 3. 6 STATS CARDS WITH 2PX BORDER LINES & SPARKLINE GRAPHS */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+      {/* 3. Insights-style metric cards with compact trend graphs */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
         {statsCards.map((card, idx) => {
           const Icon = card.icon;
           return (
             <div
               key={idx}
-              className="bg-white border-2 border-slate-300 hover:border-blue-500 rounded-3xl p-6 shadow-md flex flex-col justify-between space-y-4 group transition-all"
+              className="bg-white border border-slate-200 hover:border-blue-400 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-4 group transition-all"
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
@@ -259,8 +259,8 @@ export default function AdminDashboard() {
                   <span className="text-3xl font-black text-slate-900 block"><AnimatedCounter value={card.count} /></span>
                   <span className="text-xs font-bold text-slate-600 block">{card.subtitle}</span>
                 </div>
-                <div className={`w-12 h-12 rounded-2xl ${card.iconContainer} p-2.5 flex items-center justify-center shrink-0 shadow-xs`}>
-                  <Icon className="w-6 h-6" />
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1677ff] border border-blue-100 p-2 flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5" />
                 </div>
               </div>
 
@@ -273,13 +273,20 @@ export default function AdminDashboard() {
                 )}
 
                 {/* SVG Sparkline Path */}
-                <div className="w-24 h-8">
+                <div className="w-28 h-9">
                   <svg className="w-full h-full overflow-visible" viewBox="0 0 120 30">
+                    <line x1="0" x2="120" y1="10" y2="10" stroke="#e2e8f0" strokeWidth="1" />
+                    <line x1="0" x2="120" y1="22" y2="22" stroke="#e2e8f0" strokeWidth="1" />
+                    <path
+                      d={`${card.sparklinePath} L120,30 L0,30 Z`}
+                      fill="#dbeafe"
+                      opacity="0.7"
+                    />
                     <path
                       d={card.sparklinePath}
                       fill="none"
-                      stroke={card.sparklineColor}
-                      strokeWidth="3"
+                      stroke="#1677ff"
+                      strokeWidth="2.5"
                       strokeLinecap="round"
                     />
                   </svg>
@@ -287,7 +294,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* View All Link at Bottom */}
-              <div className="pt-3 border-t-2 border-slate-200 flex items-center justify-between">
+              <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-[11px] text-slate-500 font-bold">Updated real-time</span>
                 <Link
                   to={card.path}
@@ -304,8 +311,8 @@ export default function AdminDashboard() {
 
       {/* 4. PERFORMANCE ANALYTICS SUMMARY */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
-          <div className="flex items-center justify-between border-b-2 border-slate-200 pb-3">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] border-2 border-blue-200 flex items-center justify-center">
                 <BarChart3 className="w-4 h-4" />
@@ -327,8 +334,8 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-6">
-          <div className="flex items-center justify-between border-b-2 border-slate-200 pb-3">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 border-2 border-emerald-200 flex items-center justify-center">
                 <MessageSquare className="w-4 h-4" />

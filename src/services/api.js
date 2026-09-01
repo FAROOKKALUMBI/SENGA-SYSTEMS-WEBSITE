@@ -2,9 +2,11 @@ const API_BASE = '/api';
 
 export async function fetchApi(endpoint, options = {}) {
   try {
+    const token = localStorage.getItem('senga_admin_token');
     const res = await fetch(`${API_BASE}${endpoint}`, {
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...options.headers,
       },
       ...options,
@@ -23,6 +25,8 @@ export const api = {
   // Auth
   login: (email, password) => fetchApi('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   getStats: () => fetchApi('/stats'),
+  getAnalytics: () => fetchApi('/analytics'),
+  subscribeNewsletter: (email) => fetchApi('/newsletter', { method: 'POST', body: JSON.stringify({ email }) }),
 
   // Posts
   getPosts: (type) => fetchApi(`/posts${type ? `?type=${type}` : ''}`),

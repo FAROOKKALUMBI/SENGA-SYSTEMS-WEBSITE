@@ -67,6 +67,21 @@ export const SYSTEM_ROLES = [
   }
 ];
 
+export const ACCESS_POLICIES = {
+  SYSTEM_ADMIN: {
+    accessLevel: 'Full Access',
+    permissions: 'System configuration, users, content, media, security, backups, logs, and all staff functions',
+    paths: ['/admin/dashboard', '/admin/posts', '/admin/vacancies', '/admin/leads', '/admin/roles', '/admin/partners', '/admin/analytics', '/admin/settings', '/admin/users', '/admin/security', '/admin/logs']
+  },
+  STAFF: {
+    accessLevel: 'Medium Access',
+    permissions: 'Content, services, vacancies, partners, quotes, support, and analytics',
+    paths: ['/admin/dashboard', '/admin/posts', '/admin/vacancies', '/admin/leads', '/admin/partners', '/admin/analytics']
+  }
+};
+
+export const getAccessPolicy = (roleCode) => roleCode === 'SYSTEM_ADMIN' ? ACCESS_POLICIES.SYSTEM_ADMIN : ACCESS_POLICIES.STAFF;
+
 // DEFAULT SYSTEM ADMINISTRATOR: MR. FAROOK KALUMBI (COO)
 export const DEFAULT_COO_USER = {
   id: 'usr_farook_001',
@@ -83,7 +98,7 @@ export const DEFAULT_COO_USER = {
 export function CMSProvider({ children }) {
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('senga_admin_user');
-    return saved ? JSON.parse(saved) : DEFAULT_COO_USER;
+    return saved ? JSON.parse(saved) : null;
   });
   
   const [posts, setPosts] = useState([]);
@@ -159,9 +174,15 @@ export function CMSProvider({ children }) {
     try {
       const res = await api.login(email, password);
       if (res.success) {
-        setUser(res.user);
-        localStorage.setItem('senga_admin_user', JSON.stringify(res.user));
-        return { success: true, user: res.user };
+        const authenticatedUser = {
+          ...res.user,
+          accessLevel: getAccessPolicy(res.user.roleCode).accessLevel,
+          accessPermissions: getAccessPolicy(res.user.roleCode).permissions
+        };
+        setUser(authenticatedUser);
+        localStorage.setItem('senga_admin_user', JSON.stringify(authenticatedUser));
+        localStorage.setItem('senga_admin_token', res.token);
+        return { success: true, user: authenticatedUser };
       }
     } catch (err) {
       // Fallback user matching entered email
@@ -172,16 +193,25 @@ export function CMSProvider({ children }) {
       } else if (lowerEmail.includes('hr')) {
         fallback = { id: 'usr_003', name: 'Chisomo Banda', email: lowerEmail, title: 'HR Manager', role: 'HR Manager', roleCode: 'HR_MANAGER', avatar: null };
       }
-      setUser(fallback);
-      localStorage.setItem('senga_admin_user', JSON.stringify(fallback));
-      return { success: true, user: fallback };
+      const fallbackUser = {
+        ...fallback,
+        accessLevel: getAccessPolicy(fallback.roleCode).accessLevel,
+        accessPermissions: getAccessPolicy(fallback.roleCode).permissions
+      };
+      setUser(fallbackUser);
+      localStorage.setItem('senga_admin_user', JSON.stringify(fallbackUser));
+      localStorage.removeItem('senga_admin_token');
+      return { success: true, user: fallbackUser };
     }
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('senga_admin_user');
+    localStorage.removeItem('senga_admin_token');
   };
+
+  const isSystemAdmin = () => user?.roleCode === 'SYSTEM_ADMIN';
 
   // Posts CRUD
   const addPost = async (postData) => {
@@ -225,6 +255,7 @@ export function CMSProvider({ children }) {
   };
 
   const deletePost = async (id) => {
+    if (!isSystemAdmin()) return false;
     try {
       await api.deletePost(id);
     } catch (err) {
@@ -274,6 +305,7 @@ export function CMSProvider({ children }) {
   };
 
   const deleteVacancy = async (id) => {
+    if (!isSystemAdmin()) return false;
     try {
       await api.deleteVacancy(id);
     } catch (err) {
@@ -312,6 +344,7 @@ export function CMSProvider({ children }) {
   };
 
   const deleteQuote = async (id) => {
+    if (!isSystemAdmin()) return false;
     try {
       await api.deleteQuote(id);
     } catch (err) {
@@ -361,6 +394,7 @@ export function CMSProvider({ children }) {
 
   // Payment Gateway
   const submitPayment = async (paymentData) => {
+    if (!isSystemAdmin()) return false;
     try {
       const res = await api.submitPayment(paymentData);
       if (res.success) {
@@ -382,6 +416,7 @@ export function CMSProvider({ children }) {
 
   // Users & Roles CRUD
   const addUser = async (userData) => {
+    if (!isSystemAdmin()) return false;
     const payload = {
       ...userData,
       createdBy: user?.id || DEFAULT_COO_USER.id
@@ -406,6 +441,7 @@ export function CMSProvider({ children }) {
   };
 
   const updateUser = async (id, userData) => {
+    if (!isSystemAdmin()) return false;
     try {
       const res = await api.updateUser(id, userData);
       if (res.success) {
@@ -419,6 +455,7 @@ export function CMSProvider({ children }) {
   };
 
   const updateUserRole = async (id, roleCode) => {
+    if (!isSystemAdmin()) return false;
     const roleObj = SYSTEM_ROLES.find(r => r.id === roleCode) || SYSTEM_ROLES[0];
     try {
       await api.updateUserRole(id, roleCode);
@@ -429,6 +466,7 @@ export function CMSProvider({ children }) {
   };
 
   const deleteUser = async (id) => {
+    if (!isSystemAdmin()) return false;
     try {
       await api.deleteUser(id);
     } catch (err) {
@@ -457,6 +495,7 @@ export function CMSProvider({ children }) {
   };
 
   const deletePartner = async (id) => {
+    if (!isSystemAdmin()) return false;
     try {
       await api.deletePartner(id);
     } catch (err) {
@@ -467,6 +506,7 @@ export function CMSProvider({ children }) {
 
   // Settings
   const updateSettings = async (newSettings) => {
+    if (!isSystemAdmin()) return false;
     try {
       const res = await api.updateSettings(newSettings);
       if (res.success) {

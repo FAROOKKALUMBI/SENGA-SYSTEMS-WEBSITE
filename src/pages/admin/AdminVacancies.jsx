@@ -3,7 +3,8 @@ import { Plus, Trash2, Briefcase, MapPin, Clock, CheckCircle } from 'lucide-reac
 import { useCMS } from '../../context/CMSContext';
 
 export default function AdminVacancies() {
-  const { vacancies, addVacancy, deleteVacancy } = useCMS();
+  const { vacancies, addVacancy, deleteVacancy, user } = useCMS();
+  const canDelete = user?.roleCode === 'SYSTEM_ADMIN';
   const [showCreate, setShowCreate] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -176,13 +177,13 @@ export default function AdminVacancies() {
 
               <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-emerald-700">Status: {job.status || 'ACTIVE'}</span>
-                <button
+                {canDelete && <button
                   onClick={() => deleteVacancy(job.id)}
                   className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
                   title="Remove Vacancy"
                 >
                   <Trash2 className="w-4 h-4" />
-                </button>
+                </button>}
               </div>
             </div>
           ))}

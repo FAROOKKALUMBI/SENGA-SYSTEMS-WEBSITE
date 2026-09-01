@@ -211,7 +211,17 @@ const initialData = {
     theme: 'light',
     allowQuotes: true,
     notificationsEnabled: true
-  }
+  },
+  analytics: {
+    periodLabel: 'Last 28 days: Aug 4 – Aug 31',
+    monthlyPageViews: 48290,
+    uniqueVisitors: 12450,
+    quoteConversion: 8.4,
+    averageSessionSeconds: 252,
+    changes: { pageViews: '14.2% this month', visitors: '9.8% this month', conversion: '3.1% higher', session: '18s longer' },
+    trends: [1, -1, -1, 0, 0, -2, 0, -1, -1, 0, 1, 0, -1, 0, 0, 0, 2, 2, -1, -1, 2, -1, 0, -1, 1]
+  },
+  newsletterSubscribers: []
 };
 
 // If data file doesn't exist, create it with initialData
@@ -231,6 +241,8 @@ export function readDB() {
     if (!parsed.contacts) parsed.contacts = [];
     if (!parsed.payments) parsed.payments = [];
     if (!parsed.settings) parsed.settings = initialData.settings;
+    if (!parsed.analytics) parsed.analytics = initialData.analytics;
+    if (!parsed.newsletterSubscribers) parsed.newsletterSubscribers = [];
     return parsed;
   } catch (err) {
     console.error('Error reading DB, using initial data:', err);

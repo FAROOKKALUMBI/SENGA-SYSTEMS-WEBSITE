@@ -27,7 +27,7 @@ import {
   Home,
   LayoutGrid
 } from 'lucide-react';
-import { useCMS } from '../../context/CMSContext';
+import { getAccessPolicy, useCMS } from '../../context/CMSContext';
 
 export default function AdminLayout() {
   const { user, logout, activities } = useCMS();
@@ -40,29 +40,23 @@ export default function AdminLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [contentSubmenuOpen, setContentSubmenuOpen] = useState(true);
 
-  const currentUser = user || {
-    name: 'Mr. Farook Kalumbi',
-    title: 'Chief Operating Officer',
-    role: 'System Administrator',
-    avatar: '/farook_avatar.jpg'
-  };
+  const currentUser = user;
 
-  const roleCode = currentUser.roleCode || 'SYSTEM_ADMIN';
+  const roleCode = currentUser?.roleCode || 'STAFF';
+  const accessPolicy = getAccessPolicy(roleCode);
+  const allowedPaths = accessPolicy.paths;
 
-  const roleAllowedPaths = {
-    SYSTEM_ADMIN: ['/admin/dashboard', '/admin/posts', '/admin/vacancies', '/admin/leads', '/admin/roles', '/admin/partners', '/admin/analytics', '/admin/settings'],
-    CONTENT_ADMIN: ['/admin/dashboard', '/admin/posts', '/admin/analytics'],
-    CONTENT_AUTHOR: ['/admin/dashboard', '/admin/posts'],
-    SERVICE_MANAGER: ['/admin/dashboard', '/admin/posts'],
-    HR_MANAGER: ['/admin/dashboard', '/admin/vacancies'],
-    CLIENT_SUPPORT: ['/admin/dashboard', '/admin/leads'],
-    SALES_MANAGER: ['/admin/dashboard', '/admin/leads'],
-    SECURITY_AUDITOR: ['/admin/dashboard', '/admin/roles', '/admin/settings'],
-    PARTNER_MANAGER: ['/admin/dashboard', '/admin/partners'],
-    ANALYTICS_VIEWER: ['/admin/dashboard', '/admin/analytics']
-  };
+  React.useEffect(() => {
+    if (!user) {
+      navigate('/admin/login', { replace: true });
+      return;
+    }
+    if (!allowedPaths.some(path => location.pathname === path || location.pathname.startsWith(`${path}/`))) {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [allowedPaths, location.pathname, navigate, user]);
 
-  const allowedPaths = roleAllowedPaths[roleCode] || roleAllowedPaths.SYSTEM_ADMIN;
+  if (!user) return null;
 
   const handleSignOut = () => {
     logout();
@@ -134,7 +128,7 @@ export default function AdminLayout() {
             />
             <div className="hidden sm:block leading-tight">
               <span className="font-extrabold text-base text-white tracking-wide block">SENGA SYSTEMS</span>
-              <span className="text-[10px] font-bold tracking-wider text-blue-300 block">Building Intelligent Digital Solutions</span>
+              <span className="text-[10px] font-bold tracking-wider text-blue-300 block">{roleCode === 'SYSTEM_ADMIN' ? 'Admin Panel • Full Access' : 'Staff Panel • Medium Access'}</span>
             </div>
           </Link>
         </div>
@@ -201,7 +195,7 @@ export default function AdminLayout() {
               />
               <div className="hidden md:block text-left leading-tight">
                 <span className="font-extrabold text-xs text-white block">{currentUser.name}</span>
-                <span className="text-[10px] text-blue-300 font-semibold block">{currentUser.title || 'Chief Operating Officer'}</span>
+                <span className="text-[10px] text-blue-300 font-semibold block">{accessPolicy.accessLevel}</span>
               </div>
               <ChevronDown className="w-4 h-4 text-blue-200 hidden md:block" />
             </button>
@@ -213,7 +207,7 @@ export default function AdminLayout() {
                   <p className="font-bold text-slate-900 text-sm">{currentUser.name}</p>
                   <p className="text-[11px] text-slate-500">{currentUser.email}</p>
                   <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px]">
-                    {currentUser.role || 'System Administrator'}
+                    {accessPolicy.accessLevel}
                   </span>
                 </div>
                 <Link to="/admin/settings" onClick={() => setProfileDropdownOpen(false)} className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 font-semibold">
@@ -271,7 +265,7 @@ export default function AdminLayout() {
             </div>
 
             {/* Navigation Links with #828080 Inactive Icon Colors */}
-            <nav className="space-y-1">
+            <nav className="admin-sidebar-nav space-y-1">
               
               {/* 1. Dashboard */}
               {allowedPaths.includes('/admin/dashboard') && (
