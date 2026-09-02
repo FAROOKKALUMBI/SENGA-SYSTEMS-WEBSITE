@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Shield, 
@@ -22,6 +22,8 @@ import { useCMS } from '../context/CMSContext';
 export default function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState(null);
+  const mobileMenuRef = useRef(null);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const { openQuoteModal } = useCMS();
@@ -33,6 +35,34 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  React.useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
+  React.useEffect(() => {
+    if (!mobileMenuOpen || !mobileMenuRef.current) return;
+    const menu = mobileMenuRef.current;
+    const focusable = () => [...menu.querySelectorAll('a, button:not([disabled])')];
+    focusable()[0]?.focus();
+    const trapFocus = (event) => {
+      if (event.key === 'Escape') { closeMenu(); return; }
+      if (event.key !== 'Tab') return;
+      const items = focusable(); const first = items[0]; const last = items.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    menu.addEventListener('keydown', trapFocus);
+    return () => menu.removeEventListener('keydown', trapFocus);
+  }, [mobileMenuOpen]);
+
+  const mobileGroups = {
+    About: [['About Senga Systems', '/about'], ['Company Profile', '/about/profile'], ['Company History', '/about/history'], ['Executive Leadership', '/about/leadership'], ['FAQs', '/about/faqs']],
+    Services: [['AI & Automation', '/services#ai-automation'], ['Software Engineering', '/services#software-engineering'], ['Data & Analytics', '/services#data-analytics'], ['Security & Compliance', '/services#security-compliance'], ['ICT & Infrastructure', '/services#ict-infrastructure'], ['Design & Transformation', '/services#design-transformation']],
+    Updates: [['News', '/updates/news'], ['Events', '/updates/events'], ['Vacancies', '/updates/vacancies']],
+  };
+  const closeMenu = () => { setMobileMenuOpen(false); setMobileExpanded(null); };
+
   const handleMouseEnter = (name) => setActiveDropdown(name);
   const handleMouseLeave = () => setActiveDropdown(null);
   const isSectionActive = (section) => location.pathname === section || location.pathname.startsWith(`${section}/`);
@@ -42,7 +72,7 @@ export default function Navbar() {
     <header className={`sticky top-0 z-50 w-full font-['Plus_Jakarta_Sans',sans-serif] navbar-shell ${isScrolled ? 'is-scrolled' : ''}`}>
       
       {/* 1. TOP BAR (Exact Figma Color: #23275c Deep Purple-Navy with Top Blue Accent) */}
-      <div className="bg-[#23275c] border-t-2 border-[#2b66bf] text-white text-xs py-2.5 px-4 md:px-12">
+      <div className="hidden md:block bg-[#23275c] border-t-2 border-[#2b66bf] text-white text-xs py-2.5 px-4 md:px-12">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           
           {/* Left Contact Info */}
@@ -225,10 +255,13 @@ export default function Navbar() {
             </Link>
           </div>
 
+          <Link to="/quote" className="lg:hidden ml-auto mr-2 px-3 py-2.5 rounded-xl bg-[#2b66bf] text-white font-extrabold text-xs">Quote</Link>
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg bg-slate-100 text-slate-800"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+            className="lg:hidden min-w-11 min-h-11 p-2 rounded-lg bg-slate-100 text-slate-800"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -237,23 +270,32 @@ export default function Navbar() {
 
       {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-4 text-slate-900">
+        <div ref={mobileMenuRef} role="dialog" aria-modal="true" aria-label="Mobile navigation" className="lg:hidden fixed inset-x-0 top-0 bottom-0 z-[60] bg-white px-6 pt-24 pb-6 overflow-y-auto text-slate-900">
+          <button onClick={closeMenu} aria-label="Close navigation menu" className="absolute top-5 right-5 min-w-11 min-h-11 rounded-lg bg-slate-100"><X className="w-6 h-6 mx-auto" /></button>
           <div className="space-y-2">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${location.pathname === '/' ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Home</Link>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/about') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>About</Link>
-            <Link to="/services" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/services') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Services</Link>
-            <Link to="/updates" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/updates') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Updates</Link>
-            <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className={`block rounded-lg px-3 py-2 font-bold ${isSectionActive('/contact') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Contact</Link>
-            <Link to="/admin/login" onClick={() => setMobileMenuOpen(false)} className="block py-2 font-bold text-blue-600">Staff Portal Login</Link>
+            <Link to="/" onClick={closeMenu} className={`block rounded-lg px-3 py-3 font-bold ${location.pathname === '/' ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Home</Link>
+            {Object.entries(mobileGroups).map(([label, links]) => <div key={label} className="border-b border-slate-100">
+              <button type="button" onClick={() => setMobileExpanded(mobileExpanded === label ? null : label)} aria-expanded={mobileExpanded === label} className="w-full min-h-11 flex items-center justify-between px-3 py-3 font-bold text-left">
+                {label}<ChevronDown className={`w-5 h-5 transition-transform ${mobileExpanded === label ? 'rotate-180' : ''}`} />
+              </button>
+              {mobileExpanded === label && <div className="pb-2 pl-4 space-y-1">{links.map(([title, path]) => <Link key={path} to={path} onClick={closeMenu} className="block rounded-lg px-3 py-2.5 text-sm text-slate-700 hover:bg-blue-50">{title}</Link>)}</div>}
+            </div>)}
+            <Link to="/contact" onClick={closeMenu} className={`block rounded-lg px-3 py-3 font-bold ${isSectionActive('/contact') ? 'bg-[#f1f5f9] text-[#1E2364]' : 'hover:text-blue-600'}`}>Contact</Link>
+            <Link to="/senga-way" onClick={closeMenu} className="block px-3 py-3 font-bold text-[#1E2364]">The Senga Way</Link>
+            <Link to="/admin/login" onClick={closeMenu} className="block px-3 py-3 font-bold text-blue-600">Staff Portal Login</Link>
           </div>
           <Link
             to="/quote"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={closeMenu}
             className="w-full py-3 rounded-xl bg-[#2b66bf] text-white font-bold text-center flex items-center justify-center gap-2"
           >
             <Mail className="w-4 h-4" />
             <span>Get a Quote</span>
           </Link>
+          <div className="mt-8 pt-5 border-t border-slate-200 text-sm text-slate-600 space-y-2">
+            <a className="block" href="tel:+2650884288849">+265 (0) 884 288 849</a>
+            <a className="block break-all" href="mailto:info@senga.systems">info@senga.systems</a>
+          </div>
         </div>
       )}
 

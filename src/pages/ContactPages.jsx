@@ -21,6 +21,7 @@ import {
   Lock
 } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
+import { FieldError, useFormValidation } from '../hooks/useFormValidation.jsx';
 
 export default function ContactPages({ forceSubpath }) {
   const location = useLocation();
@@ -74,36 +75,40 @@ export default function ContactPages({ forceSubpath }) {
     timeSlot: '10:00 AM',
     notes: ''
   });
+  const contactValidation = useFormValidation({ fullName: { type: 'name', required: true }, email: { type: 'email', required: true }, phone: { type: 'phone' }, subject: { type: 'required', required: true }, message: { type: 'message', required: true } });
+  const quoteValidation = useFormValidation({ firstName: { type: 'name', required: true }, surname: { type: 'name', required: true }, email: { type: 'email', required: true }, inquiryType: { type: 'required', required: true }, projectDescription: { type: 'message', required: true } });
+  const paymentValidation = useFormValidation({ customerName: { type: 'name', required: true }, email: { type: 'email', required: true }, phone: { type: 'phone', required: true }, invoiceNo: { type: 'required', required: true }, description: { type: 'message', required: true }, amount: { type: 'amount', required: true } });
+  const consultValidation = useFormValidation({ clientName: { type: 'name', required: true }, email: { type: 'email', required: true }, phone: { type: 'phone' }, consultantNeeded: { type: 'required', required: true }, preferredDate: { type: 'required', required: true }, timeSlot: { type: 'required', required: true }, notes: { type: 'message' } });
+  const trimmed = (values) => Object.fromEntries(Object.entries(values).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value]));
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
-    await submitContact(contactData);
+    const values = trimmed(contactData); if (!contactValidation.validateAll(values)) return;
+    await submitContact(values);
     setContactSubmitted(true);
   };
 
   const handlePaymentSubmit = async (e) => {
     e.preventDefault();
-    await submitPayment({ ...paymentData, currency });
+    const values = trimmed(paymentData); if (!paymentValidation.validateAll(values)) return;
+    await submitPayment({ ...values, currency });
     setPaymentDone(true);
   };
 
   const handleQuoteSubmit = async (e) => {
     e.preventDefault();
+    const values = trimmed(quoteData); if (!quoteValidation.validateAll(values)) return;
     await submitQuote({
-      clientName: `${quoteData.firstName} ${quoteData.surname}`,
-      email: quoteData.email,
-      company: quoteData.companyName,
-      jobTitle: quoteData.jobTitle,
-      serviceRequested: quoteData.inquiryType || 'General Project Inquiry',
-      details: quoteData.projectDescription,
-      attachedFile: quoteData.fileName
+      clientName: `${values.firstName} ${values.surname}`, email: values.email, company: values.companyName,
+      jobTitle: values.jobTitle, serviceRequested: values.inquiryType || 'General Project Inquiry', details: values.projectDescription, attachedFile: values.fileName
     });
     setQuoteSubmitted(true);
   };
 
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
-    await submitConsultation(consultData);
+    const values = trimmed(consultData); if (!consultValidation.validateAll(values)) return;
+    await submitConsultation(values);
     setConsultSubmitted(true);
   };
 
@@ -163,7 +168,7 @@ export default function ContactPages({ forceSubpath }) {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleQuoteSubmit} className="space-y-6">
+                <form noValidate onSubmit={handleQuoteSubmit} className="space-y-6">
                   
                   {/* Row 1: First Name & Surname */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -177,8 +182,10 @@ export default function ContactPages({ forceSubpath }) {
                         placeholder="Enter your first name"
                         value={quoteData.firstName}
                         onChange={(e) => setQuoteData({ ...quoteData, firstName: e.target.value })}
+                        {...quoteValidation.fieldProps('firstName', quoteData.firstName)}
                         className="w-full px-4 py-3.5 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] text-sm transition-all shadow-xs"
                       />
+                      <FieldError name="firstName" error={quoteValidation.errors.firstName} />
                     </div>
 
                     <div>
@@ -191,8 +198,10 @@ export default function ContactPages({ forceSubpath }) {
                         placeholder="Enter your surname"
                         value={quoteData.surname}
                         onChange={(e) => setQuoteData({ ...quoteData, surname: e.target.value })}
+                        {...quoteValidation.fieldProps('surname', quoteData.surname)}
                         className="w-full px-4 py-3.5 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] text-sm transition-all shadow-xs"
                       />
+                      <FieldError name="surname" error={quoteValidation.errors.surname} />
                     </div>
                   </div>
 
@@ -208,8 +217,10 @@ export default function ContactPages({ forceSubpath }) {
                         placeholder="Enter your email address"
                         value={quoteData.email}
                         onChange={(e) => setQuoteData({ ...quoteData, email: e.target.value })}
+                        {...quoteValidation.fieldProps('email', quoteData.email)}
                         className="w-full px-4 py-3.5 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] text-sm transition-all shadow-xs"
                       />
+                      <FieldError name="email" error={quoteValidation.errors.email} />
                     </div>
 
                     <div>
@@ -249,6 +260,7 @@ export default function ContactPages({ forceSubpath }) {
                         required
                         value={quoteData.inquiryType}
                         onChange={(e) => setQuoteData({ ...quoteData, inquiryType: e.target.value })}
+                        {...quoteValidation.fieldProps('inquiryType', quoteData.inquiryType)}
                         className="w-full px-4 py-3.5 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 focus:outline-none focus:border-[#2563EB] text-sm transition-all shadow-xs cursor-pointer"
                       >
                         <option value="">Select an inquiry type</option>
@@ -261,6 +273,7 @@ export default function ContactPages({ forceSubpath }) {
                         <option value="Technical Support Services">Technical Support Services</option>
                         <option value="General Project Inquiry">General Project Inquiry</option>
                       </select>
+                      <FieldError name="inquiryType" error={quoteValidation.errors.inquiryType} />
                     </div>
                   </div>
 
@@ -275,8 +288,11 @@ export default function ContactPages({ forceSubpath }) {
                       placeholder="Briefly describe your objectives, timelines or technical requirements..."
                       value={quoteData.projectDescription}
                       onChange={(e) => setQuoteData({ ...quoteData, projectDescription: e.target.value })}
+                      maxLength="2000"
+                      {...quoteValidation.fieldProps('projectDescription', quoteData.projectDescription)}
                       className="w-full px-4 py-3.5 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] text-sm resize-none transition-all shadow-xs"
                     ></textarea>
+                    <div className="flex justify-between"><FieldError name="projectDescription" error={quoteValidation.errors.projectDescription} /><span className="mt-1 text-xs text-slate-500">{quoteData.projectDescription.length}/2000</span></div>
                   </div>
 
                   {/* Row 5: Attach Supporting Document */}
@@ -425,7 +441,7 @@ export default function ContactPages({ forceSubpath }) {
                       </button>
                     </div>
                   ) : (
-                    <form onSubmit={handleContactSubmit} className="space-y-4">
+                    <form noValidate onSubmit={handleContactSubmit} className="space-y-4">
                       <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">Send us a Message</h3>
 
                       {/* Row 1: Full Name & Email Address */}
@@ -440,8 +456,10 @@ export default function ContactPages({ forceSubpath }) {
                             placeholder="Enter your full name"
                             value={contactData.fullName}
                             onChange={(e) => setContactData({ ...contactData, fullName: e.target.value })}
+                            {...contactValidation.fieldProps('fullName', contactData.fullName)}
                             className="w-full px-4 py-3 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
                           />
+                          <FieldError name="fullName" error={contactValidation.errors.fullName} />
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
@@ -453,8 +471,10 @@ export default function ContactPages({ forceSubpath }) {
                             placeholder="Enter your email address"
                             value={contactData.email}
                             onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
+                            {...contactValidation.fieldProps('email', contactData.email)}
                             className="w-full px-4 py-3 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
                           />
+                          <FieldError name="email" error={contactValidation.errors.email} />
                         </div>
                       </div>
 
@@ -469,8 +489,10 @@ export default function ContactPages({ forceSubpath }) {
                             placeholder="Enter your phone number"
                             value={contactData.phone}
                             onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
+                            {...contactValidation.fieldProps('phone', contactData.phone)}
                             className="w-full px-4 py-3 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs"
                           />
+                          <FieldError name="phone" error={contactValidation.errors.phone} />
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
@@ -495,6 +517,7 @@ export default function ContactPages({ forceSubpath }) {
                           required
                           value={contactData.subject}
                           onChange={(e) => setContactData({ ...contactData, subject: e.target.value })}
+                          {...contactValidation.fieldProps('subject', contactData.subject)}
                           className="w-full px-4 py-3 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 text-sm focus:outline-none focus:border-[#2563EB] shadow-xs cursor-pointer"
                         >
                           <option value="">Select a subject</option>
@@ -504,6 +527,7 @@ export default function ContactPages({ forceSubpath }) {
                           <option value="Partnership">Partnership</option>
                           <option value="Other">Other</option>
                         </select>
+                        <FieldError name="subject" error={contactValidation.errors.subject} />
                       </div>
 
                       {/* Row 4: Message Textarea */}
@@ -517,8 +541,11 @@ export default function ContactPages({ forceSubpath }) {
                           placeholder="Enter your message here"
                           value={contactData.message}
                           onChange={(e) => setContactData({ ...contactData, message: e.target.value })}
+                          maxLength="2000"
+                          {...contactValidation.fieldProps('message', contactData.message)}
                           className="w-full px-4 py-3 rounded-xl bg-[#FFFFFF] border border-slate-300 text-slate-900 placeholder-slate-400 text-sm resize-none focus:outline-none focus:border-[#2563EB] shadow-xs"
                         ></textarea>
+                        <div className="flex justify-between"><FieldError name="message" error={contactValidation.errors.message} /><span className="mt-1 text-xs text-slate-500">{contactData.message.length}/2000</span></div>
                       </div>
 
                       {/* Submit Button */}
@@ -567,7 +594,7 @@ export default function ContactPages({ forceSubpath }) {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handlePaymentSubmit} className="space-y-5">
+                  <form noValidate onSubmit={handlePaymentSubmit} className="space-y-5">
                     
                     {/* Select Currency */}
                     <div>
@@ -743,7 +770,7 @@ export default function ContactPages({ forceSubpath }) {
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleConsultSubmit} className="space-y-4">
+                  <form noValidate onSubmit={handleConsultSubmit} className="space-y-4">
                     <div>
                       <label className="block text-xs font-bold text-slate-800 uppercase mb-1">Your Name *</label>
                       <input
@@ -752,8 +779,10 @@ export default function ContactPages({ forceSubpath }) {
                         placeholder="Enter your full name"
                         value={consultData.clientName}
                         onChange={(e) => setConsultData({ ...consultData, clientName: e.target.value })}
+                        {...consultValidation.fieldProps('clientName', consultData.clientName)}
                         className="w-full px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 text-sm"
                       />
+                      <FieldError name="clientName" error={consultValidation.errors.clientName} />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-slate-800 uppercase mb-1">Email Address *</label>
@@ -763,8 +792,10 @@ export default function ContactPages({ forceSubpath }) {
                         placeholder="Enter your email address"
                         value={consultData.email}
                         onChange={(e) => setConsultData({ ...consultData, email: e.target.value })}
+                        {...consultValidation.fieldProps('email', consultData.email)}
                         className="w-full px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 text-sm"
                       />
+                      <FieldError name="email" error={consultValidation.errors.email} />
                     </div>
                     <button type="submit" className="w-full py-3.5 rounded-xl bg-[#2563EB] text-white font-bold text-sm shadow-md">
                       Confirm Consultation Booking

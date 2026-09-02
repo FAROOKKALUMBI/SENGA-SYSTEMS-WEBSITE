@@ -28,17 +28,20 @@ import {
 import { useCMS } from '../context/CMSContext';
 import { api } from '../services/api';
 import Reveal from '../components/Reveal';
+import { FieldError, useFormValidation } from '../hooks/useFormValidation.jsx';
 
 export default function HomePage() {
   const { openQuoteModal, posts, vacancies } = useCMS();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+  const newsletterValidation = useFormValidation({ email: { type: 'email', required: true } });
 
   const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    if (newsletterEmail) {
+    const email = newsletterEmail.trim();
+    if (newsletterValidation.validateAll({ email })) {
       try {
-        await api.subscribeNewsletter(newsletterEmail);
+        await api.subscribeNewsletter(email);
         setNewsletterSubscribed(true);
         setNewsletterEmail('');
       } catch (error) {
@@ -412,13 +415,16 @@ export default function HomePage() {
               🎉 Thank you for subscribing!
             </div>
           ) : (
-            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-lg mx-auto">
+            <>
+            <form noValidate onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 max-w-lg mx-auto">
               <input
                 type="email"
                 required
                 placeholder="Enter your email address"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
+                {...newsletterValidation.fieldProps('email', newsletterEmail)}
+                aria-label="Email address"
                 className="flex-1 w-full px-5 py-3.5 rounded-xl bg-[#2858a3] text-white placeholder-blue-200/80 text-sm focus:outline-none border border-blue-400/40 shadow-inner"
               />
               <button
@@ -429,6 +435,8 @@ export default function HomePage() {
                 <Send className="w-4 h-4 text-slate-900 stroke-[2.5]" />
               </button>
             </form>
+            <FieldError name="email" error={newsletterValidation.errors.email} />
+            </>
           )}
 
           <p className="text-xs sm:text-sm text-slate-300 font-medium pt-1">

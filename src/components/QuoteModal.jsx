@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Shield, Send, CheckCircle2, Paperclip, UploadCloud } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
+import { FieldError, useFormValidation } from '../hooks/useFormValidation.jsx';
 
 export default function QuoteModal() {
   const { isQuoteOpen, setIsQuoteOpen, quoteServicePrefill, submitQuote } = useCMS();
@@ -18,6 +19,11 @@ export default function QuoteModal() {
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const validation = useFormValidation({
+    firstName: { type: 'name', required: true }, surname: { type: 'name', required: true },
+    email: { type: 'email', required: true }, inquiryType: { type: 'required', required: true },
+    projectDescription: { type: 'message', required: true },
+  });
 
   useEffect(() => {
     if (quoteServicePrefill) {
@@ -29,15 +35,13 @@ export default function QuoteModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const cleaned = Object.fromEntries(Object.entries(formData).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value]));
+    if (!validation.validateAll(cleaned)) return;
     setLoading(true);
     await submitQuote({
-      clientName: `${formData.firstName} ${formData.surname}`,
-      email: formData.email,
-      company: formData.companyName,
-      jobTitle: formData.jobTitle,
-      serviceRequested: formData.inquiryType || 'General Project Inquiry',
-      details: formData.projectDescription,
-      attachedFile: formData.fileName
+      clientName: `${cleaned.firstName} ${cleaned.surname}`, email: cleaned.email, company: cleaned.companyName,
+      jobTitle: cleaned.jobTitle, serviceRequested: cleaned.inquiryType || 'General Project Inquiry',
+      details: cleaned.projectDescription, attachedFile: cleaned.fileName
     });
     setLoading(false);
     setSubmitted(true);
@@ -95,7 +99,7 @@ export default function QuoteModal() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form noValidate onSubmit={handleSubmit} className="space-y-4">
               
               {/* Row 1: First Name & Surname */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -109,8 +113,10 @@ export default function QuoteModal() {
                     placeholder="Enter your first name"
                     value={formData.firstName}
                     onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                    {...validation.fieldProps('firstName', formData.firstName)}
                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all"
                   />
+                  <FieldError name="firstName" error={validation.errors.firstName} />
                 </div>
 
                 <div>
@@ -123,8 +129,10 @@ export default function QuoteModal() {
                     placeholder="Enter your surname"
                     value={formData.surname}
                     onChange={(e) => setFormData({ ...formData, surname: e.target.value })}
+                    {...validation.fieldProps('surname', formData.surname)}
                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all"
                   />
+                  <FieldError name="surname" error={validation.errors.surname} />
                 </div>
               </div>
 
@@ -140,8 +148,10 @@ export default function QuoteModal() {
                     placeholder="Enter your email address"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    {...validation.fieldProps('email', formData.email)}
                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all"
                   />
+                  <FieldError name="email" error={validation.errors.email} />
                 </div>
 
                 <div>
@@ -181,6 +191,7 @@ export default function QuoteModal() {
                     required
                     value={formData.inquiryType}
                     onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
+                    {...validation.fieldProps('inquiryType', formData.inquiryType)}
                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm transition-all"
                   >
                     <option value="">Select an inquiry type</option>
@@ -193,6 +204,7 @@ export default function QuoteModal() {
                     <option value="Technical Support Services">Technical Support Services</option>
                     <option value="General Project Inquiry">General Project Inquiry</option>
                   </select>
+                  <FieldError name="inquiryType" error={validation.errors.inquiryType} />
                 </div>
               </div>
 
@@ -207,8 +219,11 @@ export default function QuoteModal() {
                   placeholder="Briefly describe your objectives, timelines or technical requirements..."
                   value={formData.projectDescription}
                   onChange={(e) => setFormData({ ...formData, projectDescription: e.target.value })}
+                  maxLength="2000"
+                  {...validation.fieldProps('projectDescription', formData.projectDescription)}
                   className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2563EB] focus:bg-white text-sm resize-none transition-all"
                 ></textarea>
+                <div className="flex justify-between"><FieldError name="projectDescription" error={validation.errors.projectDescription} /><span className="text-xs text-slate-500 mt-1">{formData.projectDescription.length}/2000</span></div>
               </div>
 
               {/* Row 5: Supporting Document Upload Icon */}

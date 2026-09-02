@@ -4,6 +4,7 @@ import { Shield, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { FieldError, useFormValidation } from '../../hooks/useFormValidation.jsx';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('farook@sengasystems.com');
@@ -11,16 +12,23 @@ export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const validation = useFormValidation({ email: { type: 'email', required: true }, password: { type: 'password', required: true } });
   const { login } = useCMS();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    const values = { email: email.trim(), password: password.trim() };
+    if (!validation.validateAll(values)) return;
+    setLoginError('');
     setLoading(true);
-    const res = await login(email, password);
+    const res = await login(values.email, values.password);
     setLoading(false);
     if (res.success) {
       navigate('/admin/dashboard');
+    } else {
+      setLoginError(res.error || 'Invalid email or password.');
     }
   };
 
@@ -56,7 +64,8 @@ export default function AdminLogin() {
 
           {/* Card Body Form */}
           <div className="p-8 sm:p-10 space-y-6">
-            <form onSubmit={handleLogin} className="space-y-5">
+            <form noValidate onSubmit={handleLogin} className="space-y-5">
+              {loginError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{loginError}</p>}
               
               {/* Email Address */}
               <div>
@@ -69,8 +78,10 @@ export default function AdminLogin() {
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  {...validation.fieldProps('email', email)}
                   className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] focus:bg-white transition-all shadow-xs"
                 />
+                <FieldError name="email" error={validation.errors.email} />
               </div>
 
               {/* Password with Eye toggle */}
@@ -85,6 +96,7 @@ export default function AdminLogin() {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    {...validation.fieldProps('password', password)}
                     className="w-full pl-4 pr-11 py-3.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-[#2563EB] focus:bg-white transition-all shadow-xs"
                   />
                   <button
@@ -96,6 +108,7 @@ export default function AdminLogin() {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+                <FieldError name="password" error={validation.errors.password} />
               </div>
 
               {/* Remember Me Checkbox */}
