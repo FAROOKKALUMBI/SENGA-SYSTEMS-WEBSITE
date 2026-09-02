@@ -1,5 +1,6 @@
 import express from 'express';
 import { readDB, writeDB } from '../db.js';
+import { allowLoginAttempt, clean, createSession, isEmail, isMessage, isName, isPhone, requireAuth, requireRoles, verifyPassword } from '../security.js';
 
 const router = express.Router();
 
@@ -7,48 +8,27 @@ const getAccessPolicy = (roleCode) => roleCode === 'SYSTEM_ADMIN'
   ? { accessLevel: 'Full Access', permissions: 'Everything' }
   : { accessLevel: 'Medium Access', permissions: 'Content, Services, Vacancies, Partners, Quotes, Support, Analytics' };
 
-// Administrative operations are protected on the API as well as in portal
-// navigation. Sessions are kept in memory for this demo; production should use
-// signed, expiring JWTs or server-side persistent sessions.
-const sessions = new Map();
-const requireSystemAdmin = (req, res, next) => {
-  const token = req.get('Authorization')?.replace(/^Bearer\s+/i, '');
-  const session = token && sessions.get(token);
-  if (session?.roleCode !== 'SYSTEM_ADMIN') {
-    return res.status(403).json({ error: 'System Administrator access is required for this operation.' });
-  }
-  next();
-};
+const requireSystemAdmin = requireRoles('SYSTEM_ADMIN');
+const requireStaff = requireAuth;
 
 // Helper to generate unique ID
 const uid = () => Math.random().toString(36).substring(2, 9);
 
 // 1. Auth Login Route
 router.post('/auth/login', (req, res) => {
-  const { email, password } = req.body;
+  if (!allowLoginAttempt(req.ip)) return res.status(429).json({ error: 'Too many login attempts. Please try again later.' });
+  const { email, password } = req.body || {};
+  if (!isEmail(email) || typeof password !== 'string') return res.status(400).json({ error: 'Enter a valid email address and password.' });
   const db = readDB();
-  const lowerEmail = (email || '').toLowerCase();
-  
+  const lowerEmail = clean(email).toLowerCase();
   let matchedUser = db.users.find(u => u.email.toLowerCase() === lowerEmail);
-
-  if (!matchedUser) {
-    if (lowerEmail.includes('editor')) {
-      matchedUser = { id: 'usr_002', name: 'Grace Phiri', email: lowerEmail, title: 'Content Editor', role: 'Content Administrator', roleCode: 'CONTENT_ADMIN', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80' };
-    } else if (lowerEmail.includes('hr')) {
-      matchedUser = { id: 'usr_003', name: 'Chisomo Banda', email: lowerEmail, title: 'HR Manager', role: 'HR Manager', roleCode: 'HR_MANAGER', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80' };
-    } else if (lowerEmail.includes('auditor') || lowerEmail.includes('security')) {
-      matchedUser = { id: 'usr_004', name: 'Tamandani Mwale', email: lowerEmail, title: 'Security Lead', role: 'Security Auditor', roleCode: 'SECURITY_AUDITOR', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80' };
-    } else {
-      matchedUser = db.users[0]; // Default to Mr. Farook Kalumbi (COO)
-    }
-  }
+  if (!matchedUser || matchedUser.status !== 'ACTIVE' || !verifyPassword(password, matchedUser.passwordHash)) return res.status(401).json({ error: 'Invalid email or password.' });
 
   // Update last login in database
   matchedUser.lastLogin = 'Just now';
   writeDB(db);
 
-  const token = 'senga-jwt-token-' + uid();
-  sessions.set(token, { userId: matchedUser.id, roleCode: matchedUser.roleCode });
+  const token = createSession(matchedUser);
 
   return res.json({
     success: true,
@@ -61,7 +41,7 @@ router.post('/auth/login', (req, res) => {
 });
 
 // 2. Stats endpoint for Admin Dashboard
-router.get('/stats', (req, res) => {
+router.get('/stats', requireStaff, (req, res) => {
   const db = readDB();
   res.json({
     publishedPosts: db.posts.length,
@@ -77,7 +57,7 @@ router.get('/stats', (req, res) => {
 
 // Analytics is readable by both staff and System Administrators. Values and
 // trend points live in the database rather than being embedded in the UI.
-router.get('/analytics', (req, res) => {
+router.get('/analytics', requireStaff, (req, res) => {
   const db = readDB();
   const analytics = db.analytics || {};
   res.json({
@@ -102,7 +82,7 @@ router.get('/posts', (req, res) => {
   res.json(posts);
 });
 
-router.post('/posts', (req, res) => {
+router.post('/posts', requireStaff, (req, res) => {
   const db = readDB();
   const { userId, author, title, content, excerpt, type, category, image } = req.body;
   const authorUser = db.users.find(u => u.id === userId) || db.users[0];
@@ -143,7 +123,7 @@ router.post('/posts', (req, res) => {
   res.status(201).json({ success: true, post: newPost, activity });
 });
 
-router.put('/posts/:id', (req, res) => {
+router.put('/posts/:id', requireStaff, (req, res) => {
   const db = readDB();
   const index = db.posts.findIndex(p => p.id === req.params.id);
   if (index !== -1) {
@@ -167,7 +147,7 @@ router.get('/vacancies', (req, res) => {
   res.json(db.vacancies);
 });
 
-router.post('/vacancies', (req, res) => {
+router.post('/vacancies', requireStaff, (req, res) => {
   const db = readDB();
   const { userId, title, department, type, location, deadline, description, requirements } = req.body;
   const creatorUser = db.users.find(u => u.id === userId) || db.users[0];
@@ -208,7 +188,7 @@ router.post('/vacancies', (req, res) => {
   res.status(201).json({ success: true, vacancy: newVacancy, activity });
 });
 
-router.put('/vacancies/:id', (req, res) => {
+router.put('/vacancies/:id', requireStaff, (req, res) => {
   const db = readDB();
   const index = db.vacancies.findIndex(v => v.id === req.params.id);
   if (index !== -1) {
@@ -227,12 +207,14 @@ router.delete('/vacancies/:id', requireSystemAdmin, (req, res) => {
 });
 
 // 5. Quote Requests Endpoints
-router.get('/quotes', (req, res) => {
+router.get('/quotes', requireStaff, (req, res) => {
   const db = readDB();
   res.json(db.quotes);
 });
 
 router.post('/quotes', (req, res) => {
+  const body = req.body || {};
+  if (!isName(body.clientName || `${body.firstName || ''} ${body.surname || ''}`) || !isEmail(body.email) || !isMessage(body.details || body.projectDescription) || !clean(body.serviceRequested || body.inquiryType)) return res.status(400).json({ error: 'Please provide a valid name, email, inquiry type, and project description.' });
   const db = readDB();
   const newQuote = {
     id: 'q_' + uid(),
@@ -268,7 +250,7 @@ router.post('/quotes', (req, res) => {
   res.status(201).json({ success: true, quote: newQuote });
 });
 
-router.put('/quotes/:id', (req, res) => {
+router.put('/quotes/:id', requireStaff, (req, res) => {
   const db = readDB();
   const index = db.quotes.findIndex(q => q.id === req.params.id);
   if (index !== -1) {
@@ -287,12 +269,14 @@ router.delete('/quotes/:id', requireSystemAdmin, (req, res) => {
 });
 
 // 6. Consultations Endpoints
-router.get('/consultations', (req, res) => {
+router.get('/consultations', requireStaff, (req, res) => {
   const db = readDB();
   res.json(db.consultations);
 });
 
 router.post('/consultations', (req, res) => {
+  const body = req.body || {};
+  if (!isName(body.clientName) || !isEmail(body.email) || (body.phone && !isPhone(body.phone))) return res.status(400).json({ error: 'Please provide valid consultation details.' });
   const db = readDB();
   const newConsultation = {
     id: 'c_' + uid(),
@@ -321,12 +305,14 @@ router.post('/consultations', (req, res) => {
 });
 
 // 7. Contact Messages Endpoints
-router.get('/contacts', (req, res) => {
+router.get('/contacts', requireStaff, (req, res) => {
   const db = readDB();
   res.json(db.contacts || []);
 });
 
 router.post('/contact', (req, res) => {
+  const body = req.body || {};
+  if (!isName(body.fullName) || !isEmail(body.email) || !isMessage(body.message) || !clean(body.subject) || (body.phone && !isPhone(body.phone))) return res.status(400).json({ error: 'Please provide valid contact details.' });
   const db = readDB();
   const newContact = {
     id: 'cnt_' + uid(),
@@ -370,6 +356,8 @@ router.get('/payments', requireSystemAdmin, (req, res) => {
 // Visitors may submit a payment; viewing or managing payment data remains
 // restricted to System Administrators.
 router.post('/payments', (req, res) => {
+  const body = req.body || {};
+  if (!isName(body.customerName) || !isEmail(body.email) || !isPhone(body.phone) || !clean(body.invoiceNo) || !isMessage(body.description) || !(Number(body.amount) > 0)) return res.status(400).json({ error: 'Please provide valid payment details.' });
   const db = readDB();
   const newPayment = {
     id: 'pay_' + uid(),
@@ -380,8 +368,8 @@ router.post('/payments', (req, res) => {
     description: req.body.description || 'Senga Systems Technical Services',
     amount: req.body.amount || '0.00',
     currency: req.body.currency || 'USD',
-    status: 'COMPLETED',
-    transactionId: 'TXN-' + uid().toUpperCase(),
+    status: 'PENDING_PROVIDER_CONFIRMATION',
+    transactionId: null,
     createdAt: new Date().toISOString()
   };
 
@@ -409,7 +397,7 @@ router.post('/payments', (req, res) => {
 // Public newsletter subscriptions are persisted for later staff follow-up.
 router.post('/newsletter', (req, res) => {
   const email = (req.body.email || '').trim().toLowerCase();
-  if (!email) return res.status(400).json({ error: 'An email address is required.' });
+  if (!isEmail(email)) return res.status(400).json({ error: 'Please enter a valid email address.' });
   const db = readDB();
   if (!db.newsletterSubscribers) db.newsletterSubscribers = [];
   if (!db.newsletterSubscribers.some(subscriber => subscriber.email === email)) {
@@ -489,7 +477,7 @@ router.get('/partners', (req, res) => {
   res.json(db.partners || []);
 });
 
-router.post('/partners', (req, res) => {
+router.post('/partners', requireStaff, (req, res) => {
   const db = readDB();
   const newPartner = {
     id: 'pt_' + uid(),

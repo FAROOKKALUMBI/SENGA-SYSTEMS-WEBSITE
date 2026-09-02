@@ -182,26 +182,14 @@ export function CMSProvider({ children }) {
         setUser(authenticatedUser);
         localStorage.setItem('senga_admin_user', JSON.stringify(authenticatedUser));
         localStorage.setItem('senga_admin_token', res.token);
+        await refreshData();
         return { success: true, user: authenticatedUser };
       }
     } catch (err) {
-      // Fallback user matching entered email
-      const lowerEmail = (email || '').toLowerCase();
-      let fallback = DEFAULT_COO_USER;
-      if (lowerEmail.includes('editor')) {
-        fallback = { id: 'usr_002', name: 'Grace Phiri', email: lowerEmail, title: 'Content Editor', role: 'Content Administrator', roleCode: 'CONTENT_ADMIN', avatar: null };
-      } else if (lowerEmail.includes('hr')) {
-        fallback = { id: 'usr_003', name: 'Chisomo Banda', email: lowerEmail, title: 'HR Manager', role: 'HR Manager', roleCode: 'HR_MANAGER', avatar: null };
-      }
-      const fallbackUser = {
-        ...fallback,
-        accessLevel: getAccessPolicy(fallback.roleCode).accessLevel,
-        accessPermissions: getAccessPolicy(fallback.roleCode).permissions
-      };
-      setUser(fallbackUser);
-      localStorage.setItem('senga_admin_user', JSON.stringify(fallbackUser));
+      setUser(null);
+      localStorage.removeItem('senga_admin_user');
       localStorage.removeItem('senga_admin_token');
-      return { success: true, user: fallbackUser };
+      return { success: false, error: err.message || 'Unable to sign in.' };
     }
   };
 

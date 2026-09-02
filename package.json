@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "node server/index.js",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "test": "node --test server/security.test.js",
+    "password:hash": "node server/create-password-hash.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -31,7 +31,7 @@ function PublicLayout({ children }) {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-[#0B132B]">
       <Navbar />
-      <main key={`${location.pathname}${location.search}`} className="flex-1 page-transition">
+      <main id="main-content" key={`${location.pathname}${location.search}`} className="flex-1 page-transition">
         {children}
       </main>
       <Footer />
