@@ -13,12 +13,15 @@ import {
   Lock
 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 export default function AdminRoles() {
   const { users, systemRoles, addUser, updateUserRole, deleteUser } = useCMS();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [roleChange, setRoleChange] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -125,7 +128,7 @@ export default function AdminRoles() {
                   <td className="py-4 px-4">
                     <select
                       value={u.roleCode || 'SYSTEM_ADMIN'}
-                      onChange={(e) => updateUserRole(u.id, e.target.value)}
+                      onChange={(e) => setRoleChange({ user: u, roleCode: e.target.value })}
                       className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-[#2563EB] font-black text-xs focus:outline-none cursor-pointer shadow-xs"
                     >
                       {systemRoles.map(r => (
@@ -144,7 +147,7 @@ export default function AdminRoles() {
                       <span className="text-[11px] text-[#2563EB] font-black">Active</span>
                       {u.id !== 'usr_farook_001' && (
                         <button
-                          onClick={() => deleteUser(u.id)}
+                          onClick={() => setUserToDelete(u)}
                           className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                           title="Delete User"
                         >
@@ -237,6 +240,8 @@ export default function AdminRoles() {
           </div>
         </div>
       )}
+      <ConfirmationModal isOpen={Boolean(roleChange)} onClose={() => setRoleChange(null)} title="Change this user's role?" message={`${roleChange?.user?.name || 'This user'} will receive the permissions for ${systemRoles.find((role) => role.id === roleChange?.roleCode)?.name || 'the selected role'}.`} confirmLabel="Change role" successMessage="User role updated successfully." onConfirm={() => updateUserRole(roleChange.user.id, roleChange.roleCode)} />
+      <ConfirmationModal isOpen={Boolean(userToDelete)} onClose={() => setUserToDelete(null)} title="Delete this staff account?" message={`This permanently removes ${userToDelete?.name || 'this staff member'} and their dashboard access. This cannot be undone.`} confirmLabel="Delete account" isDestructive requireText="DELETE" successMessage="Staff account deleted successfully." onConfirm={() => deleteUser(userToDelete.id)} />
 
     </div>
   );

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, FileText, Image, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 export default function AdminPosts() {
   const { posts, addPost, deletePost, user } = useCMS();
   const canDelete = user?.roleCode === 'SYSTEM_ADMIN';
   const [showCreate, setShowCreate] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     type: 'news',
@@ -180,7 +182,7 @@ export default function AdminPosts() {
               <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-600">By {post.author || 'Senga Team'}</span>
                 {canDelete && <button
-                  onClick={() => deletePost(post.id)}
+                  onClick={() => setPostToDelete(post)}
                   className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
                   title="Delete Post"
                 >
@@ -191,6 +193,7 @@ export default function AdminPosts() {
           ))}
         </div>
       </section>
+      <ConfirmationModal isOpen={Boolean(postToDelete)} onClose={() => setPostToDelete(null)} title="Delete this published post?" message={`“${postToDelete?.title}” will be permanently removed from the website. This cannot be undone.`} confirmLabel="Delete post" isDestructive requireText="DELETE" successMessage="Post deleted successfully." onConfirm={() => deletePost(postToDelete.id)} />
 
     </div>
   );

@@ -103,6 +103,39 @@
       "conversion": "3.1% higher",
       "session": "18s longer"
     },
-    "trends": [1, -1, -1, 0, 0, -2, 0, -1, -1, 0, 1, 0, -1, 0, 0, 0, 2, 2, -1, -1, 2, -1, 0, -1, 1]
-  }
+    "trends": [
+      1,
+      -1,
+      -1,
+      0,
+      0,
+      -2,
+      0,
+      -1,
+      -1,
+      0,
+      1,
+      0,
+      -1,
+      0,
+      0,
+      0,
+      2,
+      2,
+      -1,
+      -1,
+      2,
+      -1,
+      0,
+      -1,
+      1
+    ]
+  },
+  "newsletterSubscribers": [
+    {
+      "id": "sub_7k64qzd",
+      "email": "kalumbifarook21@gmail.com",
+      "subscribedAt": "2026-09-02T22:15:40.268Z"
+    }
+  ]
 }

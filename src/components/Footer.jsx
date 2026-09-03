@@ -28,9 +28,9 @@ export default function Footer() {
               </div>
             </Link>
 
-            <p className="text-sm text-slate-300 font-medium leading-relaxed max-w-sm">
+            <Link to="/about" className="block text-sm text-slate-300 font-medium leading-relaxed max-w-sm hover:text-white transition-colors">
               Your Trusted Partner for<br />Intelligent, Secure Digital Solutions
-            </p>
+            </Link>
 
             {/* Social Media Rounded Square Icons */}
             <div className="flex items-center gap-3 pt-2">
@@ -44,10 +44,11 @@ export default function Footer() {
                 <Facebook className="w-4 h-4" />
               </a>
               <a 
-                href="#"
-                onClick={(event) => event.preventDefault()}
-                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white/50 cursor-not-allowed transition-colors flex items-center justify-center shadow-sm"
-                title="Twitter / X coming soon"
+                href="https://x.com/sengasystems"
+                target="_blank"
+                rel="noreferrer"
+                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
+                title="Senga Systems on X"
               >
                 <Twitter className="w-4 h-4" />
               </a>
@@ -61,10 +62,11 @@ export default function Footer() {
                 <Linkedin className="w-4 h-4" />
               </a>
               <a 
-                href="#"
-                onClick={(event) => event.preventDefault()}
-                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white/50 cursor-not-allowed transition-colors flex items-center justify-center shadow-sm"
-                title="YouTube coming soon"
+                href="https://www.youtube.com/@SengaSystems"
+                target="_blank"
+                rel="noreferrer"
+                className="social-icon w-9 h-9 rounded-lg bg-white/10 text-white hover:bg-[#2b66bf] transition-colors flex items-center justify-center shadow-sm"
+                title="Senga Systems on YouTube"
               >
                 <Youtube className="w-4 h-4" />
               </a>
@@ -73,10 +75,10 @@ export default function Footer() {
 
           {/* Column 2: Company Navigation */}
           <div className="lg:col-span-2 space-y-4">
-            <h4 className="text-white font-bold text-base tracking-wide">Company</h4>
+            <Link to="/about" className="inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Company</Link>
             <ul className="footer-links space-y-2.5 text-sm font-normal text-slate-300">
               <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/about/team" className="hover:text-white transition-colors">Our Team</Link></li>
+              <li><Link to="/about/leadership" className="hover:text-white transition-colors">Our Team</Link></li>
               <li><Link to="/about/partners" className="hover:text-white transition-colors">Partners</Link></li>
               <li><Link to="/updates/news" className="hover:text-white transition-colors">News & Updates</Link></li>
               <li><Link to="/updates/vacancies" className="hover:text-white transition-colors">Careers</Link></li>
@@ -85,7 +87,7 @@ export default function Footer() {
 
           {/* Column 3: Our Services Navigation */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="text-white font-bold text-base tracking-wide">Our Services</h4>
+            <Link to="/services" className="inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Our Services</Link>
             <ul className="footer-links space-y-2.5 text-sm font-normal text-slate-300">
               <li><Link to="/services#ai-automation" className="hover:text-white transition-colors">AI & Automation</Link></li>
               <li><Link to="/services#software-engineering" className="hover:text-white transition-colors">Software Engineering</Link></li>
@@ -98,24 +100,24 @@ export default function Footer() {
 
           {/* Column 4: Contact Us Information & Malawi Locations */}
           <div className="lg:col-span-3 space-y-4">
-            <h4 className="text-white font-bold text-base tracking-wide">Contact Us</h4>
+            <Link to="/contact" className="inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Contact Us</Link>
             <ul className="space-y-3 text-sm font-normal text-slate-300">
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-slate-300 shrink-0" />
-                <span>(+265) 884 288 849</span>
+                <a href="tel:+265884288849" className="hover:text-white transition-colors">(+265) 884 288 849</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-slate-300 shrink-0" />
-                <span>info@senga.systems</span>
+                <a href="mailto:info@senga.systems" className="break-all hover:text-white transition-colors">info@senga.systems</a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-slate-300 shrink-0 mt-1" />
                 <div className="space-y-1">
-                  <p>Mzuzu, Malawi <span className="text-cyan-400 text-xs font-semibold">(HQ)</span></p>
-                  <p>Blantyre, Malawi</p>
-                  <p>Lilongwe, Malawi</p>
-                  <p>Mangochi, Malawi</p>
-                  <p>Salima, Malawi</p>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Mzuzu%2C+Malawi" target="_blank" rel="noreferrer" className="block hover:text-white transition-colors">Mzuzu, Malawi <span className="text-cyan-400 text-xs font-semibold">(HQ)</span></a>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Blantyre%2C+Malawi" target="_blank" rel="noreferrer" className="block hover:text-white transition-colors">Blantyre, Malawi</a>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Lilongwe%2C+Malawi" target="_blank" rel="noreferrer" className="block hover:text-white transition-colors">Lilongwe, Malawi</a>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Mangochi%2C+Malawi" target="_blank" rel="noreferrer" className="block hover:text-white transition-colors">Mangochi, Malawi</a>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Salima%2C+Malawi" target="_blank" rel="noreferrer" className="block hover:text-white transition-colors">Salima, Malawi</a>
                 </div>
               </li>
             </ul>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Briefcase, MapPin, Clock, CheckCircle } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 export default function AdminVacancies() {
   const { vacancies, addVacancy, deleteVacancy, user } = useCMS();
   const canDelete = user?.roleCode === 'SYSTEM_ADMIN';
   const [showCreate, setShowCreate] = useState(false);
+  const [vacancyToDelete, setVacancyToDelete] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     department: 'Software Engineering',
@@ -178,7 +180,7 @@ export default function AdminVacancies() {
               <div className="pt-3 border-t border-slate-200 flex items-center justify-between">
                 <span className="text-xs font-bold text-emerald-700">Status: {job.status || 'ACTIVE'}</span>
                 {canDelete && <button
-                  onClick={() => deleteVacancy(job.id)}
+                  onClick={() => setVacancyToDelete(job)}
                   className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
                   title="Remove Vacancy"
                 >
@@ -189,6 +191,7 @@ export default function AdminVacancies() {
           ))}
         </div>
       </section>
+      <ConfirmationModal isOpen={Boolean(vacancyToDelete)} onClose={() => setVacancyToDelete(null)} title="Remove this job vacancy?" message={`“${vacancyToDelete?.title}” will no longer be visible to applicants. This cannot be undone.`} confirmLabel="Remove vacancy" isDestructive successMessage="Vacancy removed successfully." onConfirm={() => deleteVacancy(vacancyToDelete.id)} />
 
     </div>
   );

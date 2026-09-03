@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, CreditCard, FileText, MessageSquare, Square, Star, Trash2 } from 'lucide-react';
 import { useCMS } from '../../context/CMSContext';
+import ConfirmationModal from '../../components/ConfirmationModal';
 
 function InboxSection({ title, subtitle, badge, children, empty, isEmpty, className = '' }) {
   return <section className={`overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm ${className}`}>
@@ -23,6 +24,7 @@ export default function AdminLeads() {
   const { quotes, consultations, contacts, payments, updateQuoteStatus, deleteQuote, user } = useCMS();
   const isSystemAdmin = user?.roleCode === 'SYSTEM_ADMIN';
   const [activeInbox, setActiveInbox] = useState('quotes');
+  const [quoteToDelete, setQuoteToDelete] = useState(null);
   return <div className="space-y-8 font-['Plus_Jakarta_Sans',sans-serif]">
     <div className="bg-white border-2 border-slate-300 rounded-3xl p-6 sm:p-8 shadow-md space-y-2">
       <span className="text-xs font-black uppercase tracking-wider text-[#2563EB]">Lead Management &amp; Sales</span>
@@ -37,7 +39,7 @@ export default function AdminLeads() {
     </div>
 
     <InboxSection className={activeInbox === 'quotes' ? '' : 'hidden'} title={`Project Quote Submissions (${quotes.length})`} subtitle="Manage inbound quotes and update sales pipeline statuses" badge="Active Sales Pipeline" isEmpty={!quotes.length} empty="No quote submissions recorded yet.">
-      {quotes.map(q => <InboxRow key={q.id} right={<><select value={q.status || 'PENDING'} onChange={e => updateQuoteStatus(q.id, e.target.value)} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#2563EB]"><option>PENDING</option><option>CONTACTED</option><option>APPROVED</option><option>ARCHIVED</option></select>{isSystemAdmin && <button onClick={() => deleteQuote(q.id)} className="p-1.5 text-slate-400 hover:text-red-600" title="Delete Quote"><Trash2 className="h-4 w-4" /></button>}</>}>
+      {quotes.map(q => <InboxRow key={q.id} right={<><select value={q.status || 'PENDING'} onChange={e => updateQuoteStatus(q.id, e.target.value)} className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#2563EB]"><option>PENDING</option><option>CONTACTED</option><option>APPROVED</option><option>ARCHIVED</option></select>{isSystemAdmin && <button onClick={() => setQuoteToDelete(q)} className="p-1.5 text-slate-400 hover:text-red-600" title="Delete Quote"><Trash2 className="h-4 w-4" /></button>}</>}>
         <h3 className="truncate text-sm font-bold text-slate-900">{q.clientName}</h3><p className="mt-1 truncate text-xs text-slate-500">{q.email} • {q.company || 'Private Entity'} {q.phone ? `• ${q.phone}` : ''}</p><p className="mt-2 truncate text-sm text-slate-700"><span className="font-semibold text-[#2563EB]">Service Requested: {q.serviceRequested}</span> — {q.details}</p>{q.attachedFile && <p className="mt-2 flex items-center gap-2 truncate text-xs font-medium text-[#2563EB]"><FileText className="h-4 w-4 shrink-0" /><span className="truncate">Attached File: {q.attachedFile}</span></p>}
       </InboxRow>)}
     </InboxSection>
@@ -59,5 +61,6 @@ export default function AdminLeads() {
         <div className="flex items-center gap-2"><CreditCard className="h-4 w-4 shrink-0 text-[#2563EB]" /><h3 className="truncate text-sm font-bold text-slate-900">{p.customerName}</h3><span className="text-xs font-mono text-slate-500">({p.invoiceNo})</span></div><p className="mt-1 truncate text-xs text-slate-500">{p.email} • {p.description}</p>
       </InboxRow>)}
     </InboxSection>}
+    <ConfirmationModal isOpen={Boolean(quoteToDelete)} onClose={() => setQuoteToDelete(null)} title="Delete this quote submission?" message={`This will permanently delete the submission from ${quoteToDelete?.clientName || 'this client'}. This action cannot be undone.`} confirmLabel="Delete submission" isDestructive successMessage="Quote submission deleted successfully." onConfirm={() => deleteQuote(quoteToDelete.id)} />
   </div>;
 }
