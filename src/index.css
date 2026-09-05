@@ -94,7 +94,13 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 }
 
 @media (max-width: 767px) {
-  .hero-visual, .ambient-orb { animation: none; }
+  .hero-visual {
+    animation: none;
+    opacity: .68;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  }
+  .ambient-orb { animation: none; }
   .feature-grid > div { border-right: 0; border-bottom: 1px solid rgba(67, 56, 202, .4); padding-bottom: 1rem; }
   .feature-grid > div:last-child { border-bottom: 0; padding-bottom: .5rem; }
 }
