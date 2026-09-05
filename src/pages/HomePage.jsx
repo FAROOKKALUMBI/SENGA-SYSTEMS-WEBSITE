@@ -87,7 +87,7 @@ export default function HomePage() {
     <div className="space-y-0 font-['Plus_Jakarta_Sans',sans-serif]">
       
       {/* 1. HERO SECTION (Figma Blue Gradient & Monitor Blur) */}
-      <section className="relative min-h-[520px] lg:min-h-[580px] pt-14 pb-20 md:pt-20 md:pb-28 bg-gradient-to-r from-[#17386d] via-[#122e5a] to-[#0c1f3f] text-white overflow-hidden flex items-center">
+      <section className="relative min-h-[520px] lg:min-h-[580px] pt-14 pb-20 md:pt-20 md:pb-28 bg-gradient-to-r from-[#17386d] via-[#122e5a] to-[#0c1f3f] text-white overflow-hidden flex flex-col items-stretch lg:flex-row lg:items-center">
         
         {/* Right Monitor Code Blur Overlay */}
         <div 
@@ -98,7 +98,7 @@ export default function HomePage() {
         {/* Radial Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#17386d] via-[#17386d]/90 to-transparent"></div>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-12 relative z-10 w-full">
+        <div className="max-w-7xl mx-auto px-4 md:px-12 relative z-10 w-full text-left">
           <div className="max-w-2xl space-y-6">
             
             <div className="space-y-3">
