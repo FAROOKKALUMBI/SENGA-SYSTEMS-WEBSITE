@@ -29,7 +29,7 @@ function PublicLayout({ children }) {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#0B132B]">
+    <div className="public-site min-h-screen flex flex-col justify-between bg-[#0B132B]">
       <Navbar />
       <main id="main-content" key={`${location.pathname}${location.search}`} className="flex-1 page-transition">
         {children}

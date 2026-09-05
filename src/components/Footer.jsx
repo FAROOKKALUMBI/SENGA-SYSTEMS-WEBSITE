@@ -75,7 +75,7 @@ export default function Footer() {
 
           {/* Column 2: Company Navigation */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/about" className="inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Company</Link>
+            <Link to="/about" className="heading-balance inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Company</Link>
             <ul className="footer-links space-y-2.5 text-sm font-normal text-slate-300">
               <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/about/leadership" className="hover:text-white transition-colors">Our Team</Link></li>
@@ -87,7 +87,7 @@ export default function Footer() {
 
           {/* Column 3: Our Services Navigation */}
           <div className="lg:col-span-3 space-y-4">
-            <Link to="/services" className="inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Our Services</Link>
+            <Link to="/services" className="heading-balance inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Our Services</Link>
             <ul className="footer-links space-y-2.5 text-sm font-normal text-slate-300">
               <li><Link to="/services#ai-automation" className="hover:text-white transition-colors">AI & Automation</Link></li>
               <li><Link to="/services#software-engineering" className="hover:text-white transition-colors">Software Engineering</Link></li>
@@ -100,7 +100,7 @@ export default function Footer() {
 
           {/* Column 4: Contact Us Information & Malawi Locations */}
           <div className="lg:col-span-3 space-y-4">
-            <Link to="/contact" className="inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Contact Us</Link>
+            <Link to="/contact" className="heading-balance inline-block text-white font-bold text-base tracking-wide hover:text-cyan-300 transition-colors">Contact Us</Link>
             <ul className="space-y-3 text-sm font-normal text-slate-300">
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-slate-300 shrink-0" />

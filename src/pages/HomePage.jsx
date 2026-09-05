@@ -102,10 +102,6 @@ export default function HomePage() {
           <div className="max-w-2xl space-y-6">
             
             <div className="space-y-3">
-              <span className="hero-badge inline-block text-xs sm:text-sm font-extrabold uppercase tracking-[0.12em] text-blue-200">
-                Secure technology, intelligent innovation
-              </span>
-
               <h1 className="hero-heading text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-none">
                 Senga Systems.
               </h1>
@@ -261,13 +257,11 @@ export default function HomePage() {
               </span>
 
               <h2 className="text-4xl sm:text-5xl font-black text-[#0f172a] tracking-tight leading-tight">
-                Malawi's AI-Powered<br />Technology Partner
+                Malawi's AI-Powered Technology Partner
               </h2>
 
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal max-w-lg">
-                With deep expertise in AI, software engineering and cybersecurity Senga Systems delivers intelligent, scalable solutions that<br className="hidden sm:inline" />
-                empower<br className="hidden sm:inline" />
-                businesses, organizations and communities.
+                With deep expertise in AI, software engineering and cybersecurity Senga Systems delivers intelligent, scalable solutions that empower businesses, organizations and communities.
               </p>
 
               <div className="pt-2">
@@ -456,7 +450,7 @@ export default function HomePage() {
 
           {/* Heading */}
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight max-w-3xl mx-auto">
-            Ready To Empower Your Business<br className="hidden sm:inline" /> With Technology?
+            Ready To Empower Your Business With Technology?
           </h2>
 
           {/* Paragraph */}
